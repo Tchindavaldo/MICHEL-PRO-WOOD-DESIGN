@@ -1,11 +1,9 @@
 // next
 import { useRouter } from 'next/router';
 // @mui
-import { alpha, styled } from '@mui/material/styles';
 import {
   Link,
   Stack,
-  Button,
   Divider,
   Container,
   Typography,
@@ -47,7 +45,7 @@ export default function Footer() {
               <Stack alignItems="flex-start" spacing={3}>
                 <Logo />
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  MICHEL PRO WOOD DESIGN est une entreprise spécialisée dans la menuiserie, l'ébénisterie, la construction bois et l'usinage CNC. Nous formons également la prochaine génération d'artisans.
+                  MICHEL PRO WOOD DESIGN est une entreprise spécialisée dans la menuiserie, l&apos;ébénisterie, la construction bois et l&apos;usinage CNC. Nous formons également la prochaine génération d&apos;artisans.
                 </Typography>
               </Stack>
 
@@ -145,7 +143,7 @@ export default function Footer() {
             </Link>
 
             <Link variant="caption" sx={{ color: 'text.secondary' }}>
-              Conditions d'utilisation
+              Conditions d&apos;utilisation
             </Link>
           </Stack>
         </Stack>
