@@ -24,7 +24,7 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { varHover, varTranHover } from 'src/components/animate';
 // assets
-import { REALIZATION_IMAGES } from 'src/assets/data/michel-pro-wood/realizations-link.ts';
+import { REALIZATION_IMAGES } from 'src/assets/data/michel-pro-wood/realizations-link';
 
 // ----------------------------------------------------------------------
 
