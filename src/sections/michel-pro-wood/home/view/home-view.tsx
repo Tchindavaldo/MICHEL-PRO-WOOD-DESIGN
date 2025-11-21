@@ -16,28 +16,31 @@ import TestimonialMarketing from 'src/sections/testimonial/marketing';
 import OurClientsMarketing from 'src/sections/our-clients/marketing';
 import {
   MarketingLandingFaqs,
-  MarketingLandingHero,
-  MarketingLandingAbout,
   MarketingLandingFreeSEO,
-  MarketingLandingProcess,
-  MarketingLandingServices,
   MarketingLandingCaseStudies,
 } from 'src/sections/_marketing/landing';
+import HomeHero from '../home-hero';
+import HomeVideoCarousel from '../home-video-carousel';
+import HomeAbout from '../home-about';
+import HomeServices from '../home-services';
+import HomeProcess from '../home-process';
 
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
   return (
     <>
-      <MarketingLandingHero />
+      <HomeHero />
 
       <OurClientsMarketing brands={_brands} />
 
-      <MarketingLandingAbout />
+      <HomeVideoCarousel />
 
-      <MarketingLandingServices />
+      <HomeAbout />
 
-      <MarketingLandingProcess />
+      <HomeServices />
+
+      <HomeProcess />
 
       <MarketingLandingCaseStudies caseStudies={_caseStudies.slice(-6)} />
 
