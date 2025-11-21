@@ -59,11 +59,11 @@ export default function MarketingServicesHero() {
                 color: 'common.white',
               }}
             >
-              <Typography variant="h1">Offline SEO</Typography>
+              <Typography variant="h1">Devis en Ligne</Typography>
 
               <Typography sx={{ opacity: 0.72 }}>
-                Etiam sollicitudin, ipsum eu pulvinar rutrum, tellus ipsum laoreet sapien, quis
-                venenatis ante odio sit amet eros.
+                Obtenez rapidement un devis personnalisé pour vos projets de menuiserie, ébénisterie,
+                construction bois ou formation professionnelle.
               </Typography>
             </Stack>
 
@@ -88,20 +88,20 @@ function MarketingServicesHeroForm() {
             <Iconify icon="carbon:email" width={24} sx={{ color: 'text.disabled' }} />
           </InputAdornment>
         }
-        placeholder="Email"
+        placeholder="Votre Email"
       />
 
       <StyledInput
         startAdornment={
           <InputAdornment position="start">
-            <Iconify icon="carbon:license-global" width={24} sx={{ color: 'text.disabled' }} />
+            <Iconify icon="carbon:phone" width={24} sx={{ color: 'text.disabled' }} />
           </InputAdornment>
         }
-        placeholder="Website URL"
+        placeholder="Numéro de Téléphone"
       />
 
       <Button fullWidth={!isMdUp} size="large" variant="contained" sx={{ flexShrink: 0 }}>
-        Analyse
+        Demander un Devis
       </Button>
     </Stack>
   );

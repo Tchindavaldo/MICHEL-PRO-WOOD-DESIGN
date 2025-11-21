@@ -11,7 +11,7 @@ import FormProvider, { RHFTextField, RHFSlider } from 'src/components/hook-form'
 
 // ----------------------------------------------------------------------
 
-const SERVICES = ['Email marketing', 'SEO', ' Social Marketing', 'Research'];
+const SERVICES = ['Menuiserie', 'Ébénisterie', 'Construction Bois', 'Formation', 'Vente Matériaux', 'Aménagement Intérieur'];
 
 type FormValuesProps = {
   services: string[];
@@ -125,26 +125,26 @@ export default function ContactMarketingForm() {
           direction={{ xs: 'column', md: 'row' }}
           sx={{ width: 1 }}
         >
-          <RHFTextField name="firstName" label="First Name" />
-          <RHFTextField name="lastName" label="Last Name" />
+          <RHFTextField name="firstName" label="Prénom" />
+          <RHFTextField name="lastName" label="Nom" />
         </Stack>
 
         <RHFTextField name="email" label="Email" />
-        <RHFTextField name="phoneNumber" label="Phone number" />
+        <RHFTextField name="phoneNumber" label="Numéro de téléphone" />
 
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           spacing={{ xs: 2.5, md: 2 }}
           sx={{ width: 1 }}
         >
-          <RHFTextField name="compnany" label="Compnany" />
+          <RHFTextField name="compnany" label="Entreprise" />
 
-          <RHFTextField name="website" label="Website" />
+          <RHFTextField name="website" label="Ville" />
         </Stack>
 
         <Stack spacing={5} sx={{ py: 2, width: 1 }}>
           <Typography variant="overline" sx={{ color: 'text.disabled' }}>
-            Your Budget
+            Votre Budget (FCFA)
           </Typography>
 
           <RHFSlider
@@ -167,7 +167,7 @@ export default function ContactMarketingForm() {
         loading={isSubmitting}
         sx={{ mt: 3 }}
       >
-        Send Request
+        Envoyer la Demande
       </LoadingButton>
     </FormProvider>
   );

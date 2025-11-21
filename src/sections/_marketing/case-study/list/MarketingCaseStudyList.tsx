@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // @mui
 import { Pagination, Tabs, Tab, Box } from '@mui/material';
 // types
@@ -8,12 +8,15 @@ import MarketingCaseStudyItem from '../item';
 
 // ----------------------------------------------------------------------
 
+const ITEMS_PER_PAGE = 6;
+
 type Props = {
   caseStudies: ICaseStudyProps[];
 };
 
 export default function MarketingCaseStudyList({ caseStudies }: Props) {
   const [tab, setTab] = useState('All');
+  const [page, setPage] = useState(1);
 
   const getCategories = caseStudies.map((project) => project.category);
 
@@ -21,8 +24,23 @@ export default function MarketingCaseStudyList({ caseStudies }: Props) {
 
   const filtered = applyFilter(caseStudies, tab);
 
+  // Calculate pagination
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const startIndex = (page - 1) * ITEMS_PER_PAGE;
+  const paginatedProjects = filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  // Scroll to top whenever page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [page]);
+
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
+    setPage(1); // Reset to first page when changing category
+  };
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
 
   return (
@@ -52,22 +70,28 @@ export default function MarketingCaseStudyList({ caseStudies }: Props) {
           },
         }}
       >
-        {filtered.map((project) => (
+        {paginatedProjects.map((project) => (
           <MarketingCaseStudyItem key={project.id} project={project} />
         ))}
       </Box>
 
-      <Pagination
-        count={10}
-        color="primary"
-        size="large"
-        sx={{
-          pb: 10,
-          '& .MuiPagination-ul': {
-            justifyContent: 'center',
-          },
-        }}
-      />
+      {totalPages > 1 && (
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
+          color="primary"
+          size="large"
+          showFirstButton
+          showLastButton
+          sx={{
+            pb: 10,
+            '& .MuiPagination-ul': {
+              justifyContent: 'center',
+            },
+          }}
+        />
+      )}
     </>
   );
 }

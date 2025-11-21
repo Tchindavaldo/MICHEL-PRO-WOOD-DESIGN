@@ -1,6 +1,15 @@
 // ----------------------------------------------------------------------
 
 export const paths = {
+  // MICHEL PRO WOOD DESIGN
+  michelProWood: {
+    home: '/',
+    about: '/a-propos',
+    services: '/services',
+    realizations: '/realisations',
+    shop: '/boutique',
+    contact: '/contact',
+  },
   // Marketing
   marketing: {
     landing: '/marketing/landing',

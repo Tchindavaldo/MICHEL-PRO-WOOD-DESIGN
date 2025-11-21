@@ -17,10 +17,10 @@ import CountUp from 'src/components/count-up';
 const COLORS = ['primary', 'secondary', 'warning', 'success'] as const;
 
 const SUMMARY = [
-  { title: 'Years of experience', total: 12, icon: 'carbon:increase-level' },
-  { title: 'Awards', total: 20, icon: 'carbon:trophy' },
-  { title: 'Projects', total: 150, icon: 'carbon:data-vis-4' },
-  { title: 'Happy clients', total: 32000, icon: 'carbon:user-certification' },
+  { title: "Années d'expérience", total: 10, icon: 'carbon:increase-level' },
+  { title: 'Projets réalisés', total: 250, icon: 'carbon:data-vis-4' },
+  { title: 'Clients satisfaits', total: 180, icon: 'carbon:user-certification' },
+  { title: 'Formations dispensées', total: 50, icon: 'carbon:trophy' },
 ];
 
 // ----------------------------------------------------------------------
@@ -83,16 +83,18 @@ export default function MarketingAbout() {
             textAlign: { xs: 'center', md: 'left' },
           }}
         >
-          <Typography variant="h2">Who We Are?</Typography>
+          <Typography variant="h2">Qui Sommes-Nous ?</Typography>
 
           <Typography sx={{ mt: 3, mb: 5, color: 'text.secondary' }}>
-            Vivamus consectetuer hendrerit lacus. Curabitur a felis in nunc fringilla tristique.
-            Nulla neque dolor, sagittis eget, iaculis quis, molestie non, velit.
+            Michel Pro Wood Design est une entreprise spécialisée dans la menuiserie, l'ébénisterie, 
+            la conception et la fabrication assistée par ordinateur (CFAO), les constructions bois 
+            et la formation professionnelle.
             <br />
             <br />
-            Nam pretium turpis et arcu. Praesent porttitor, nulla vitae posuere iaculis, arcu nisl
-            dignissim dolor, a pretium mi sem ut ipsum. Praesent venenatis metus at tortor pulvinar
-            varius.
+            Notre mission est de transformer le secteur bois camerounais en intégrant l'artisanat 
+            traditionnel, la technologie numérique, la modélisation 3D, l'usinage CNC et un système 
+            de gestion moderne pour produire des ouvrages en bois de haute qualité, durables, 
+            esthétiques et personnalisés.
           </Typography>
 
           <Button
@@ -101,7 +103,7 @@ export default function MarketingAbout() {
             size="large"
             endIcon={<Iconify icon="carbon:chevron-right" />}
           >
-            Check Our Work
+            Découvrir Nos Réalisations
           </Button>
         </Grid>
       </Grid>

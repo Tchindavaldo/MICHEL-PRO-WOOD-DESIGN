@@ -7,34 +7,34 @@ import SvgColor from 'src/components/svg-color';
 
 const SERVICES = [
   {
-    title: 'Search Engine Optimization',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
+    title: 'Menuiserie & Ébénisterie',
+    description: 'Meubles sur mesure, portes en bois massif, placards, cuisines modernes et mobilier haut de gamme.',
     icon: '/assets/icons/ic_statistics.svg',
   },
   {
-    title: 'Social Media Strategy',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
-    icon: '/assets/icons/ic_social_media.svg',
-  },
-  {
-    title: 'Real Time and Data',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
-    icon: '/assets/icons/ic_real_time.svg',
-  },
-  {
-    title: 'Online Media Management',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
+    title: 'Aménagements Intérieurs',
+    description: 'Conception complète d\'espaces intérieurs : lambris, frises, parquets, dressings et solutions sur mesure.',
     icon: '/assets/icons/ic_checklist.svg',
   },
   {
-    title: 'Reporting & Analysis',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
+    title: 'Vente de Bois & Dérivés',
+    description: 'Distribution de bois massif, panneaux mélaminés, formica, stratifiés et tous dérivés du bois.',
     icon: '/assets/icons/ic_report.svg',
   },
   {
-    title: 'Penalty Recovery',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
+    title: 'Quincaillerie & Finitions',
+    description: 'Quincaillerie générale de menuiserie, produits de finition, vernis, lasures et accessoires.',
     icon: '/assets/icons/ic_file.svg',
+  },
+  {
+    title: 'Tapisserie & Mousses',
+    description: 'Vente de mousses, matelas, tissus d\'ameublement et accessoires de tapisserie de qualité.',
+    icon: '/assets/icons/ic_social_media.svg',
+  },
+  {
+    title: 'Construction Bois',
+    description: 'Charpentes, ossatures légères, maisons en bois et constructions bois complètes. Vente partout dans le monde.',
+    icon: '/assets/icons/ic_real_time.svg',
   },
 ];
 
@@ -49,7 +49,7 @@ export default function MarketingServicesInclude() {
         pb: { xs: 10, md: 15 },
       }}
     >
-      <Typography variant="h2">Services Include</Typography>
+      <Typography variant="h2">Nos Services</Typography>
 
       <Typography
         sx={{
@@ -60,7 +60,8 @@ export default function MarketingServicesInclude() {
           mb: { xs: 8, md: 10 },
         }}
       >
-        Nunc nonummy metus. Donec elit libero, sodales nec, volutpat a, suscipit non, turpis.
+        De la conception à la réalisation, nous offrons une gamme complète de services 
+        alliant savoir-faire artisanal et technologie moderne.
       </Typography>
 
       <Box

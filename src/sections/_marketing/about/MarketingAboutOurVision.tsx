@@ -1,11 +1,14 @@
+import { useState, useRef } from 'react';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Container, Typography, Stack, Fab } from '@mui/material';
 // utils
 import { bgGradient } from 'src/utils/cssStyles';
 // components
-import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
+// data
+import { HOME_VIDEOS } from 'src/assets/data/michel-pro-wood/videos-link';
+import { HERO_IMAGES } from 'src/assets/data/michel-pro-wood/images-link';
 
 // ----------------------------------------------------------------------
 
@@ -35,9 +38,30 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
   },
 }));
 
+const StyledVideo = styled('video')({
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  display: 'block',
+});
+
 // ----------------------------------------------------------------------
 
 export default function MarketingAboutOurVision() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handlePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
   return (
     <Container>
       <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
@@ -48,7 +72,7 @@ export default function MarketingAboutOurVision() {
             top: { md: 80 },
           }}
         >
-          Our Vision
+          Notre Vision
         </StyledTypography>
 
         <Stack
@@ -58,17 +82,33 @@ export default function MarketingAboutOurVision() {
         >
           <Fab
             color="primary"
+            onClick={handlePlayPause}
             sx={{
               zIndex: 9,
               position: 'absolute',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.1)',
+              },
             }}
           >
-            <Iconify icon="carbon:play" width={24} />
+            <Iconify icon={isPlaying ? 'carbon:pause' : 'carbon:play'} width={24} />
           </Fab>
 
           <StyledOverlay />
 
-          <Image alt="hero" src="/assets/images/marketing/marketing_post_01.jpg" ratio="16/9" />
+          <StyledVideo
+            ref={videoRef}
+            src={HOME_VIDEOS.entreprise}
+            poster={HERO_IMAGES[2]}
+            loop
+            playsInline
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            style={{
+              aspectRatio: '16/9',
+            }}
+          />
         </Stack>
 
         <StyledTypography
@@ -79,7 +119,8 @@ export default function MarketingAboutOurVision() {
             opacity: { md: 0.72 },
           }}
         >
-          Our vision offering the best product nulla vehicula tortor scelerisque ultrices malesuada.
+          Former une nouvelle génération de jeunes artisans qualifiés et transformer le secteur bois 
+          camerounais par l'excellence, l'innovation et le savoir-faire.
         </StyledTypography>
       </Stack>
     </Container>

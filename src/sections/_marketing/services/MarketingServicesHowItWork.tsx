@@ -18,28 +18,28 @@ import useResponsive from 'src/hooks/useResponsive';
 
 const TIMELINES = [
   {
-    step: 'STEP 1',
-    title: 'Planning',
+    step: 'ÉTAPE 1',
+    title: 'Consultation & Conception',
     description:
-      'Curabitur ullamcorper ultricies nisi. Praesent nonummy mi in odio. Donec mollis hendrerit risus.',
+      'Échange sur vos besoins, prise de mesures et création de plans 3D personnalisés pour visualiser votre projet.',
   },
   {
-    step: 'STEP 2',
-    title: 'Research',
+    step: 'ÉTAPE 2',
+    title: 'Devis & Validation',
     description:
-      'Curabitur ullamcorper ultricies nisi. Praesent nonummy mi in odio. Donec mollis hendrerit risus.',
+      'Établissement d\'un devis détaillé, choix des matériaux et validation du projet avant fabrication.',
   },
   {
-    step: 'STEP 3',
-    title: 'Optimizing',
+    step: 'ÉTAPE 3',
+    title: 'Fabrication',
     description:
-      'Curabitur ullamcorper ultricies nisi. Praesent nonummy mi in odio. Donec mollis hendrerit risus.',
+      'Réalisation artisanale avec usinage CNC pour une précision optimale et des finitions impeccables.',
   },
   {
-    step: 'STEP 4',
-    title: 'Results',
+    step: 'ÉTAPE 4',
+    title: 'Livraison & Installation',
     description:
-      'Curabitur ullamcorper ultricies nisi. Praesent nonummy mi in odio. Donec mollis hendrerit risus.',
+      'Livraison soignée et installation professionnelle avec contrôle qualité final pour votre satisfaction.',
   },
 ];
 
@@ -66,7 +66,7 @@ export default function MarketingServicesHowItWork() {
     <StyledRoot>
       <Container>
         <Typography variant="h2" sx={{ textAlign: 'center' }}>
-          How It Works
+          Comment Ça Marche
         </Typography>
 
         <Typography
@@ -79,7 +79,7 @@ export default function MarketingServicesHowItWork() {
             mb: { xs: 8, md: 10 },
           }}
         >
-          Nunc nonummy metus. Donec elit libero, sodales nec, volutpat a, suscipit non, turpis.
+          De la conception à la livraison, découvrez notre processus de travail éprouvé pour des résultats exceptionnels.
         </Typography>
 
         <Timeline position={isMdUp ? 'alternate' : 'right'}>

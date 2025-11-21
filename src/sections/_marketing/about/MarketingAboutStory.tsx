@@ -15,28 +15,28 @@ import useResponsive from 'src/hooks/useResponsive';
 
 const TIMELINES = [
   {
-    year: '2021',
-    title: 'Customer Satisfaction',
+    year: '2024',
+    title: 'Expansion & Formation',
     description:
-      'Curabitur ullamcorper ultricies nisi. Praesent nonummy mi in odio. Donec mollis hendrerit risus.',
+      'Lancement de notre centre de formation professionnelle en menuiserie, ébénisterie et usinage CNC pour former la nouvelle génération.',
   },
   {
-    year: '2020',
-    title: 'Transparency',
+    year: '2022',
+    title: 'Technologie CNC',
     description:
-      'Curabitur ullamcorper ultricies nisi. Praesent nonummy mi in odio. Donec mollis hendrerit risus.',
-  },
-  {
-    year: '2019',
-    title: 'Reputation',
-    description:
-      'Curabitur ullamcorper ultricies nisi. Praesent nonummy mi in odio. Donec mollis hendrerit risus.',
+      'Intégration de la CFAO et de l\'usinage CNC pour des réalisations de haute précision et des designs innovants.',
   },
   {
     year: '2018',
-    title: 'Cooperation',
+    title: 'Croissance & Diversification',
     description:
-      'Curabitur ullamcorper ultricies nisi. Praesent nonummy mi in odio. Donec mollis hendrerit risus.',
+      'Expansion de nos services vers la construction bois et les cuisines modernes personnalisées.',
+  },
+  {
+    year: '2015',
+    title: 'Création de l\'Entreprise',
+    description:
+      'Fondation de Michel Pro Wood Design avec la vision de transformer le secteur bois camerounais.',
   },
 ];
 
@@ -64,10 +64,11 @@ export default function MarketingAboutStory() {
             mb: { xs: 8, md: 10 },
           }}
         >
-          <Typography variant="h2">Our Story</Typography>
+          <Typography variant="h2">Notre Histoire</Typography>
 
           <Typography sx={{ color: 'text.secondary' }}>
-            Nunc nonummy metus. Donec elit libero, sodales nec, volutpat a, suscipit non, turpis.
+            Une aventure débutée en 2015 avec la passion du bois et la volonté de transformer 
+            l'artisanat traditionnel par l'innovation technologique.
           </Typography>
         </Stack>
 

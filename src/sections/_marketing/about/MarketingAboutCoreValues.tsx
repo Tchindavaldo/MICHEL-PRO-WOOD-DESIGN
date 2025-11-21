@@ -7,23 +7,23 @@ import SvgColor from 'src/components/svg-color';
 
 const CORE_VALUES = [
   {
-    title: 'Customer Satisfaction',
-    description: 'Aenean urna dictum adipiscing nec, cras quisque.',
+    title: 'Excellence Artisanale',
+    description: 'Fabrication de haute précision avec bois sélectionné premium et finitions irréprochables.',
     icon: '/assets/icons/ic_agreement.svg',
   },
   {
-    title: 'Transparency',
-    description: 'Aenean urna dictum adipiscing nec, cras quisque.',
+    title: 'Innovation Technologique',
+    description: 'CFAO, modélisation 3D et usinage CNC pour des réalisations modernes et précises.',
     icon: '/assets/icons/ic_transparency.svg',
   },
   {
-    title: 'Reputation',
-    description: 'Aenean urna dictum adipiscing nec, cras quisque.',
+    title: 'Personnalisation Totale',
+    description: 'Chaque projet est unique et adapté aux besoins spécifiques de nos clients.',
     icon: '/assets/icons/ic_reputation.svg',
   },
   {
-    title: 'Cooperation',
-    description: 'Aenean urna dictum adipiscing nec, cras quisque.',
+    title: 'Formation & Transmission',
+    description: 'Former la nouvelle génération d\'artisans qualifiés pour l\'avenir du secteur bois.',
     icon: '/assets/icons/ic_popularity.svg',
   },
 ];
@@ -40,7 +40,7 @@ export default function MarketingAboutCoreValues() {
       }}
     >
       <Typography variant="h2" sx={{ mb: { xs: 8, md: 10 } }}>
-        Our Core Values
+        Nos Valeurs Fondamentales
       </Typography>
 
       <Box

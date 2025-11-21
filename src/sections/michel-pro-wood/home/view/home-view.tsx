@@ -1,29 +1,24 @@
 // _mock
 import {
   _brands,
-  _members,
-  _blogMarketingPosts,
   _caseStudies,
-  _testimonials,
   _pricingMarketing,
 } from 'src/_mock';
 //
 import PricingMarketing from 'src/sections/pricing/marketing';
-import TeamMarketing from 'src/sections/team/marketing';
-import NewsletterMarketing from 'src/sections/newsletter/marketing';
-import { BlogMarketingLatestPosts } from 'src/sections/blog/marketing';
-import TestimonialMarketing from 'src/sections/testimonial/marketing';
 import OurClientsMarketing from 'src/sections/our-clients/marketing';
-import {
-  MarketingLandingFaqs,
-  MarketingLandingFreeSEO,
-  MarketingLandingCaseStudies,
-} from 'src/sections/_marketing/landing';
 import HomeHero from '../home-hero';
 import HomeVideoCarousel from '../home-video-carousel';
 import HomeAbout from '../home-about';
 import HomeServices from '../home-services';
 import HomeProcess from '../home-process';
+import HomeRealizations from '../home-realizations';
+import HomeShop from '../home-shop';
+import HomePricing from '../home-pricing';
+import HomeJobs from '../home-jobs';
+import HomeTestimonials from '../home-testimonials';
+import HomeLatestPosts from '../home-latest-posts';
+import HomeGetQuote from '../home-get-quote';
 
 // ----------------------------------------------------------------------
 
@@ -42,21 +37,19 @@ export default function HomeView() {
 
       <HomeProcess />
 
-      <MarketingLandingCaseStudies caseStudies={_caseStudies.slice(-6)} />
+      <HomeRealizations />
 
-      <TeamMarketing members={_members} />
+      <HomeShop />
 
-      <PricingMarketing plans={_pricingMarketing} />
+      <HomePricing />
 
-      <MarketingLandingFaqs />
+      <HomeJobs />
 
-      <TestimonialMarketing testimonials={_testimonials} />
+      <HomeTestimonials />
 
-      <BlogMarketingLatestPosts posts={_blogMarketingPosts.slice(0, 4)} />
+      <HomeLatestPosts />
 
-      <MarketingLandingFreeSEO />
-
-      <NewsletterMarketing />
+      <HomeGetQuote />
     </>
   );
 }

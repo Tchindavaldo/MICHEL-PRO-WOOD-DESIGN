@@ -9,33 +9,33 @@ import Image from 'src/components/image';
 
 const BENEFITS = [
   {
-    title: 'Online Media',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
+    title: 'Fabrication Artisanale',
+    description: 'Haute précision avec bois sélectionné premium et finitions irréprochables.',
     iconColor: 'primary',
   },
   {
-    title: 'Design',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
+    title: 'Technologie CFAO',
+    description: 'Conception et fabrication assistée par ordinateur pour des réalisations modernes.',
     iconColor: 'success',
   },
   {
-    title: 'Marketing',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
+    title: 'Personnalisation Totale',
+    description: 'Chaque projet est unique et adapté à vos besoins spécifiques.',
     iconColor: 'secondary',
   },
   {
-    title: 'HR & Recruiting',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
+    title: 'Durabilité Garantie',
+    description: 'Matériaux de qualité supérieure pour des ouvrages durables dans le temps.',
     iconColor: 'secondary',
   },
   {
-    title: 'Management',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
+    title: 'Savoir-faire Local',
+    description: 'Expertise camerounaise combinée à la technologie moderne.',
     iconColor: 'success',
   },
   {
-    title: 'Branding',
-    description: 'Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi. ',
+    title: 'Service Professionnel',
+    description: 'Accompagnement complet de la conception à la livraison.',
     iconColor: 'primary',
   },
 ];
@@ -54,7 +54,7 @@ export default function MarketingServicesBenefits() {
     >
       <Container>
         <Typography variant="h2" sx={{ textAlign: 'center' }}>
-          Benefits Achieved
+          Nos Caractéristiques
         </Typography>
 
         <Typography
@@ -67,7 +67,7 @@ export default function MarketingServicesBenefits() {
             mb: { xs: 8, md: 10 },
           }}
         >
-          Nunc nonummy metus. Donec elit libero, sodales nec, volutpat a, suscipit non, turpis.
+          Ce qui nous distingue et fait notre réputation d'excellence dans le secteur bois.
         </Typography>
 
         <Box
