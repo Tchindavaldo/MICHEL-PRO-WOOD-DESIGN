@@ -3,8 +3,6 @@ import { alpha, styled } from '@mui/material/styles';
 import { Container, Typography, Stack, Box, Unstable_Grid2 as Grid } from '@mui/material';
 // utils
 import { bgGradient } from 'src/utils/cssStyles';
-// components
-import HomeVideoCarousel from '../home/home-video-carousel';
 
 // ----------------------------------------------------------------------
 
@@ -103,7 +101,7 @@ export default function RealizationsHero() {
                     </Typography>
                   </Box>
                   <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                    Menuiserie & Ébénisterie d'excellence
+                    Menuiserie & Ébénisterie d&apos;excellence
                   </Typography>
                 </Stack>
               </StyledCard>

@@ -1,13 +1,12 @@
 // @mui
 import { Container } from '@mui/material';
-//
-import HomeTestimonials from '../../home/home-testimonials';
-import HomeLatestPosts from '../../home/home-latest-posts';
-import HomeGetQuote from '../../home/home-get-quote';
-import HomeRealizations from '../../home/home-realizations';
-import RealizationsHero from '../realizations-hero';
+// sections
 import { MarketingCaseStudyList } from 'src/sections/_marketing/case-study/list';
+// data
 import { REALIZATIONS_CASE_STUDIES } from 'src/assets/data/michel-pro-wood/realizations-data';
+//
+import HomeGetQuote from '../../home/home-get-quote';
+import RealizationsHero from '../realizations-hero';
 
 // ----------------------------------------------------------------------
 

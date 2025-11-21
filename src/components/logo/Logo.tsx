@@ -1,4 +1,3 @@
-```
 import { memo } from 'react';
 // next
 import NextLink from 'next/link';
@@ -45,4 +44,3 @@ function Logo({ single = false, sx }: LogoProps) {
 }
 
 export default memo(Logo);
-```

@@ -13,7 +13,6 @@ import {
   EcommerceLandingPopularProducts,
   EcommerceLandingFeaturedProducts,
 } from 'src/sections/_e-commerce/landing';
-import HomeShop from '../../home/home-shop';
 import HomeGetQuote from '../../home/home-get-quote';
 
 // ----------------------------------------------------------------------
