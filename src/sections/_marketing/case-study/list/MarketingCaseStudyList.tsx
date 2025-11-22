@@ -51,13 +51,20 @@ export default function MarketingCaseStudyList({ caseStudies }: Props) {
         variant="scrollable"
         allowScrollButtonsMobile
         onChange={handleChangeTab}
+        slotProps={{
+          startScrollButtonIcon: { sx: { width: 'max-content' } },
+          endScrollButtonIcon: { sx: { width: 'max-content' } },
+        }}
         sx={{
           mx: { xs: -2.5, md: 0 },
           px: { xs: 2.5, md: 0 },
+          '& .MuiTabScrollButton-root': {
+            width: 'max-content',
+          },
         }}
       >
         {categories.map((category) => (
-          <Tab key={category} value={category} label={category} sx={{ width: 'max-content' }} />
+          <Tab key={category} value={category} label={category} />
         ))}
       </Tabs>
 

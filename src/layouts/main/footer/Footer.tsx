@@ -32,8 +32,6 @@ export default function Footer() {
 
   const mainFooter = (
     <>
-      <Divider />
-
       <Container
         sx={{
           overflow: 'hidden',
@@ -45,13 +43,13 @@ export default function Footer() {
             <Stack spacing={{ xs: 3, md: 5 }}>
               <Stack alignItems="flex-start" spacing={3}>
                 <Logo sx={{ width: 50, height: 50 }} />
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                <Typography variant="body2" sx={{ color: 'grey.400' }}>
                   MICHEL PRO WOOD DESIGN est une entreprise spécialisée dans la menuiserie, l&apos;ébénisterie, la construction bois et l&apos;usinage CNC. Nous formons également la prochaine génération d&apos;artisans.
                 </Typography>
               </Stack>
 
               <Stack spacing={2}>
-                <Typography variant="h6">Suivez-nous</Typography>
+                <Typography variant="h6" sx={{ color: 'common.white' }}>Suivez-nous</Typography>
                 <Stack direction="row" alignItems="center">
                   {_socials.map((social) => (
                     <IconButton key={social.value} color="primary">
@@ -70,52 +68,52 @@ export default function Footer() {
               justifyContent="space-between"
             >
               <Stack spacing={2}>
-                <Typography variant="h6">Menu</Typography>
-                <Link href={paths.michelProWood.home} color="inherit" variant="body2" sx={{ display: 'block' }}>
+                <Typography variant="h6" sx={{ color: 'common.white' }}>Menu</Typography>
+                <Link href={paths.michelProWood.home} color="grey.400" variant="body2" sx={{ display: 'block', '&:hover': { color: 'primary.main' } }}>
                   Home
                 </Link>
-                <Link href={paths.michelProWood.about} color="inherit" variant="body2" sx={{ display: 'block' }}>
+                <Link href={paths.michelProWood.about} color="grey.400" variant="body2" sx={{ display: 'block', '&:hover': { color: 'primary.main' } }}>
                   À Propos
                 </Link>
-                <Link href={paths.michelProWood.services} color="inherit" variant="body2" sx={{ display: 'block' }}>
+                <Link href={paths.michelProWood.services} color="grey.400" variant="body2" sx={{ display: 'block', '&:hover': { color: 'primary.main' } }}>
                   Services
                 </Link>
-                <Link href={paths.michelProWood.realizations} color="inherit" variant="body2" sx={{ display: 'block' }}>
+                <Link href={paths.michelProWood.realizations} color="grey.400" variant="body2" sx={{ display: 'block', '&:hover': { color: 'primary.main' } }}>
                   Réalisations
                 </Link>
-                <Link href={paths.michelProWood.shop} color="inherit" variant="body2" sx={{ display: 'block' }}>
+                <Link href={paths.michelProWood.shop} color="grey.400" variant="body2" sx={{ display: 'block', '&:hover': { color: 'primary.main' } }}>
                   Boutique
                 </Link>
-                <Link href={paths.michelProWood.contact} color="inherit" variant="body2" sx={{ display: 'block' }}>
+                <Link href={paths.michelProWood.contact} color="grey.400" variant="body2" sx={{ display: 'block', '&:hover': { color: 'primary.main' } }}>
                   Contact
                 </Link>
               </Stack>
 
               <Stack spacing={2}>
-                <Typography variant="h6">Contact</Typography>
+                <Typography variant="h6" sx={{ color: 'common.white' }}>Contact</Typography>
                 <Stack spacing={1}>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  <Typography variant="body2" sx={{ color: 'grey.400' }}>
                     Bafoussam (Foyer Lagouenne, Ouest Cameroun)
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  <Typography variant="body2" sx={{ color: 'grey.400' }}>
                     michelprowooddesign@gmail.com
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  <Typography variant="body2" sx={{ color: 'grey.400' }}>
                     696 10 36 72 / 683 69 64 62
                   </Typography>
                 </Stack>
               </Stack>
 
               <Stack spacing={2}>
-                <Typography variant="h6">Horaires</Typography>
+                <Typography variant="h6" sx={{ color: 'common.white' }}>Horaires</Typography>
                 <Stack spacing={1}>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  <Typography variant="body2" sx={{ color: 'grey.400' }}>
                     Lundi - Vendredi : 8h00 - 18h00
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  <Typography variant="body2" sx={{ color: 'grey.400' }}>
                     Samedi : 8h00 - 14h00
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  <Typography variant="body2" sx={{ color: 'grey.400' }}>
                     Dimanche : Fermé
                   </Typography>
                 </Stack>
@@ -125,7 +123,7 @@ export default function Footer() {
         </Grid>
       </Container>
 
-      <Divider />
+      <Divider sx={{ borderColor: 'grey.800' }} />
 
       <Container>
         <Stack
@@ -134,16 +132,16 @@ export default function Footer() {
           justifyContent="space-between"
           sx={{ py: 3, textAlign: 'center' }}
         >
-          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+          <Typography variant="caption" sx={{ color: 'grey.500' }}>
             © 2025 MICHEL PRO WOOD DESIGN. Tous droits réservés.
           </Typography>
 
           <Stack direction="row" spacing={3} justifyContent="center">
-            <Link variant="caption" sx={{ color: 'text.secondary' }}>
+            <Link variant="caption" sx={{ color: 'grey.500', '&:hover': { color: 'primary.main' } }}>
               Politique de confidentialité
             </Link>
 
-            <Link variant="caption" sx={{ color: 'text.secondary' }}>
+            <Link variant="caption" sx={{ color: 'grey.500', '&:hover': { color: 'primary.main' } }}>
               Conditions d&apos;utilisation
             </Link>
           </Stack>
@@ -153,7 +151,7 @@ export default function Footer() {
   );
 
   return (
-    <Box component="footer" sx={{ bgcolor: 'background.neutral' }}>
+    <Box component="footer" sx={{ bgcolor: '#1A1A1A' }}>
       {mainFooter}
     </Box>
   );
