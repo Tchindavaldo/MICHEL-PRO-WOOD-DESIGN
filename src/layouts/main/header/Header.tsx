@@ -1,6 +1,7 @@
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Box, AppBar, Toolbar, Container } from '@mui/material';
+import { Box, AppBar, Toolbar, Container, Button } from '@mui/material';
+import { paths } from 'src/routes/paths';
 // hooks
 import useOffSetTop from 'src/hooks/useOffSetTop';
 import useResponsive from 'src/hooks/useResponsive';
@@ -54,10 +55,25 @@ export default function Header({ headerOnDark }: Props) {
       >
         <Container sx={{ height: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ lineHeight: 0 }}>
-            <Logo />
+            <Logo sx={{ width: 50, height: 50 }} />
           </Box>
 
           {isMdUp && <NavDesktop data={navConfig} />}
+          
+          {isMdUp && (
+            <Button 
+              variant="contained" 
+              color="primary" 
+              href={paths.michelProWood.contact}
+              sx={{ 
+                ml: { xs: 1, md: 2 },
+                mr: { xs: 1, md: 0 },
+                whiteSpace: 'nowrap'
+              }}
+            >
+              Demander un devis
+            </Button>
+          )}
 
           {!isMdUp && <NavMobile data={navConfig} />}
         </Container>

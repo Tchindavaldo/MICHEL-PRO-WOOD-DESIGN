@@ -9,6 +9,7 @@ import {
   Typography,
   IconButton,
   Unstable_Grid2 as Grid,
+  Box,
 } from '@mui/material';
 // hooks
 import useResponsive from 'src/hooks/useResponsive';
@@ -43,7 +44,7 @@ export default function Footer() {
           <Grid xs={12} md={4}>
             <Stack spacing={{ xs: 3, md: 5 }}>
               <Stack alignItems="flex-start" spacing={3}>
-                <Logo />
+                <Logo sx={{ width: 50, height: 50 }} />
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   MICHEL PRO WOOD DESIGN est une entreprise spécialisée dans la menuiserie, l&apos;ébénisterie, la construction bois et l&apos;usinage CNC. Nous formons également la prochaine génération d&apos;artisans.
                 </Typography>
@@ -151,5 +152,9 @@ export default function Footer() {
     </>
   );
 
-  return <footer>{mainFooter}</footer>;
+  return (
+    <Box component="footer" sx={{ bgcolor: 'background.neutral' }}>
+      {mainFooter}
+    </Box>
+  );
 }

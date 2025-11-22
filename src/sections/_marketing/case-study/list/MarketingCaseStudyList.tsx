@@ -51,9 +51,13 @@ export default function MarketingCaseStudyList({ caseStudies }: Props) {
         variant="scrollable"
         allowScrollButtonsMobile
         onChange={handleChangeTab}
+        sx={{
+          mx: { xs: -2.5, md: 0 },
+          px: { xs: 2.5, md: 0 },
+        }}
       >
         {categories.map((category) => (
-          <Tab key={category} value={category} label={category} />
+          <Tab key={category} value={category} label={category} sx={{ width: 'max-content' }} />
         ))}
       </Tabs>
 

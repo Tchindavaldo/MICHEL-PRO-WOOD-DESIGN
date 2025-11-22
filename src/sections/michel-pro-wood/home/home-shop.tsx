@@ -51,7 +51,6 @@ const StyledOverlay = styled('div')(({ theme }) => ({
   top: 0,
   left: 0,
   zIndex: 8,
-  opacity: 0,
   width: '100%',
   height: '100%',
   position: 'absolute',
@@ -61,6 +60,16 @@ const StyledOverlay = styled('div')(({ theme }) => ({
     duration: theme.transitions.duration.short,
   }),
   '&:hover': { opacity: 1 },
+  [theme.breakpoints.up('md')]: {
+    opacity: 0,
+  },
+  [theme.breakpoints.down('md')]: {
+    opacity: 1,
+    ...bgGradient({
+      startColor: `${alpha(theme.palette.common.black, 0)} 0%`,
+      endColor: `${alpha(theme.palette.common.black, 0.25)} 75%`,
+    }),
+  },
 }));
 
 // ----------------------------------------------------------------------
@@ -202,18 +211,19 @@ type ShopProductProps = {
 function ShopProduct({ product }: ShopProductProps) {
   const { name, image } = product;
   const [price, setPrice] = useState(0);
+  const isMdUp = useResponsive('up', 'md');
 
   useEffect(() => {
-    setPrice(Math.floor(Math.random() * (2000 - 100 + 1)) + 100);
+    setPrice(Math.floor(Math.random() * (500000 - 50000 + 1)) + 50000);
   }, []);
 
   return (
     <Stack>
       <Box
         component={m.div}
-        whileHover="hover"
-        variants={varHover(0.95)}
-        transition={varTranHover()}
+        whileHover={isMdUp ? 'hover' : undefined}
+        variants={isMdUp ? varHover(0.95) : undefined}
+        transition={isMdUp ? varTranHover() : undefined}
         sx={{ position: 'relative', borderRadius: 2, overflow: 'hidden' }}
       >
         <StyledOverlay>
@@ -229,7 +239,7 @@ function ShopProduct({ product }: ShopProductProps) {
           </Stack>
         </StyledOverlay>
 
-        <m.div variants={varHover(1.15)} transition={varTranHover()}>
+        <m.div variants={isMdUp ? varHover(1.15) : undefined} transition={isMdUp ? varTranHover() : undefined}>
           <Image src={image} alt={name} ratio="3/4" />
         </m.div>
       </Box>
@@ -238,7 +248,7 @@ function ShopProduct({ product }: ShopProductProps) {
         <Typography variant="h6">{name}</Typography>
 
         <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-          {price} €
+          {price.toLocaleString('fr-FR')} FCFA
         </Typography>
       </Stack>
     </Stack>

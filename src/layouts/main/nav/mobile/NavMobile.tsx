@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { List, Drawer, IconButton, Button, Stack } from '@mui/material';
 // config
 import { NAV } from 'src/config-global';
+import { paths } from 'src/routes/paths';
 // components
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
@@ -61,8 +62,8 @@ export default function NavMobile({ data }: NavProps) {
           </List>
 
           <Stack spacing={1.5} sx={{ p: 3 }}>
-            <Button fullWidth variant="contained" color="inherit">
-              Buy Now
+            <Button fullWidth variant="contained" color="primary" href={paths.michelProWood.contact}>
+              Demander un devis
             </Button>
           </Stack>
         </Scrollbar>

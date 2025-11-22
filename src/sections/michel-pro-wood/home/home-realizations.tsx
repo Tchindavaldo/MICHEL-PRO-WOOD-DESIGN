@@ -181,7 +181,7 @@ export default function HomeRealizations() {
       <Stack alignItems={{ xs: 'center', md: 'flex-end' }}>
         <Button
           component={NextLink}
-          href="#"
+          href={paths.michelProWood.realizations}
           size="large"
           color="inherit"
           endIcon={<Iconify icon="carbon:chevron-right" />}
@@ -241,7 +241,7 @@ function LargeItem({ caseStudy }: LargeItemProps) {
 
         <Button
           component={NextLink}
-          href="#"
+          href={paths.michelProWood.realizations}
           size="small"
           color="inherit"
           endIcon={<Iconify icon="carbon:chevron-right" />}
@@ -271,7 +271,7 @@ function SmallItem({ caseStudy, isSquare, isMdUp }: SmallItemProps) {
   const { coverImg, title, category } = caseStudy;
 
   return (
-    <Link component={NextLink} href="#">
+    <Link component={NextLink} href={paths.michelProWood.realizations}>
       <Paper
         component={m.div}
         whileHover="hover"

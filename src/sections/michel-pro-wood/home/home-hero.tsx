@@ -2,7 +2,7 @@
 import { useRef } from 'react';
 // @mui
 import { alpha, useTheme, styled } from '@mui/material/styles';
-import { Stack, Container, Typography, Button, Fab, Unstable_Grid2 as Grid, Box } from '@mui/material';
+import { Stack, Container, Typography, Button, Fab, Unstable_Grid2 as Grid, Box, IconButton } from '@mui/material';
 // utils
 import { bgGradient } from 'src/utils/cssStyles';
 // hooks
@@ -37,15 +37,64 @@ export default function HomeHero() {
     fade: true,
     ...CarouselDots({
       sx: {
-        left: 0,
-        right: 0,
-        zIndex: 9,
-        bottom: 64,
-        position: 'absolute',
-        display: 'flex',
-        justifyContent: 'center',
+        mx: 2, // Margin for dots
       },
     }),
+    appendDots: (dots: any) => (
+      <Box
+        component="ul"
+        sx={{
+          zIndex: 9,
+          bottom: 64,
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          color: 'primary.main',
+          '& li': {
+            width: 18,
+            height: 18,
+            opacity: 0.32,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            '&.slick-active': {
+              opacity: 1,
+            },
+          },
+        }}
+      >
+        <IconButton
+          onClick={handlePrev}
+          sx={{
+            width: 40,
+            height: 40,
+            color: 'common.white',
+            bgcolor: alpha(theme.palette.grey[900], 0.48),
+            '&:hover': { bgcolor: theme.palette.grey[900] },
+          }}
+        >
+          <Iconify icon="eva:arrow-ios-back-fill" />
+        </IconButton>
+
+        {dots}
+
+        <IconButton
+          onClick={handleNext}
+          sx={{
+            width: 40,
+            height: 40,
+            color: 'common.white',
+            bgcolor: alpha(theme.palette.grey[900], 0.48),
+            '&:hover': { bgcolor: theme.palette.grey[900] },
+          }}
+        >
+          <Iconify icon="eva:arrow-ios-forward-fill" />
+        </IconButton>
+      </Box>
+    ),
   };
 
   const slides = [
@@ -98,18 +147,18 @@ export default function HomeHero() {
           >
             <Container
               sx={{
-                height: { md: '100vh' },
-                display: { md: 'flex' },
-                alignItems: { md: 'center' },
+                height: '100vh',
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
               <Grid container columnSpacing={{ xs: 0, md: 10 }}>
                 <Grid
                   xs={12}
-                  md={6}
-                  lg={5}
+                  md={8}
+                  lg={6}
                   sx={{
-                    textAlign: { xs: 'center', md: 'left' },
+                    textAlign: 'left',
                     color: 'common.white',
                   }}
                 >
@@ -117,19 +166,19 @@ export default function HomeHero() {
                     Michel Pro Wood Design
                   </Typography>
 
-                  <Typography variant="h2" sx={{ my: 3, color: 'common.white' }}>
+                  <Typography variant="h2" sx={{ my: 3, color: 'common.white', fontSize: { xs: '2rem', md: '3.75rem' } }}>
                     {slide.title}
                   </Typography>
 
-                  <Typography sx={{ color: 'common.white', mb: 5, opacity: 0.8 }}>
+                  <Typography sx={{ color: 'common.white', mb: 5, opacity: 0.8, fontSize: { xs: '0.9rem', md: '1.1rem' } }}>
                     {slide.description}
                   </Typography>
 
                   <Stack
-                    spacing={3}
-                    direction={{ xs: 'column', sm: 'row' }}
-                    alignItems={{ xs: 'center', md: 'unset' }}
-                    justifyContent={{ xs: 'center', md: 'unset' }}
+                    spacing={2}
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="flex-start"
                   >
                     <Button variant="contained" color="primary" size="large">
                       Obtenir un devis
@@ -140,7 +189,7 @@ export default function HomeHero() {
                         <Fab size="medium" color="info" sx={{ mr: 1 }}>
                           <Iconify width={24} icon="carbon:play" />
                         </Fab>
-                        See Our Work
+                        Voir Vidéo
                       </Stack>
                     )}
                   </Stack>
@@ -150,31 +199,6 @@ export default function HomeHero() {
           </Box>
         ))}
       </Carousel>
-
-      <CarouselArrows
-        onNext={handleNext}
-        onPrev={handlePrev}
-        sx={{
-          top: '50%',
-          transform: 'translateY(-50%)',
-          position: 'absolute',
-          width: '100%',
-          justifyContent: 'space-between',
-          px: 2,
-          '& .MuiIconButton-root': {
-            mt: -5,
-            width: 48,
-            height: 48,
-            opacity: 0.48,
-            color: 'common.white',
-            cursor: 'pointer',
-            borderRadius: '50%',
-            bgcolor: 'action.hover',
-            transition: theme.transitions.create('opacity'),
-            '&:hover': { opacity: 1, bgcolor: 'action.selected' },
-          },
-        }}
-      />
     </StyledRoot>
   );
 }

@@ -14,10 +14,10 @@ const StyledRoot = styled('div')(({ theme }) => ({
   position: 'relative',
   height: '50vh',
   maxHeight: '500px',
-  minHeight: '400px',
+  minHeight: '500px',
   display: 'flex',
   alignItems: 'center',
-  paddingTop: theme.spacing(6),
+  paddingTop: theme.spacing(15),
   paddingBottom: theme.spacing(6),
   [theme.breakpoints.up('md')]: {
     paddingTop: theme.spacing(8),
@@ -26,7 +26,8 @@ const StyledRoot = styled('div')(({ theme }) => ({
 }));
 
 const StyledCard = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2),
+  padding: theme.spacing(1),
+  height: '100%',
   borderRadius: theme.spacing(1.5),
   background: alpha(theme.palette.common.white, 0.08),
   backdropFilter: 'blur(10px)',
@@ -57,7 +58,7 @@ export default function RealizationsHero() {
                 display: 'block',
               }}
             >
-              PORTFOLIO
+              NOS EXPERTISES
             </Typography>
             <Typography
               variant="h1"
@@ -80,9 +81,13 @@ export default function RealizationsHero() {
           </Box>
 
           <Grid container spacing={2}>
-            <Grid xs={12} sm={6}>
+            <Grid xs={6} sm={6}>
               <StyledCard>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack
+                  direction={{ xs: 'column', md: 'row' }}
+                  spacing={2}
+                  alignItems={{ xs: 'flex-start', md: 'center' }}
+                >
                   <Box
                     sx={{
                       width: 48,
@@ -100,16 +105,20 @@ export default function RealizationsHero() {
                       🪵
                     </Typography>
                   </Box>
-                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  <Typography sx={{ fontWeight: 'bold', typography: { xs: 'caption', md: 'body1' } }}>
                     Menuiserie & Ébénisterie d&apos;excellence
                   </Typography>
                 </Stack>
               </StyledCard>
             </Grid>
 
-            <Grid xs={12} sm={6}>
+            <Grid xs={6} sm={6}>
               <StyledCard>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack
+                  direction={{ xs: 'column', md: 'row' }}
+                  spacing={2}
+                  alignItems={{ xs: 'flex-start', md: 'center' }}
+                >
                   <Box
                     sx={{
                       width: 48,
@@ -127,16 +136,20 @@ export default function RealizationsHero() {
                       🏗️
                     </Typography>
                   </Box>
-                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  <Typography sx={{ fontWeight: 500, typography: { xs: 'caption', md: 'body1' } }}>
                     Construction bois innovante
                   </Typography>
                 </Stack>
               </StyledCard>
             </Grid>
 
-            <Grid xs={12} sm={6}>
+            <Grid xs={6} sm={6}>
               <StyledCard>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack
+                  direction={{ xs: 'column', md: 'row' }}
+                  spacing={2}
+                  alignItems={{ xs: 'flex-start', md: 'center' }}
+                >
                   <Box
                     sx={{
                       width: 48,
@@ -154,16 +167,20 @@ export default function RealizationsHero() {
                       ⭐
                     </Typography>
                   </Box>
-                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  <Typography sx={{ fontWeight: 500, typography: { xs: 'caption', md: 'body1' } }}>
                     Finitions artisanales premium
                   </Typography>
                 </Stack>
               </StyledCard>
             </Grid>
 
-            <Grid xs={12} sm={6}>
+            <Grid xs={6} sm={6}>
               <StyledCard>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack
+                  direction={{ xs: 'column', md: 'row' }}
+                  spacing={2}
+                  alignItems={{ xs: 'flex-start', md: 'center' }}
+                >
                   <Box
                     sx={{
                       width: 48,
@@ -181,7 +198,7 @@ export default function RealizationsHero() {
                       🎯
                     </Typography>
                   </Box>
-                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  <Typography sx={{ fontWeight: 500, typography: { xs: 'caption', md: 'body1' } }}>
                     Solutions 100% personnalisées
                   </Typography>
                 </Stack>

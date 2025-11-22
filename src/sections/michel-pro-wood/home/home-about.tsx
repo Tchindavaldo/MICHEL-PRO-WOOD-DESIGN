@@ -8,6 +8,10 @@ import {
   Box,
   Unstable_Grid2 as Grid,
 } from '@mui/material';
+// next
+import NextLink from 'next/link';
+// routes
+import { paths } from 'src/routes/paths';
 // utils
 import { fShortenNumber } from 'src/utils/formatNumber';
 // components
@@ -82,6 +86,8 @@ export default function HomeAbout() {
           </Typography>
 
           <Button
+            component={NextLink}
+            href={paths.michelProWood.about}
             size="large"
             color="inherit"
             endIcon={<Iconify icon="carbon:chevron-right" />}

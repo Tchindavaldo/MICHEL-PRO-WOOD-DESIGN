@@ -57,9 +57,9 @@ function VideoSlide({ slide }: SlideProps) {
         sx={{
           width: '100%',
           height: '100%',
+          minHeight: { xs: 400, md: 600 },
           objectFit: 'cover',
           display: 'block',
-          maxHeight: 600,
         }}
       >
         <source src={slide.video} type="video/mp4" />
@@ -77,19 +77,20 @@ function VideoSlide({ slide }: SlideProps) {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'flex-end',
+          alignItems: 'flex-start',
           p: { xs: 3, md: 5 },
         }}
       >
-        <Stack spacing={2} sx={{ color: 'common.white', maxWidth: 480 }}>
-          <Typography variant="h3" sx={{ color: 'common.white' }}>
+        <Stack spacing={2} sx={{ color: 'common.white', maxWidth: 600, textAlign: 'left', alignItems: 'flex-start' }}>
+          <Typography variant="h3" sx={{ color: 'common.white', fontSize: { xs: '1.5rem', md: '3rem' } }}>
             {slide.title}
           </Typography>
 
-          <Typography sx={{ color: 'common.white', opacity: 0.8 }}>
+          <Typography sx={{ color: 'common.white', opacity: 0.8, fontSize: { xs: '0.9rem', md: '1.1rem' } }}>
             {slide.description}
           </Typography>
 
-          <Stack direction="row" spacing={2} alignItems="center">
+          <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-start">
             <Button variant="contained" color="primary" href={slide.ctaLink}>
               {slide.ctaText}
             </Button>

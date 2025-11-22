@@ -8,6 +8,8 @@ import { Box, Container, Typography, Stack, Button, Link, Avatar } from '@mui/ma
 // utils
 import { fDate } from 'src/utils/formatTime';
 import { bgGradient } from 'src/utils/cssStyles';
+// hooks
+import useResponsive from 'src/hooks/useResponsive';
 // components
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
@@ -192,13 +194,15 @@ type PostItemProps = {
   };
 };
 
+
 function PostItem({ post }: PostItemProps) {
   const { title, duration, coverImg, author, createdAt } = post;
+  const isMdUp = useResponsive('up', 'md');
 
   return (
     <Stack
       component={m.div}
-      whileHover="hover"
+      whileHover={isMdUp ? 'hover' : undefined}
       sx={{
         borderRadius: 2,
         overflow: 'hidden',
@@ -206,7 +210,7 @@ function PostItem({ post }: PostItemProps) {
         boxShadow: (theme) => theme.customShadows.z12,
       }}
     >
-      <m.div variants={varHover(1.25)} transition={varTranHover()}>
+      <m.div variants={isMdUp ? varHover(1.25) : undefined} transition={isMdUp ? varTranHover() : undefined}>
         <Image src={coverImg} alt={title} ratio="3/4" />
       </m.div>
 

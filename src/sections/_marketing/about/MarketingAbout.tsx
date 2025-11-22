@@ -115,8 +115,7 @@ export default function MarketingAbout() {
           display: 'grid',
           gap: { xs: 5, md: 8 },
           gridTemplateColumns: {
-            xs: 'repeat(1, 1fr)',
-            sm: 'repeat(2, 1fr)',
+            xs: 'repeat(2, 1fr)',
             md: 'repeat(4, 1fr)',
           },
         }}

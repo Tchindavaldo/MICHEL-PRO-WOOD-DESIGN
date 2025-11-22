@@ -113,6 +113,6 @@ export const navConfig = [
   { title: 'A Propos', path: paths.michelProWood.about },
   { title: 'Services', path: paths.michelProWood.services },
   { title: 'Réalisations', path: paths.michelProWood.realizations },
-  { title: 'Boutique', path: paths.michelProWood.shop },
+  // { title: 'Boutique', path: paths.michelProWood.shop },
   { title: 'Contact', path: paths.michelProWood.contact },
 ];
