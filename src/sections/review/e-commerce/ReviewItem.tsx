@@ -44,11 +44,11 @@ export default function ReviewItem({ name, rating, message, postedAt, avatarUrl 
         <Typography variant="body2">{message}</Typography>
 
         <Stack spacing={1} direction={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }}>
-          <Typography variant="subtitle2">Was this review helpful?</Typography>
+          <Typography variant="subtitle2">Cet avis vous a-t-il été utile ?</Typography>
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Button size="small" color="inherit" startIcon={<Iconify icon="carbon:thumbs-up" />}>
-              Yes
+              Oui
             </Button>
 
             <Button
@@ -63,7 +63,7 @@ export default function ReviewItem({ name, rating, message, postedAt, avatarUrl 
                 />
               }
             >
-              No
+              Non
             </Button>
           </Stack>
         </Stack>

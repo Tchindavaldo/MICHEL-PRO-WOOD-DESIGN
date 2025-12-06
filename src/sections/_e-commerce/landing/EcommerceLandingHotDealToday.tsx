@@ -76,7 +76,7 @@ export default function EcommerceLandingHotDealToday() {
             textAlign: { xs: 'center', md: 'unset' },
           }}
         >
-          🔥 Hot Deal Today
+         Offres Spéciales du Jour
         </Typography>
 
         <ProductCountdownBlock

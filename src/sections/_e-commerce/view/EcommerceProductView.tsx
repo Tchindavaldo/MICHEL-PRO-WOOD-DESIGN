@@ -42,13 +42,13 @@ export default function EcommerceProductView() {
         <CustomBreadcrumbs
           links={[
             {
-              name: 'Home',
+              name: 'Accueil',
             },
             {
-              name: 'Mobile Phones',
+              name: 'Mobilier',
             },
             {
-              name: 'Apple iPhone 14',
+              name: _mockProduct.name,
             },
           ]}
           sx={{ my: 5 }}
@@ -76,11 +76,11 @@ export default function EcommerceProductView() {
             <EcommerceProductDetailsDescription
               description={_mockProduct.description}
               specifications={[
-                { label: 'Category', value: 'Mobile' },
-                { label: 'Manufacturer', value: 'Apple' },
-                { label: 'Warranty', value: '12 Months' },
-                { label: 'Serial number', value: '358607726380311' },
-                { label: 'Ships From', value: 'United States' },
+                { label: 'Catégorie', value: 'Mobilier' },
+                { label: 'Fabricant', value: 'Wood Pro' },
+                { label: 'Garantie', value: '2 Ans' },
+                { label: 'Référence', value: 'WP-2023-001' },
+                { label: 'Origine', value: 'Cameroun' },
               ]}
             />
           </Grid>

@@ -14,24 +14,46 @@ import HomePricing from '../../home/home-pricing';
 
 // ----------------------------------------------------------------------
 
-export default function ServicesView() {
+// ----------------------------------------------------------------------
+
+type Props = {
+  services?: any[];
+  serviceIncludes?: any[];
+  serviceBenefits?: any[];
+  plans?: any[];
+  processSteps?: any[];
+  testimonials?: any[];
+  posts?: any[];
+  pageContent?: any;
+};
+
+export default function ServicesView({
+  services = [],
+  serviceIncludes = [],
+  serviceBenefits = [],
+  plans = [],
+  processSteps = [],
+  testimonials = [],
+  posts = [],
+  pageContent
+}: Props) {
   return (
     <>
-      <MarketingServicesHero />
+      <MarketingServicesHero pageContent={pageContent} />
 
-      <HomeServices />
+      <HomeServices services={services} />
 
-      <MarketingServicesInclude />
+      <MarketingServicesInclude serviceIncludes={serviceIncludes} />
 
-      <HomePricing />
+      <HomePricing plans={plans} />
 
-      <MarketingServicesBenefits />
+      <MarketingServicesBenefits serviceBenefits={serviceBenefits} />
 
-      <MarketingServicesHowItWork />
+      <MarketingServicesHowItWork processSteps={processSteps} />
 
-      <HomeTestimonials />
+      <HomeTestimonials testimonials={testimonials} />
 
-      <HomeLatestPosts />
+      <HomeLatestPosts posts={posts} />
 
       <HomeGetQuote />
     </>

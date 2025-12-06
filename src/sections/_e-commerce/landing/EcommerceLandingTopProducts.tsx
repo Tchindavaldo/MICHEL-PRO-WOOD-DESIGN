@@ -1,5 +1,8 @@
 // @mui
-import { Box, Typography, Container } from '@mui/material';
+import { Box, Typography, Container, Button } from '@mui/material';
+import NextLink from 'next/link';
+import { paths } from 'src/routes/paths';
+import Iconify from 'src/components/iconify';
 // _mock
 import { _products } from 'src/_mock';
 //
@@ -21,7 +24,7 @@ export default function EcommerceLandingTopProducts() {
           textAlign: { xs: 'center', md: 'unset' },
         }}
       >
-        Top Products
+        Meilleures Ventes
       </Typography>
 
       <Box
@@ -59,6 +62,19 @@ export default function EcommerceLandingTopProducts() {
           <EcommerceProductItemTop product={_products[4]} />
           <EcommerceProductItemTop product={_products[10]} />
         </Box>
+      </Box>
+
+      <Box sx={{ mt: 8, textAlign: 'center' }}>
+        <Button
+          component={NextLink}
+          href={paths.eCommerce.products}
+          size="large"
+          variant="contained"
+          color="primary"
+          endIcon={<Iconify icon="carbon:arrow-right" />}
+        >
+          Voir tous les produits
+        </Button>
       </Box>
     </Container>
   );

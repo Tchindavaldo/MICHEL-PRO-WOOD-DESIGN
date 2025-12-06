@@ -65,13 +65,14 @@ export default function EcommerceProductItemHero({ product }: Props) {
             variant="contained"
             endIcon={<Iconify icon="carbon:chevron-right" />}
           >
-            Shop Now
+            Acheter Maintenant
           </Button>
         </Box>
       </Grid>
 
       <Grid xs={12} md={6}>
         <Image
+          ratio="1/1"
           src={coverImg}
           sx={{
             ...filterStyles(

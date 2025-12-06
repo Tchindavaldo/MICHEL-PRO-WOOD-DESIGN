@@ -74,13 +74,13 @@ export default function ReviewNewForm({ onClose, ...other }: Props) {
   return (
     <Dialog fullWidth maxWidth="sm" onClose={onClose} {...other}>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle sx={{ typography: 'h3', pb: 3 }}>Review</DialogTitle>
+        <DialogTitle sx={{ typography: 'h3', pb: 3 }}>Avis</DialogTitle>
 
         <DialogContent sx={{ py: 0 }}>
           <Stack spacing={2.5}>
             <div>
               <Typography variant="subtitle2" gutterBottom>
-                Your rating:
+                Votre note :
               </Typography>
 
               <Controller
@@ -92,21 +92,19 @@ export default function ReviewNewForm({ onClose, ...other }: Props) {
               {!!errors.rating && <FormHelperText error> {errors.rating?.message}</FormHelperText>}
             </div>
 
-            <RHFTextField multiline rows={3} name="review" label="Review *" />
-
-            <RHFTextField name="name" label="Name *" />
-
-            <RHFTextField name="email" label="Email address *" />
+            <RHFTextField multiline rows={3} name="review" label="Avis *" />
+            <RHFTextField name="name" label="Nom *" />
+            <RHFTextField name="email" label="Adresse Email *" />
           </Stack>
         </DialogContent>
 
         <DialogActions>
           <Button variant="outlined" onClick={onClose} color="inherit">
-            Cancel
+            Annuler
           </Button>
 
           <LoadingButton color="inherit" type="submit" variant="contained" loading={isSubmitting}>
-            Post Review
+            Publier l'avis
           </LoadingButton>
         </DialogActions>
       </FormProvider>

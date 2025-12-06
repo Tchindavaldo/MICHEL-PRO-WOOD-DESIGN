@@ -59,8 +59,27 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function MarketingServicesHowItWork() {
+// ----------------------------------------------------------------------
+
+type Props = {
+  processSteps?: {
+    id: string;
+    stepNumber: string;
+    title: string;
+    description: string;
+  }[];
+};
+
+export default function MarketingServicesHowItWork({ processSteps = [] }: Props) {
   const isMdUp = useResponsive('up', 'md');
+
+  const displayTimelines = processSteps.length > 0 
+    ? processSteps.map((step: any) => ({
+        step: step.stepNumber,
+        title: step.title,
+        description: step.description,
+      }))
+    : TIMELINES;
 
   return (
     <StyledRoot>
@@ -83,7 +102,7 @@ export default function MarketingServicesHowItWork() {
         </Typography>
 
         <Timeline position={isMdUp ? 'alternate' : 'right'}>
-          {TIMELINES.map((value, index) => (
+          {displayTimelines.map((value, index) => (
             <TimelineItem
               key={value.title}
               sx={{
@@ -93,12 +112,12 @@ export default function MarketingServicesHowItWork() {
               }}
             >
               <TimelineSeparator>
-                <TimelineDot color={COLORS[index]} />
+                <TimelineDot color={COLORS[index % COLORS.length]} />
                 <TimelineConnector />
               </TimelineSeparator>
 
               <TimelineContent sx={{ pb: { xs: 3, md: 5 } }}>
-                <Typography variant="overline" sx={{ color: `${COLORS[index]}.main` }}>
+                <Typography variant="overline" sx={{ color: `${COLORS[index % COLORS.length]}.main` }}>
                   {value.step}
                 </Typography>
 

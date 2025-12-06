@@ -52,10 +52,24 @@ const TESTIMONIALS = [
 
 // ----------------------------------------------------------------------
 
-export default function HomeTestimonials() {
+type Props = {
+  testimonials?: {
+    id: string;
+    name: string;
+    role: string;
+    avatar: string;
+    rating: number;
+    review: string;
+  }[];
+};
+
+export default function HomeTestimonials({ testimonials = [] }: Props) {
   const theme = useTheme();
 
   const carouselRef = useRef<Carousel | null>(null);
+
+  // Use provided testimonials or fallback to default
+  const displayTestimonials = testimonials.length > 0 ? testimonials : TESTIMONIALS;
 
   const carouselSettings = {
     dots: true,
@@ -105,7 +119,7 @@ export default function HomeTestimonials() {
           <Grid container spacing={10} justifyContent="center">
             <Grid xs={12} md={8}>
               <Carousel ref={carouselRef} {...carouselSettings}>
-                {TESTIMONIALS.map((testimonial) => (
+                {displayTestimonials.map((testimonial) => (
                   <TestimonialItem key={testimonial.id} testimonial={testimonial} />
                 ))}
               </Carousel>

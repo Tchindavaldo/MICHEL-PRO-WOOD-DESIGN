@@ -11,23 +11,23 @@ export default function EcommerceCheckoutNewCardForm() {
     <Stack spacing={2.5} sx={{ pt: 3 }}>
       <RHFTextField
         name="newCard.cardNumber"
-        label="Card Number"
+        label="Numéro de carte"
         placeholder="XXXX XXXX XXXX XXXX"
         InputLabelProps={{ shrink: true }}
       />
 
       <RHFTextField
         name="newCard.cardHolder"
-        label="Card Holder"
-        placeholder="JOHN DOE"
+        label="Titulaire de la carte"
+        placeholder="NOM PRENOM"
         InputLabelProps={{ shrink: true }}
       />
 
       <Stack spacing={2} direction="row">
         <RHFTextField
           name="newCard.expirationDate"
-          label="Expiration Date"
-          placeholder="MM/YY"
+          label="Date d'expiration"
+          placeholder="MM/AA"
           InputLabelProps={{ shrink: true }}
         />
         <RHFTextField
@@ -44,7 +44,7 @@ export default function EcommerceCheckoutNewCardForm() {
         sx={{ typography: 'caption', color: 'text.disabled' }}
       >
         <Iconify icon="carbon:locked" sx={{ mr: 0.5 }} />
-        Your transaction is secured with SSL encryption
+        Votre transaction est sécurisée avec cryptage SSL
       </Stack>
     </Stack>
   );

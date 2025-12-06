@@ -44,7 +44,19 @@ const SERVICES = [
 
 // ----------------------------------------------------------------------
 
-export default function HomeServices() {
+type Props = {
+  services?: {
+    name: string;
+    content: string;
+    path: string;
+    icon: string;
+    color: string;
+  }[];
+};
+
+export default function HomeServices({ services = [] }: Props) {
+  const displayServices = services.length > 0 ? services : SERVICES;
+
   return (
     <Container
       sx={{
@@ -83,8 +95,8 @@ export default function HomeServices() {
           },
         }}
       >
-        {SERVICES.map((service, index) => (
-          <ServiceItem key={service.name} service={service} index={index} />
+        {displayServices.map((service, index) => (
+          <ServiceItem key={`${service.name}-${index}`} service={service as any} index={index} />
         ))}
       </Box>
     </Container>
@@ -107,6 +119,16 @@ type ServiceItemProps = {
 function ServiceItem({ service, index }: ServiceItemProps) {
   const { name, icon, content, path, color } = service;
 
+  // Ensure color is valid, fallback to 'primary' if not
+  const validColors = ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const;
+  const safeColor = validColors.includes(color as any) ? color : 'primary';
+
+  // Ensure path is valid, fallback to services page if not
+  const safePath = path || paths.michelProWood.services;
+
+  // Ensure icon is valid, fallback to default icon if not
+  const safeIcon = icon || '/assets/icons/ic_chip.svg';
+
   return (
     <Card
       sx={{
@@ -123,12 +145,12 @@ function ServiceItem({ service, index }: ServiceItemProps) {
       }}
     >
       <SvgColor
-        src={icon}
+        src={safeIcon}
         sx={{
           width: 88,
           height: 88,
           mx: 'auto',
-          color: (theme) => theme.palette[color].main,
+          color: (theme) => theme.palette[safeColor].main,
         }}
       />
 
@@ -141,8 +163,8 @@ function ServiceItem({ service, index }: ServiceItemProps) {
 
       <IconButton
         component={NextLink}
-        href={path}
-        color={color}
+        href={safePath}
+        color={safeColor}
       >
         <Iconify icon="carbon:direction-straight-right" />
       </IconButton>

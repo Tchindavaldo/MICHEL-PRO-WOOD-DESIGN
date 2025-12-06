@@ -22,10 +22,33 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function HomeHero() {
+type Props = {
+  slides?: {
+    id: string | number;
+    title: string;
+    description: string;
+    image?: string;
+    coverUrl?: string; // Add coverUrl as alternative to image
+    hasVideo?: boolean;
+    videoUrl?: string;
+    label?: string;
+  }[];
+};
+
+export default function HomeHero({ slides = [] }: Props) {
   const theme = useTheme();
   const isMdUp = useResponsive('up', 'md');
   const carouselRef = useRef<Carousel | null>(null);
+
+  // console.log('HomeHero - Slides received:', slides.length, slides);
+
+  const handlePrev = () => {
+    carouselRef.current?.slickPrev();
+  };
+
+  const handleNext = () => {
+    carouselRef.current?.slickNext();
+  };
 
   const carouselSettings = {
     dots: true,
@@ -97,7 +120,7 @@ export default function HomeHero() {
     ),
   };
 
-  const slides = [
+  const defaultSlides = [
     {
       id: 1,
       title: 'Michel Pro Wood Design – Des créations en bois uniques',
@@ -124,24 +147,22 @@ export default function HomeHero() {
     },
   ];
 
-  const handlePrev = () => {
-    carouselRef.current?.slickPrev();
-  };
-
-  const handleNext = () => {
-    carouselRef.current?.slickNext();
-  };
+  const displaySlides = slides.length > 0 ? slides : defaultSlides;
 
   return (
     <StyledRoot>
       <Carousel ref={carouselRef} {...carouselSettings}>
-        {slides.map((slide) => (
+        {displaySlides.map((slide) => {
+          const imageUrl = slide.coverUrl || slide.image;
+          // console.log('Rendering slide:', slide.title, 'with image:', imageUrl);
+          
+          return (
           <Box
             key={slide.id}
             sx={{
               ...bgGradient({
                 color: alpha(theme.palette.common.black, 0.6), // Reduced opacity
-                imgUrl: slide.image,
+                imgUrl: imageUrl,
               }),
             }}
           >
@@ -197,7 +218,8 @@ export default function HomeHero() {
               </Grid>
             </Container>
           </Box>
-        ))}
+          );
+        })}
       </Carousel>
     </StyledRoot>
   );

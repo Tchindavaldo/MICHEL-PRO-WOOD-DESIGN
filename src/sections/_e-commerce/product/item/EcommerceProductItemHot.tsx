@@ -42,6 +42,7 @@ export default function EcommerceProductItemHot({ product, hotProduct = false, s
         }}
       >
         <Image
+          ratio="1/1"
           src={product.coverImg}
           sx={{
             mb: 2,
@@ -77,7 +78,7 @@ export default function EcommerceProductItemHot({ product, hotProduct = false, s
             <Typography
               variant="caption"
               sx={{ flexShrink: 0, color: 'text.disabled' }}
-            >{`🔥 ${product.sold} Sold`}</Typography>
+            >{`${product.sold} Sold`}</Typography>
           </Stack>
         )}
       </Paper>

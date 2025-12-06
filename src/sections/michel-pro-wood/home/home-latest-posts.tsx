@@ -68,10 +68,29 @@ const POSTS = [
 
 // ----------------------------------------------------------------------
 
-export default function HomeLatestPosts() {
+// ----------------------------------------------------------------------
+
+type Props = {
+  posts?: {
+    id: string;
+    title: string;
+    duration: string;
+    coverImg: string;
+    author: {
+      name: string;
+      picture: string;
+    };
+    createdAt: Date;
+  }[];
+};
+
+export default function HomeLatestPosts({ posts = [] }: Props) {
   const theme = useTheme();
 
   const carouselRef = useRef<Carousel | null>(null);
+
+  // Use provided posts or fallback to default
+  const displayPosts = posts.length > 0 ? posts : POSTS;
 
   const carouselSettings = {
     dots: true,
@@ -133,7 +152,7 @@ export default function HomeLatestPosts() {
           rightButtonProps={{ sx: { right: { xs: 0, md: -40 } } }}
         >
           <Carousel ref={carouselRef} {...carouselSettings}>
-            {POSTS.map((post) => (
+            {displayPosts.map((post) => (
               <Box
                 key={post.id}
                 sx={{

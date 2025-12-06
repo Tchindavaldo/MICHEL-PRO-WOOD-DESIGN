@@ -29,7 +29,28 @@ const STEPS = [
 
 // ----------------------------------------------------------------------
 
-export default function HomeProcess() {
+// ----------------------------------------------------------------------
+
+type Props = {
+  processSteps?: {
+    id: string;
+    stepNumber: string;
+    title: string;
+    description?: string;
+    imageUrl?: string;
+  }[];
+};
+
+export default function HomeProcess({ processSteps = [] }: Props) {
+  // Use provided processSteps or fallback to default
+  const displaySteps = processSteps.length > 0 ? processSteps : STEPS.map((step, index) => ({
+    id: `step-${index}`,
+    stepNumber: `ÉTAPE ${index + 1}`,
+    title: step.name,
+    description: '',
+    imageUrl: step.icon,
+  }));
+
   return (
     <Container
       sx={{
@@ -68,8 +89,8 @@ export default function HomeProcess() {
           },
         }}
       >
-        {STEPS.map((step, index) => (
-          <StepItem key={step.name} step={step} index={index} />
+        {displaySteps.map((step, index) => (
+          <StepItem key={step.id} step={step} index={index} />
         ))}
       </Box>
     </Container>
@@ -80,22 +101,25 @@ export default function HomeProcess() {
 
 type StepItemProps = {
   step: {
-    name: string;
-    icon: string;
+    id: string;
+    stepNumber: string;
+    title: string;
+    description?: string;
+    imageUrl?: string;
   };
   index: number;
 };
 
 function StepItem({ step, index }: StepItemProps) {
-  const { name, icon } = step;
+  const { stepNumber, title, description, imageUrl } = step;
 
   return (
     <Card
       sx={{
         p: 2,
-        color: (theme) => theme.palette[COLORS[index]].darker,
-        bgcolor: (theme) => theme.palette[COLORS[index]].light,
-        boxShadow: (theme) => `-8px 12px 32px 0px ${alpha(theme.palette[COLORS[index]].main, 0.2)}`,
+        color: (theme) => theme.palette[COLORS[index % COLORS.length]].darker,
+        bgcolor: (theme) => theme.palette[COLORS[index % COLORS.length]].light,
+        boxShadow: (theme) => `-8px 12px 32px 0px ${alpha(theme.palette[COLORS[index % COLORS.length]].main, 0.2)}`,
         ...(index === 1 && {
           mb: { md: 2.5 },
         }),
@@ -107,11 +131,21 @@ function StepItem({ step, index }: StepItemProps) {
         }),
       }}
     >
-      <SvgColor src={icon} sx={{ width: 64, height: 64, opacity: 0.48 }} />
+      {imageUrl && <SvgColor src={imageUrl} sx={{ width: 64, height: 64, opacity: 0.48 }} />}
 
-      <Typography variant="h5" sx={{ mt: 3, textAlign: 'right' }}>
-        {name}
+      <Typography variant="overline" sx={{ mt: 2, display: 'block', opacity: 0.7 }}>
+        {stepNumber}
       </Typography>
+
+      <Typography variant="h5" sx={{ mt: 1, textAlign: 'right' }}>
+        {title}
+      </Typography>
+
+      {description && (
+        <Typography variant="body2" sx={{ mt: 1, opacity: 0.7, textAlign: 'right' }}>
+          {description}
+        </Typography>
+      )}
     </Card>
   );
 }

@@ -29,7 +29,7 @@ export default function EcommerceProductItemTop({ product, variant = 'small', sx
 
   const isLarge = isMdUp && variant === 'large';
 
-  const coverImg = <Image src={product.coverImg} />;
+  const coverImg = <Image ratio="1/1" src={product.coverImg} sx={{ borderRadius: 2 }} />;
 
   const nameText = (
     <TextMaxLine variant="h5" line={1}>
@@ -49,7 +49,7 @@ export default function EcommerceProductItemTop({ product, variant = 'small', sx
       endIcon={<Iconify icon="carbon:chevron-right" />}
       sx={{ flexShrink: 0 }}
     >
-      More Details
+      Plus de Détails
     </Button>
   );
 

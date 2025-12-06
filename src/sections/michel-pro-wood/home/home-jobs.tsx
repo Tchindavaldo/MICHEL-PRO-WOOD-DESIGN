@@ -96,15 +96,128 @@ const JOBS = [
   },
 ];
 
-export default function HomeJobs() {
+// ----------------------------------------------------------------------
+
+type Props = {
+  jobs?: {
+    id: string;
+    title: string;
+    type?: string;
+    main_missions?: { text: string }[];
+    profile_requirements?: { text: string }[];
+    benefits?: { text: string }[];
+    application_files?: { text: string }[];
+    contact_phones?: string[];
+    contact_email?: string;
+    contact_location?: string;
+    content?: React.ReactNode | string;
+  }[];
+};
+
+export default function HomeJobs({ jobs = [] }: Props) {
   const isMdUp = useResponsive('up', 'md');
 
-  const [expanded, setExpanded] = useState<string | false>(JOBS[0].id);
+  // Use provided jobs or fallback to default
+  const displayJobs = jobs.length > 0 ? jobs : JOBS;
+
+  const [expanded, setExpanded] = useState<string | false>(displayJobs[0]?.id || false);
 
   const handleChangeExpanded =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
+
+  const renderContent = (job: any) => {
+    // If job has old-style content (from JOBS constant), use it
+    if (job.content) {
+      if (typeof job.content === 'string') {
+        return <div dangerouslySetInnerHTML={{ __html: job.content }} />;
+      }
+      return job.content;
+    }
+
+    // Otherwise, render from structured data (from database)
+    return (
+      <Stack spacing={2}>
+        {/* Missions Principales */}
+        {job.main_missions && job.main_missions.length > 0 && (
+          <>
+            <Typography variant="subtitle1" sx={{ color: 'primary.main' }}>
+              Missions Principales :
+            </Typography>
+            <ul style={{ paddingLeft: 20, margin: 0 }}>
+              {job.main_missions.map((mission: any, idx: number) => (
+                <li key={idx}>{mission.text}</li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        {/* Profil Recherché */}
+        {job.profile_requirements && job.profile_requirements.length > 0 && (
+          <>
+            <Typography variant="subtitle1" sx={{ color: 'primary.main' }}>
+              Profil Recherché :
+            </Typography>
+            <ul style={{ paddingLeft: 20, margin: 0 }}>
+              {job.profile_requirements.map((req: any, idx: number) => (
+                <li key={idx}>{req.text}</li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        {/* Avantages */}
+        {job.benefits && job.benefits.length > 0 && (
+          <>
+            <Typography variant="subtitle1" sx={{ color: 'primary.main' }}>
+              Avantages du {job.type} :
+            </Typography>
+            <ul style={{ paddingLeft: 20, margin: 0 }}>
+              {job.benefits.map((benefit: any, idx: number) => (
+                <li key={idx}>{benefit.text}</li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        {/* Dossier de Candidature */}
+        {job.application_files && job.application_files.length > 0 && (
+          <>
+            <Typography variant="subtitle1" sx={{ color: 'primary.main' }}>
+              Dossier de Candidature :
+            </Typography>
+            <ul style={{ paddingLeft: 20, margin: 0 }}>
+              {job.application_files.map((file: any, idx: number) => (
+                <li key={idx}>{file.text}</li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        {/* Contact */}
+        {(job.contact_phones?.length > 0 || job.contact_email || job.contact_location) && (
+          <Typography variant="body2" sx={{ fontStyle: 'italic', mt: 2, color: 'text.secondary' }}>
+            {job.contact_phones && job.contact_phones.length > 0 && (
+              <>
+                <strong>Contact :</strong> {job.contact_phones.join(' / ')} <br />
+              </>
+            )}
+            {job.contact_email && (
+              <>
+                <strong>Email :</strong> {job.contact_email} <br />
+              </>
+            )}
+            {job.contact_location && (
+              <>
+                <strong>Lieu :</strong> {job.contact_location}
+              </>
+            )}
+          </Typography>
+        )}
+      </Stack>
+    );
+  };
 
   return (
     <Container
@@ -127,7 +240,7 @@ export default function HomeJobs() {
             </Typography>
           </Stack>
 
-          {JOBS.map((job) => (
+          {displayJobs.map((job) => (
             <Accordion
               key={job.id}
               expanded={expanded === job.id}
@@ -143,7 +256,7 @@ export default function HomeJobs() {
                 />
               </AccordionSummary>
 
-              <AccordionDetails>{job.content}</AccordionDetails>
+              <AccordionDetails>{renderContent(job)}</AccordionDetails>
             </Accordion>
           ))}
         </Grid>

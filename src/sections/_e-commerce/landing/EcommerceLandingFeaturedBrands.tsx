@@ -34,15 +34,15 @@ export default function EcommerceLandingFeaturedBrands() {
           textAlign: { xs: 'center', md: 'unset' },
         }}
       >
-        Featured Brands
+        Nos Collections
       </Typography>
 
       <Grid container spacing={3}>
         <Grid xs={12} md={4}>
           <BrandInfo
-            logo={<Iconify icon="ri:apple-fill" width={40} />}
-            name="Apple"
-            description=" While most people enjoy casino gambling, sports betting, lottery and bingo playing."
+            logo={<Iconify icon="carbon:crown" width={40} />}
+            name="Collection Prestige"
+            description="Découvrez notre collection la plus exclusive, alliant bois rares et finitions d'exception."
             path="#"
             sx={{ height: 1 }}
           />
@@ -107,7 +107,7 @@ function BrandInfo({ logo, name, description, path, sx, ...other }: BrandInfoPro
         endIcon={<Iconify icon="carbon:chevron-right" />}
         sx={{ mt: 5 }}
       >
-        More Details
+        Plus de Détails
       </Button>
     </Stack>
   );

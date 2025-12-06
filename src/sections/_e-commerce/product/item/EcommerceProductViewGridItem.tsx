@@ -25,6 +25,7 @@ export default function EcommerceProductViewGridItem({ product, sx, ...other }: 
     <Stack
       sx={{
         position: 'relative',
+        height: '100%', // Ensure equal height
         '&:hover .add-to-cart': {
           opacity: 1,
         },
@@ -33,14 +34,8 @@ export default function EcommerceProductViewGridItem({ product, sx, ...other }: 
       {...other}
     >
       {product.label === 'new' && (
-        <Label color="info" sx={{ position: 'absolute', m: 1, top: 0, right: 0, zIndex: 9 }}>
+        <Label variant="filled" color="primary" sx={{ position: 'absolute', m: 1, top: 0, right: 0, zIndex: 9 }}>
           NEW
-        </Label>
-      )}
-
-      {product.label === 'sale' && (
-        <Label color="error" sx={{ position: 'absolute', m: 1, top: 0, right: 0, zIndex: 9 }}>
-          SALE
         </Label>
       )}
 
@@ -69,6 +64,7 @@ export default function EcommerceProductViewGridItem({ product, sx, ...other }: 
 
         <Image
           src={product.coverImg}
+          ratio="1/1"
           sx={{
             flexShrink: 0,
             borderRadius: 1.5,

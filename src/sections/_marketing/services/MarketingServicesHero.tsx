@@ -1,5 +1,5 @@
 // @mui
-import { alpha, styled } from '@mui/material/styles';
+import { alpha, styled, useTheme } from '@mui/material/styles';
 import {
   Stack,
   Button,
@@ -9,6 +9,7 @@ import {
   InputBaseProps,
   InputAdornment,
   Unstable_Grid2 as Grid,
+  Box,
 } from '@mui/material';
 // hooks
 import useResponsive from 'src/hooks/useResponsive';
@@ -20,11 +21,6 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
-  ...bgGradient({
-    startColor: `${alpha(theme.palette.common.black, 0)} 0%`,
-    endColor: `${theme.palette.common.black} 75%`,
-    imgUrl: '/assets/images/marketing/marketing_services_hero.jpg',
-  }),
   padding: theme.spacing(15, 0),
   [theme.breakpoints.up('md')]: {
     padding: theme.spacing(20, 0),
@@ -43,9 +39,28 @@ const StyledInput = styled((props: InputBaseProps) => <InputBase fullWidth {...p
 
 // ----------------------------------------------------------------------
 
-export default function MarketingServicesHero() {
+type Props = {
+  pageContent?: {
+    title: string;
+    subtitle: string;
+    image_url: string;
+    content?: string;
+  };
+};
+
+export default function MarketingServicesHero({ pageContent }: Props) {
+  const theme = useTheme();
+
   return (
-    <StyledRoot>
+    <StyledRoot
+      sx={{
+        ...bgGradient({
+          startColor: `${alpha(theme.palette.common.black, 0)} 0%`,
+          endColor: `${theme.palette.common.black} 75%`,
+          imgUrl: pageContent?.image_url || '/assets/images/marketing/marketing_services_hero.jpg',
+        }),
+      }}
+    >
       <Container>
         <Grid container spacing={3} justifyContent="center">
           <Grid xs={12} md={8}>
@@ -59,11 +74,12 @@ export default function MarketingServicesHero() {
                 color: 'common.white',
               }}
             >
-              <Typography variant="h1">Devis en Ligne</Typography>
+              <Typography variant="h1">
+                {pageContent?.title || 'Devis en Ligne'}
+              </Typography>
 
               <Typography sx={{ opacity: 0.72 }}>
-                Obtenez rapidement un devis personnalisé pour vos projets de menuiserie, ébénisterie,
-                construction bois ou formation professionnelle.
+                {pageContent?.subtitle || pageContent?.content || 'Obtenez rapidement un devis personnalisé pour vos projets de menuiserie, ébénisterie, construction bois ou formation professionnelle.'}
               </Typography>
             </Stack>
 

@@ -22,24 +22,27 @@ import {
 
 // ----------------------------------------------------------------------
 
-const BRAND_OPTIONS = ['Apple', 'Samsung', 'Xiaomi', 'Honor'];
+const BRAND_OPTIONS = ['Michel Pro Wood', 'Partenaires', 'Premium Wood', 'Eco Design'];
 
 const CATEGORY_OPTIONS = [
-  'Apple iPhone',
-  'Samsung Galaxy',
-  'Nike Air Max',
-  'Adidas Ultraboost',
-  'Sony PlayStation',
+  'Mobilier',
+  'Agencement',
+  'Menuiserie Ext.',
+  'Menuiserie Int.',
+  'Cuisine',
+  'Salle de Bain',
+  'Parquet',
+  'Terrasse',
 ];
 
-const SHIPPING_OPTIONS = ['Fast', 'Saving', 'Free'];
+const SHIPPING_OPTIONS = ['Standard', 'Express', 'Gratuit'];
 
-const TAG_OPTIONS = ['Books and Media', 'Pet', 'Electronics', 'Food', 'Automotive and Industrial'];
+const TAG_OPTIONS = ['Bois Massif', 'Sur Mesure', 'Design', 'Intérieur', 'Extérieur', 'Premium', 'Durable'];
 
 // ----------------------------------------------------------------------
 
 const defaultValues = {
-  filterBrand: [BRAND_OPTIONS[1]],
+  filterBrand: [BRAND_OPTIONS[0]],
   filterCategories: '',
   filterRating: null,
   filterStock: false,

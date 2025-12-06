@@ -3,72 +3,96 @@ import _mock from '../_mock';
 
 // ----------------------------------------------------------------------
 
+const PRODUCT_IMAGES = [
+  '/assets/images/michel-pro-wood/vente/armoir.jpg',
+  '/assets/images/michel-pro-wood/vente/chaise prmium en bois.JPG',
+  '/assets/images/michel-pro-wood/vente/lit .JPG',
+  '/assets/images/michel-pro-wood/vente/portail bois premium.jpg',
+  '/assets/images/michel-pro-wood/vente/portail bois premium.JPG',
+  '/assets/images/michel-pro-wood/vente/portail prmium.JPG',
+  '/assets/images/michel-pro-wood/vente/table chaisse sale a manger.JPG',
+  '/assets/images/michel-pro-wood/vente/table salon.JPG',
+  '/assets/images/michel-pro-wood/vente/terase bois premium.jpg',
+];
+
+const REALIZATION_IMAGES = [
+  '/assets/images/michel-pro-wood/realisation/armoir .JPG',
+  '/assets/images/michel-pro-wood/realisation/canape salon prmium.JPG',
+  '/assets/images/michel-pro-wood/realisation/canape salon.JPG',
+  '/assets/images/michel-pro-wood/realisation/chaise salon.JPG',
+  '/assets/images/michel-pro-wood/realisation/lit .JPG',
+  '/assets/images/michel-pro-wood/realisation/table chaisse sale a manger.JPG',
+  '/assets/images/michel-pro-wood/realisation/table salon.JPG',
+];
+
+const ALL_IMAGES = [...PRODUCT_IMAGES, ...REALIZATION_IMAGES];
+
 const NAME = [
-  'Apple iPhone',
-  'Samsung Galaxy',
-  'Nike Air Max',
-  'Adidas Ultraboost',
-  'Sony PlayStation',
-  'Microsoft Surface',
-  'Tesla Model S',
-  'Amazon Echo',
-  'Google Pixel',
-  'Bose QuietComfort',
-  'Canon EOS',
-  'HP Spectre',
-  'LG OLED',
-  'Rolex Submariner',
-  'Chanel No.5',
-  'Louis Vuitton Speedy',
-  'Gucci Ace',
-  'Ray-Ban Aviator',
-  'Herschel Little America',
-  'Le Creuset Dutch Oven',
-  'Yeti Tumbler',
-  'Patagonia Nano Puff',
-  'Lululemon Align Leggings',
-  'Allbirds Wool Runners',
+  'Armoire Design',
+  'Chaise Premium Bois',
+  'Lit Double Confort',
+  'Portail Bois Massif',
+  'Portail Premium',
+  'Ensemble Salle à Manger',
+  'Table de Salon Moderne',
+  'Terrasse Bois Exotique',
+  'Canapé Salon Premium',
+  'Canapé Salon',
+  'Chaise Salon',
+  'Lit Suite Parentale',
+  'Table à Manger Familiale',
+  'Table Basse Design',
+  'Bureau Professionnel',
+  'Bibliothèque Murale',
+  'Dressing Sur Mesure',
+  'Cuisine Équipée',
+  'Parquet Chêne',
+  'Escalier Suspendu',
+  'Pergola Bioclimatique',
+  'Bardage Façade',
+  'Porte Entrée Bois',
+  'Fenêtre Bois',
 ];
 
 const CATEGORIES = [
-  'Electronics',
-  'Fashion and Apparel',
-  'Home and Garden',
-  'Beauty and Personal Care',
-  'Health and Wellness',
-  'Toys and Games',
-  'Sports and Outdoors',
-  'Baby and Kids',
-  'Automotive and Industrial',
-  'Pet Supplies',
-  'Food and Beverage',
-  'Office and School Supplies',
-  'Jewelry and Accessories',
-  'Arts and Crafts',
-  'Books and Media',
-  'Travel and Luggage',
-  'Gifts and Flowers',
-  'Musical Instruments',
-  'Party Supplies',
-  'Business and Industrial Supplies',
-  'Tools and Hardware',
-  'Electronics Accessories',
-  'Furniture and Decor',
-  'Computer and Software',
+  'Mobilier',
+  'Agencement',
+  'Menuiserie Extérieure',
+  'Menuiserie Intérieure',
+  'Cuisine',
+  'Salle de Bain',
+  'Parquet',
+  'Terrasse',
+  'Escalier',
+  'Rangement',
+  'Décoration',
+  'Jardin',
+  'Bureau',
+  'Chambre',
+  'Salon',
+  'Salle à Manger',
+  'Entrée',
+  'Extérieur',
+  'Professionnel',
+  'Sur Mesure',
+  'Design',
+  'Traditionnel',
+  'Contemporain',
+  'Rustique',
 ];
 
 const DESCRIPTION = `
-<p>Aenean viverra rhoncus pede. Etiam feugiat lorem non metus. Quisque malesuada placerat nisl.</p>
+<p>Découvrez l'excellence du travail du bois avec nos créations uniques. Chaque pièce est conçue avec passion et expertise pour sublimer votre intérieur et extérieur.</p>
 
 <ul>
-  <li> Updated with a more matte texture, perfect for casual styling. </li>
-  <li> Durable water-repellent coating. </li>
-  <li> dsdsds </li>
-  <li> dsdsds </li>
-  <li> Anti-static lining. </li>
+  <li> Bois de qualité supérieure, sélectionné avec soin. </li>
+  <li> Finitions artisanales irréprochables. </li>
+  <li> Design sur mesure adapté à vos besoins. </li>
+  <li> Durabilité et résistance garanties. </li>
+  <li> Respect de l'environnement et gestion durable des forêts. </li>
 </ul>
 
-<p>Living in today’s metropolitan world of cellular phones, mobile computers and other high-tech gadgets is not just hectic but very impersonal. We make money and then invest our time and effort in making more money..</p>
+<p>Chez Wood Pro, nous transformons le bois en œuvres d'art fonctionnelles. Que ce soit pour votre mobilier, votre agencement intérieur ou vos aménagements extérieurs, nous mettons notre savoir-faire à votre service pour réaliser vos rêves.</p>
 `;
 
 // ----------------------------------------------------------------------
@@ -86,32 +110,32 @@ export const _productsTable = [...Array(12)].map((_, index) => ({
 
 export const _productsCarousel = [...Array(4)].map((_, index) => ({
   id: _mock.id(index),
-  title: _mock.text.blogTitle(index),
-  caption: _mock.text.description(index),
-  coverImg: _mock.image.product(index),
-  label: 'Opening Sale Discount 50%',
+  title: NAME[index],
+  caption: 'Qualité et Design Exceptionnels',
+  coverImg: ALL_IMAGES[index % ALL_IMAGES.length],
+  label: 'Offre Spéciale -20%',
 }));
 
 // ----------------------------------------------------------------------
 
 export const _productsCompare = [
-  'Apple iPhone 12 Pro',
-  'Apple iPhone 13 Pro',
-  'Apple iPhone 14 Pro',
+  'Chaise Premium Bois',
+  'Chaise Salon',
+  'Chaise Design',
 ].map((name, index) => ({
   id: _mock.id(index),
   name,
   price: _mock.number.price(index),
   rating: _mock.number.rating(index),
-  coverImg: _mock.image.product(4),
+  coverImg: ALL_IMAGES[1],
   details: (index === 0 && [
-    'Super Retina XDR (OLED)',
-    'Up to 29 hours video playback',
-    'A14 Bionic',
-    'True Tone',
-    'IP68',
-    '2017',
-  ]) || ['Super Retina XDR (OLED)', '', 'A14 Bionic', '', 'IP68', '2017'],
+    'Bois Massif',
+    'Garantie 5 ans',
+    'Finition Vernis',
+    'Confort Optimal',
+    'Livraison Incluse',
+    '2023',
+  ]) || ['Bois Massif', '', 'Finition Huilée', '', 'Livraison Incluse', '2023'],
 }));
 
 // ----------------------------------------------------------------------
@@ -119,11 +143,11 @@ export const _productsCompare = [
 export const _products = [...Array(24)].map((_, index) => ({
   id: _mock.id(index),
   name: NAME[index],
-  caption: _mock.text.description(index),
+  caption: 'Création Wood Pro',
   description: DESCRIPTION,
-  coverImg: _mock.image.product(index),
+  coverImg: ALL_IMAGES[index % ALL_IMAGES.length],
   review: index * 2 + 40,
-  category: CATEGORIES[index],
+  category: CATEGORIES[index % CATEGORIES.length],
   sold: index * 2 + 40,
   inStock: 100,
   rating: _mock.number.rating(index),
@@ -138,13 +162,14 @@ export const _products = [...Array(24)].map((_, index) => ({
       _mock.number.price(5),
     ][index] || 0,
   images: [
-    _mock.image.product(1),
-    _mock.image.product(2),
-    _mock.image.product(3),
-    _mock.image.product(4),
-    _mock.image.product(5),
-    _mock.image.product(6),
-    _mock.image.product(7),
-    _mock.image.product(8),
+    ALL_IMAGES[(index) % ALL_IMAGES.length],
+    ALL_IMAGES[(index + 1) % ALL_IMAGES.length],
+    ALL_IMAGES[(index + 2) % ALL_IMAGES.length],
+    ALL_IMAGES[(index + 3) % ALL_IMAGES.length],
+    ALL_IMAGES[(index + 4) % ALL_IMAGES.length],
+    ALL_IMAGES[(index + 5) % ALL_IMAGES.length],
+    ALL_IMAGES[(index + 6) % ALL_IMAGES.length],
+    ALL_IMAGES[(index + 7) % ALL_IMAGES.length],
   ],
 }));
+

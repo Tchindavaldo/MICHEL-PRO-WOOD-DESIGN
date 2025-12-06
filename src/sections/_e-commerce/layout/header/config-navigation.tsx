@@ -7,85 +7,91 @@ import { MegaMenuItemProps } from 'src/components/mega-menu';
 // MOCK DATA
 // ----------------------------------------------------------------------
 
+const PRODUCT_IMAGES = [
+  '/assets/images/michel-pro-wood/vente/armoir.jpg',
+  '/assets/images/michel-pro-wood/vente/chaise prmium en bois.JPG',
+  '/assets/images/michel-pro-wood/vente/lit .JPG',
+  '/assets/images/michel-pro-wood/vente/portail bois premium.jpg',
+  '/assets/images/michel-pro-wood/vente/table chaisse sale a manger.JPG',
+  '/assets/images/michel-pro-wood/vente/table salon.JPG',
+];
+
+const PRODUCT_NAMES = [
+  'Armoire Design',
+  'Chaise Premium',
+  'Lit Double',
+  'Portail Bois',
+  'Salle à Manger',
+  'Table Salon',
+];
+
 const PRODUCTS = [...Array(10)].map((_, index) => ({
-  name: _mock.text.blogTitle(index),
-  image: _mock.image.product(index),
+  name: PRODUCT_NAMES[index % PRODUCT_NAMES.length],
+  image: PRODUCT_IMAGES[index % PRODUCT_IMAGES.length],
   path: '#',
 }));
 
 const TAGS = [
-  { name: 'Paper Cup', path: '#' },
-  { name: 'Lotion Pump', path: '#' },
-  { name: 'Brush Cutter', path: '#' },
-  { name: 'Display Rack', path: '#' },
-  { name: 'Glass Bottle', path: '#' },
+  { name: 'Chaises', path: '#' },
+  { name: 'Tables', path: '#' },
+  { name: 'Lits', path: '#' },
+  { name: 'Armoires', path: '#' },
+  { name: 'Portes', path: '#' },
 ];
 
 export const data: MegaMenuItemProps[] = [
   {
     path: '',
-    title: 'Categories',
+    title: 'Catégories',
     icon: <Iconify icon="carbon:menu" sx={{ width: 1, height: 1 }} />,
     products: PRODUCTS,
     tags: TAGS,
     children: [
       {
-        subheader: 'Other Machinery & Parts',
+        subheader: 'Mobilier Intérieur',
         items: [
-          { title: 'Metallic Processing Machinery', path: '#' },
-          { title: 'Machinery for Food, Beverage & Cereal', path: '#' },
-          { title: 'Laser Equipment', path: '#' },
-          { title: 'Mould', path: '#' },
-          { title: 'Textile Machinery & Parts', path: '#' },
-          { title: 'Cutting & Fold-bend Machine', path: '#' },
-          { title: 'Paper Machinery', path: '#' },
-          { title: 'Rubber Machinery', path: '#' },
-          { title: 'Chemical Equipment & Machinery', path: '#' },
-          { title: 'Mixing Equipment', path: '#' },
-          { title: 'Machinery for Garment, Shoes & Accessories', path: '#' },
-          { title: 'Crushing & Culling Machine', path: '#' },
+          { title: 'Salons', path: '#' },
+          { title: 'Salles à manger', path: '#' },
+          { title: 'Chambres', path: '#' },
+          { title: 'Bureaux', path: '#' },
+          { title: 'Rangements', path: '#' },
         ],
       },
       {
-        subheader: 'Plastic & Woodworking',
+        subheader: 'Menuiserie & Agencement',
         items: [
-          { title: 'Plastic Machinery', path: '#' },
-          { title: 'Woodworking Machinery', path: '#' },
-          { title: 'Blow Molding Machine', path: '#' },
-          { title: 'Plastic Recycling Machine', path: '#' },
-          { title: 'Injection Molding Machine', path: '#' },
+          { title: 'Portes & Fenêtres', path: '#' },
+          { title: 'Escaliers', path: '#' },
+          { title: 'Parquets', path: '#' },
+          { title: 'Cuisines', path: '#' },
+          { title: 'Dressings', path: '#' },
         ],
       },
       {
-        subheader: 'Construction Machinery',
+        subheader: 'Extérieur',
         items: [
-          { title: 'Building Material Making Machinery', path: '#' },
-          { title: 'Lifting Equipment', path: '#' },
-          { title: 'Excavator', path: '#' },
-          { title: 'Concrete Machinery', path: '#' },
-          { title: 'Stone Processing Machinery', path: '#' },
+          { title: 'Terrasses', path: '#' },
+          { title: 'Pergolas', path: '#' },
+          { title: 'Bardages', path: '#' },
+          { title: 'Portails', path: '#' },
+          { title: 'Mobilier de Jardin', path: '#' },
         ],
       },
       {
-        subheader: 'Agriculture Machinery',
+        subheader: 'Collections',
         items: [
-          { title: 'Agriculture Machinery', path: '#' },
-          { title: 'Livestock MachineryFeed', path: '#' },
-          { title: 'Feed Processing Machinery', path: '#' },
-          { title: 'Tiller', path: '#' },
-          { title: 'Harvesting Machine', path: '#' },
-        ],
-      },
-      {
-        subheader: 'Machine Tools',
-        items: [
-          { title: 'CNC Machine Tools', path: '#' },
-          { title: 'Lathe', path: '#' },
-          { title: 'Grinding Machine ', path: '#' },
-          { title: 'Drilling Machine ', path: '#' },
-          { title: 'Milling Machine ', path: '#' },
+          { title: 'Prestige', path: '#' },
+          { title: 'Contemporain', path: '#' },
+          { title: 'Rustique', path: '#' },
+          { title: 'Nouveautés', path: '#' },
+          { title: 'Promotions', path: '#' },
         ],
       },
     ],
+  },
+  {
+    path: '#',
+    title: 'Suivi Colis',
+    icon: <Iconify icon="carbon:delivery-parcel" sx={{ width: 1, height: 1 }} />,
   },
 ];

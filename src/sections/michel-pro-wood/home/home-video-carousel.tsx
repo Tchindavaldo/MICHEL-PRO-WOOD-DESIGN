@@ -20,7 +20,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 type SlideProps = {
   slide: {
-    id: number;
+    id: string | number;
     title: string;
     description: string;
     video: string;
@@ -105,7 +105,18 @@ function VideoSlide({ slide }: SlideProps) {
   );
 }
 
-export default function HomeVideoCarousel() {
+type Props = {
+  videoSlides?: {
+    id: string;
+    title: string;
+    description: string;
+    video_url: string;
+    cta_text?: string;
+    cta_link?: string;
+  }[];
+};
+
+export default function HomeVideoCarousel({ videoSlides = [] }: Props) {
   const theme = useTheme();
   const carouselRef = useRef<Carousel | null>(null);
 
@@ -122,9 +133,9 @@ export default function HomeVideoCarousel() {
     }),
   };
 
-  const slides = [
+  const defaultSlides = [
     {
-      id: 1,
+      id: '1',
       title: 'Fabrication',
       description: 'Découvrez nos processus de fabrication assistée par ordinateur et notre savoir-faire artisanal.',
       video: HOME_VIDEOS.fabrication,
@@ -132,7 +143,7 @@ export default function HomeVideoCarousel() {
       ctaLink: '#',
     },
     {
-      id: 2,
+      id: '2',
       title: 'Entreprise',
       description: 'Plongez au cœur de Michel Pro Wood Design et découvrez notre vision et notre équipe.',
       video: HOME_VIDEOS.entreprise,
@@ -140,7 +151,7 @@ export default function HomeVideoCarousel() {
       ctaLink: '#',
     },
     {
-      id: 3,
+      id: '3',
       title: 'Formations',
       description: 'Formez-vous aux métiers du bois avec nos programmes complets en menuiserie et CFAO.',
       video: HOME_VIDEOS.formation,
@@ -148,7 +159,7 @@ export default function HomeVideoCarousel() {
       ctaLink: '#',
     },
     {
-      id: 4,
+      id: '4',
       title: 'Tutos',
       description: 'Apprenez des techniques et astuces avec nos tutoriels vidéos exclusifs.',
       video: HOME_VIDEOS.tutos,
@@ -156,6 +167,18 @@ export default function HomeVideoCarousel() {
       ctaLink: '#',
     },
   ];
+
+  // Map Supabase data to component format or use default
+  const displaySlides = videoSlides.length > 0 
+    ? videoSlides.map(slide => ({
+        id: slide.id,
+        title: slide.title,
+        description: slide.description,
+        video: slide.video_url,
+        ctaText: slide.cta_text || 'En savoir plus',
+        ctaLink: slide.cta_link || '#',
+      }))
+    : defaultSlides;
 
   const handlePrev = () => {
     carouselRef.current?.slickPrev();
@@ -170,7 +193,7 @@ export default function HomeVideoCarousel() {
       <Container>
         <Box sx={{ position: 'relative' }}>
           <Carousel ref={carouselRef} {...carouselSettings}>
-            {slides.map((slide) => (
+            {displaySlides.map((slide) => (
               <VideoSlide key={slide.id} slide={slide} />
             ))}
           </Carousel>

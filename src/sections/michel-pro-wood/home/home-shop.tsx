@@ -13,6 +13,8 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import Carousel, { CarouselArrows, CarouselDots } from 'src/components/carousel';
 import { varHover, varTranHover } from 'src/components/animate';
+import NextLink from 'next/link';
+import { paths } from 'src/routes/paths';
 // assets
 import { PRODUCT_IMAGES } from 'src/assets/data/michel-pro-wood/products-link';
 
@@ -87,7 +89,15 @@ const PRODUCTS = [
 
 // ----------------------------------------------------------------------
 
-export default function HomeShop() {
+type Props = {
+  products?: {
+    name: string;
+    image: string;
+    price?: number;
+  }[];
+};
+
+export default function HomeShop({ products = [] }: Props) {
   const theme = useTheme();
 
   const isMdUp = useResponsive('up', 'md');
@@ -99,6 +109,9 @@ export default function HomeShop() {
   const container = useBoundingClientRect(containerRef);
 
   const offsetLeft = container?.left;
+
+  // Use provided products or fallback to default
+  const displayProducts = products.length > 0 ? products : PRODUCTS;
 
   const carouselSettings = {
     dots: true,
@@ -180,7 +193,7 @@ export default function HomeShop() {
         }}
       >
         <Carousel ref={carouselRef} {...carouselSettings}>
-          {PRODUCTS.map((product, index) => (
+          {displayProducts.map((product, index) => (
             <Box
               key={index}
               sx={{
@@ -195,6 +208,19 @@ export default function HomeShop() {
           ))}
         </Carousel>
       </Box>
+
+      <Container sx={{ mt: 8, textAlign: 'center' }}>
+        <Button
+          component={NextLink}
+          href={paths.michelProWood.shop}
+          size="large"
+          variant="contained"
+          color="primary"
+          endIcon={<Iconify icon="carbon:arrow-right" />}
+        >
+          Visiter la Boutique
+        </Button>
+      </Container>
     </StyledRoot>
   );
 }
@@ -205,17 +231,20 @@ type ShopProductProps = {
   product: {
     name: string;
     image: string;
+    price?: number;
   };
 };
 
 function ShopProduct({ product }: ShopProductProps) {
-  const { name, image } = product;
-  const [price, setPrice] = useState(0);
+  const { name, image, price: productPrice } = product;
+  const [price, setPrice] = useState(productPrice || 0);
   const isMdUp = useResponsive('up', 'md');
 
   useEffect(() => {
-    setPrice(Math.floor(Math.random() * (500000 - 50000 + 1)) + 50000);
-  }, []);
+    if (!productPrice) {
+      setPrice(Math.floor(Math.random() * (500000 - 50000 + 1)) + 50000);
+    }
+  }, [productPrice]);
 
   return (
     <Stack>

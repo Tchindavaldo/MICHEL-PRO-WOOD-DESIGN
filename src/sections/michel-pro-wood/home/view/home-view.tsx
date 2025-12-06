@@ -1,3 +1,4 @@
+import { Container, Typography } from '@mui/material';
 // _mock
 import {
   _brands,
@@ -22,32 +23,65 @@ import HomeGetQuote from '../home-get-quote';
 
 // ----------------------------------------------------------------------
 
-export default function HomeView() {
+type Props = {
+  services?: any[];
+  testimonials?: any[];
+  partners?: any[];
+  realizations?: any[];
+  products?: any[];
+  posts?: any[];
+  jobs?: any[];
+  plans?: any[];
+  slides?: any[];
+  processSteps?: any[];
+  videoSlides?: any[];
+};
+
+export default function HomeView({ 
+  services = [], 
+  testimonials = [], 
+  partners = [], 
+  realizations = [], 
+  products = [],
+  posts = [],
+  jobs = [],
+  plans = [],
+  slides = [],
+  processSteps = [],
+  videoSlides = []
+}: Props) {
+  // Use provided partners or fallback to default brands
+  const displayBrands = partners.length > 0 ? partners : _brands;
+
   return (
     <>
-      <HomeHero />
+      <HomeHero slides={slides} />
+      
+      <Container sx={{ mt: 10, mb: 5, textAlign: 'center' }}>
+        <Typography variant="h2">Nos Partenaires</Typography>
+      </Container>
 
-      <OurClientsMarketing brands={_brands} />
+      <OurClientsMarketing brands={displayBrands} />
 
-      <HomeVideoCarousel />
+      <HomeVideoCarousel videoSlides={videoSlides} />
 
       <HomeAbout />
 
-      <HomeServices />
+      <HomeServices services={services} />
 
-      <HomeProcess />
+      <HomeProcess processSteps={processSteps} />
 
-      <HomeRealizations />
+      <HomeRealizations realizations={realizations} />
 
-      <HomeShop />
+      <HomeShop products={products} />
 
-      <HomePricing />
+      <HomePricing plans={plans} />
 
-      <HomeJobs />
+      <HomeJobs jobs={jobs} />
 
-      <HomeTestimonials />
+      <HomeTestimonials testimonials={testimonials} />
 
-      <HomeLatestPosts />
+      <HomeLatestPosts posts={posts} />
 
       <HomeGetQuote />
     </>

@@ -16,17 +16,17 @@ import { ProductColorPicker, ProductOptionPicker, ProductPrice } from '../../com
 // ----------------------------------------------------------------------
 
 const COLOR_OPTIONS = [
-  { label: '#FA541C', value: 'red' },
-  { label: '#754FFE', value: 'violet' },
-  { label: '#00B8D9', value: 'cyan' },
-  { label: '#36B37E', value: 'green' },
+  { label: '#8B4513', value: 'chene' },
+  { label: '#A0522D', value: 'noyer' },
+  { label: '#CD853F', value: 'teck' },
+  { label: '#DEB887', value: 'hetre' },
 ];
 
 const MEMORY_OPTIONS = [
-  { label: '128GB', value: '128gb' },
-  { label: '256GB', value: '256gb' },
-  { label: '512GB', value: '512gb' },
-  { label: '1TB', value: '1tb' },
+  { label: 'Brut', value: 'brut' },
+  { label: 'Vernis', value: 'vernis' },
+  { label: 'Huilé', value: 'huile' },
+  { label: 'Laqué', value: 'laque' },
 ];
 
 // ----------------------------------------------------------------------
@@ -50,9 +50,9 @@ export default function EcommerceProductDetailsInfo({
 }: Props) {
   const isMdUp = useResponsive('up', 'md');
 
-  const [color, setColor] = useState('red');
+  const [color, setColor] = useState('chene');
 
-  const [memory, setMemory] = useState('128gb');
+  const [memory, setMemory] = useState('vernis');
 
   const handleChangeColor = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColor((event.target as HTMLInputElement).value);
@@ -65,7 +65,7 @@ export default function EcommerceProductDetailsInfo({
   return (
     <>
       <Label color="success" sx={{ mb: 3 }}>
-        In Stock
+        En Stock
       </Label>
 
       <Stack spacing={1} sx={{ mb: 2 }}>
@@ -75,7 +75,7 @@ export default function EcommerceProductDetailsInfo({
           <Rating size="small" value={rating} readOnly precision={0.5} />
 
           <Typography variant="caption" sx={{ color: 'text.disabled' }}>
-            ({review} reviews)
+            ({review} avis)
           </Typography>
         </Stack>
       </Stack>
@@ -90,12 +90,12 @@ export default function EcommerceProductDetailsInfo({
 
       <Stack spacing={3} sx={{ my: 5 }}>
         <Stack spacing={2}>
-          <Typography variant="subtitle2">Color</Typography>
+          <Typography variant="subtitle2">Essence de Bois</Typography>
           <ProductColorPicker value={color} onChange={handleChangeColor} options={COLOR_OPTIONS} />
         </Stack>
 
         <Stack spacing={2}>
-          <Typography variant="subtitle2">Memory</Typography>
+          <Typography variant="subtitle2">Finition</Typography>
           <ProductOptionPicker
             value={memory}
             onChange={handleChangeMemory}
@@ -132,7 +132,7 @@ export default function EcommerceProductDetailsInfo({
             variant="contained"
             startIcon={<Iconify icon="carbon:shopping-cart-plus" />}
           >
-            Add to Cart
+            Ajouter au Panier
           </Button>
 
           <Button
@@ -143,7 +143,7 @@ export default function EcommerceProductDetailsInfo({
             color="primary"
             variant="contained"
           >
-            Buy Now
+            Acheter Maintenant
           </Button>
         </Stack>
       </Stack>
@@ -152,15 +152,15 @@ export default function EcommerceProductDetailsInfo({
 
       <Stack spacing={3} direction="row" justifyContent={{ xs: 'center', md: 'unset' }}>
         <Stack direction="row" alignItems="center" sx={{ typography: 'subtitle2' }}>
-          <Iconify icon="carbon:add-alt" sx={{ mr: 1 }} /> Compare
+          <Iconify icon="carbon:add-alt" sx={{ mr: 1 }} /> Comparer
         </Stack>
 
         <Stack direction="row" alignItems="center" sx={{ typography: 'subtitle2' }}>
-          <Iconify icon="carbon:favorite" sx={{ mr: 1 }} /> Compare
+          <Iconify icon="carbon:favorite" sx={{ mr: 1 }} /> Favoris
         </Stack>
 
         <Stack direction="row" alignItems="center" sx={{ typography: 'subtitle2' }}>
-          <Iconify icon="carbon:share" sx={{ mr: 1 }} /> Compare
+          <Iconify icon="carbon:share" sx={{ mr: 1 }} /> Partager
         </Stack>
       </Stack>
     </>

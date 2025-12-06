@@ -1,33 +1,28 @@
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Typography, Container, Stack } from '@mui/material';
+import { Box, Typography, Container, Stack, Button } from '@mui/material';
+import NextLink from 'next/link';
+import { paths } from 'src/routes/paths';
 // components
 import Image from 'src/components/image';
+import Iconify from 'src/components/iconify';
 import TextMaxLine from 'src/components/text-max-line';
 
 // ----------------------------------------------------------------------
 
 const CATEGORIES = [
-  { label: 'Men Clothes', icon: '/assets/icons/e-commerce/ic_men_clothes.svg', path: '#' },
-  {
-    label: 'Women Clothes',
-    icon: '/assets/icons/e-commerce/ic_women_clothes.svg',
-    path: '#',
-  },
-  { label: 'Watches', icon: '/assets/icons/e-commerce/ic_watches.svg', path: '#' },
-  {
-    label: 'Home Appliances',
-    icon: '/assets/icons/e-commerce/ic_home_appliances.svg',
-    path: '#',
-  },
-  { label: 'Sport & Outdoor', icon: '/assets/icons/e-commerce/ic_sport.svg', path: '#' },
-  { label: 'Books & Stationery', icon: '/assets/icons/e-commerce/ic_book.svg', path: '#' },
-  { label: 'Home & Living', icon: '/assets/icons/e-commerce/ic_home_living.svg', path: '#' },
-  { label: 'Health', icon: '/assets/icons/e-commerce/ic_health.svg', path: '#' },
-  { label: 'Mobile', icon: '/assets/icons/e-commerce/ic_mobile.svg', path: '#' },
-  { label: 'Laptop', icon: '/assets/icons/e-commerce/ic_laptop.svg', path: '#' },
-  { label: 'Tablet', icon: '/assets/icons/e-commerce/ic_tablet.svg', path: '#' },
-  { label: 'Headphones', icon: '/assets/icons/e-commerce/ic_headphones.svg', path: '#' },
+  { label: 'Mobilier', icon: 'carbon:home', path: '#' },
+  { label: 'Agencement', icon: 'carbon:chart-treemap', path: '#' },
+  { label: 'Menuiserie Ext.', icon: 'carbon:construction', path: '#' },
+  { label: 'Menuiserie Int.', icon: 'mdi:door', path: '#' },
+  { label: 'Cuisine', icon: 'carbon:restaurant', path: '#' },
+  { label: 'Salle de Bain', icon: 'carbon:clean', path: '#' },
+  { label: 'Parquet', icon: 'carbon:grid', path: '#' },
+  { label: 'Terrasse', icon: 'carbon:sun', path: '#' },
+  { label: 'Escalier', icon: 'mdi:stairs', path: '#' },
+  { label: 'Rangement', icon: 'carbon:box', path: '#' },
+  { label: 'Décoration', icon: 'carbon:color-palette', path: '#' },
+  { label: 'Jardin', icon: 'carbon:tree', path: '#' },
 ];
 
 // ----------------------------------------------------------------------
@@ -46,7 +41,7 @@ export default function EcommerceLandingCategories() {
           textAlign: { xs: 'center', md: 'unset' },
         }}
       >
-        Categories
+        Nos Catégories
       </Typography>
 
       <Box
@@ -70,12 +65,19 @@ export default function EcommerceLandingCategories() {
               cursor: 'pointer',
               border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.24)}`,
               '&:hover': {
-                boxShadow: (theme) => `0 0 0 2px ${theme.palette.text.primary}`,
+                boxShadow: (theme) => theme.customShadows.z24,
               },
             }}
           >
-            <Box sx={{ mb: 2, p: 1.5, bgcolor: 'background.neutral', borderRadius: '50%' }}>
-              <Image src={category.icon} sx={{ width: 40, height: 40 }} />
+            <Box
+              sx={{
+                mb: 2,
+                p: 1.5,
+                borderRadius: '50%',
+                bgcolor: 'background.neutral',
+              }}
+            >
+              <Iconify icon={category.icon} width={24} />
             </Box>
 
             <TextMaxLine variant="subtitle2" line={1}>
@@ -84,6 +86,8 @@ export default function EcommerceLandingCategories() {
           </Stack>
         ))}
       </Box>
+
+
     </Container>
   );
 }

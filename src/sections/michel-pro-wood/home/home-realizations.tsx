@@ -95,8 +95,24 @@ const CASE_STUDIES = [
 
 // ----------------------------------------------------------------------
 
-export default function HomeRealizations() {
+type Props = {
+  realizations?: {
+    id: string | number;
+    title: string;
+    category: string;
+    coverImg: string;
+    description: string;
+  }[];
+};
+
+export default function HomeRealizations({ realizations = [] }: Props) {
   const isMdUp = useResponsive('up', 'md');
+
+  // Merge DB realizations with fallback data to ensure we have enough items (6 needed)
+  const displayRealizations = [...realizations, ...CASE_STUDIES].slice(0, 6);
+
+  // If we still don't have enough items (e.g. empty DB and empty fallback), fill with placeholders or handle gracefully
+  // But CASE_STUDIES has 6 items, so we are safe.
 
   return (
     <Container
@@ -129,12 +145,12 @@ export default function HomeRealizations() {
       >
         {/* Item 1 */}
         <Grid xs={6} md={2}>
-          <SmallItem caseStudy={CASE_STUDIES[0]} isMdUp={isMdUp} />
+          <SmallItem caseStudy={displayRealizations[0]} isMdUp={isMdUp} />
         </Grid>
 
         {!isMdUp && (
           <Grid xs={6} md={2}>
-            <SmallItem caseStudy={CASE_STUDIES[5]} isMdUp={isMdUp} />
+            <SmallItem caseStudy={displayRealizations[5]} isMdUp={isMdUp} />
           </Grid>
         )}
 
@@ -142,30 +158,30 @@ export default function HomeRealizations() {
           {/* Item 2 */}
           <Grid xs={6} md={9}>
             {isMdUp ? (
-              <LargeItem caseStudy={CASE_STUDIES[1]} />
+              <LargeItem caseStudy={displayRealizations[1]} />
             ) : (
-              <SmallItem caseStudy={CASE_STUDIES[1]} isSquare isMdUp={isMdUp} />
+              <SmallItem caseStudy={displayRealizations[1]} isSquare isMdUp={isMdUp} />
             )}
           </Grid>
 
           {/* Item 3 */}
           <Grid xs={6} md={3}>
             <Stack justifyContent={{ md: 'flex-end' }} sx={{ height: { md: 1 } }}>
-              <SmallItem caseStudy={CASE_STUDIES[2]} isSquare isMdUp={isMdUp} />
+              <SmallItem caseStudy={displayRealizations[2]} isSquare isMdUp={isMdUp} />
             </Stack>
           </Grid>
 
           {/* Item 4 */}
           <Grid xs={6} md={3}>
-            <SmallItem caseStudy={CASE_STUDIES[3]} isSquare isMdUp={isMdUp} />
+            <SmallItem caseStudy={displayRealizations[3]} isSquare isMdUp={isMdUp} />
           </Grid>
 
           {/* Item 5 */}
           <Grid xs={6} md={9}>
             {isMdUp ? (
-              <LargeItem caseStudy={CASE_STUDIES[4]} />
+              <LargeItem caseStudy={displayRealizations[4]} />
             ) : (
-              <SmallItem caseStudy={CASE_STUDIES[4]} isSquare isMdUp={isMdUp} />
+              <SmallItem caseStudy={displayRealizations[4]} isSquare isMdUp={isMdUp} />
             )}
           </Grid>
         </Grid>
@@ -173,7 +189,7 @@ export default function HomeRealizations() {
         {/* Item 6 */}
         {isMdUp && (
           <Grid xs={6} md={2}>
-            <SmallItem caseStudy={CASE_STUDIES[5]} isMdUp={isMdUp} />
+            <SmallItem caseStudy={displayRealizations[5]} isMdUp={isMdUp} />
           </Grid>
         )}
       </Grid>
@@ -197,7 +213,7 @@ export default function HomeRealizations() {
 
 type LargeItemProps = {
   caseStudy: {
-    id: number;
+    id: string | number;
     title: string;
     category: string;
     coverImg: string;
@@ -257,7 +273,7 @@ function LargeItem({ caseStudy }: LargeItemProps) {
 
 type SmallItemProps = {
   caseStudy: {
-    id: number;
+    id: string | number;
     title: string;
     category: string;
     coverImg: string;

@@ -33,14 +33,8 @@ export default function EcommerceProductViewListItem({ product, ...other }: Prop
       {...other}
     >
       {product.label === 'new' && (
-        <Label color="info" sx={{ position: 'absolute', m: 1, top: 0, left: 0, zIndex: 9 }}>
+        <Label variant="filled" color="primary" sx={{ position: 'absolute', m: 1, top: 0, left: 0, zIndex: 9 }}>
           NEW
-        </Label>
-      )}
-
-      {product.label === 'sale' && (
-        <Label color="error" sx={{ position: 'absolute', m: 1, top: 0, left: 0, zIndex: 9 }}>
-          SALE
         </Label>
       )}
 

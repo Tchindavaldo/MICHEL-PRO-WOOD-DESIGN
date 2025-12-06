@@ -1,6 +1,9 @@
 import { useState } from 'react';
 // @mui
-import { Box, Typography, Container, Tabs, Tab } from '@mui/material';
+import { Box, Typography, Container, Tabs, Tab, Button } from '@mui/material';
+import NextLink from 'next/link';
+import { paths } from 'src/routes/paths';
+import Iconify from 'src/components/iconify';
 // _mock
 import { _products } from 'src/_mock';
 //
@@ -8,12 +11,12 @@ import { EcommerceProductItemBestSellers } from '../product/item';
 
 // ----------------------------------------------------------------------
 
-const TABS = ['Featured Products', 'Top Rated Products', 'Onsale Products'];
+const TABS = ['Produits Vedettes', 'Mieux Notés', 'En Promotion'];
 
 // ----------------------------------------------------------------------
 
 export default function EcommerceLandingPopularProducts() {
-  const [tab, setTab] = useState('Featured Products');
+  const [tab, setTab] = useState('Produits Vedettes');
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
@@ -31,7 +34,7 @@ export default function EcommerceLandingPopularProducts() {
           textAlign: { xs: 'center', md: 'unset' },
         }}
       >
-        Popular Products
+        Produits Populaires
       </Typography>
 
       <Tabs
@@ -59,6 +62,19 @@ export default function EcommerceLandingPopularProducts() {
         {_products.slice(0, 8).map((product) => (
           <EcommerceProductItemBestSellers key={product.id} product={product} />
         ))}
+      </Box>
+
+      <Box sx={{ mt: 8, textAlign: 'center' }}>
+        <Button
+          component={NextLink}
+          href={paths.eCommerce.products}
+          size="large"
+          variant="contained"
+          color="primary"
+          endIcon={<Iconify icon="carbon:arrow-right" />}
+        >
+          Voir tous les produits
+        </Button>
       </Box>
     </Container>
   );

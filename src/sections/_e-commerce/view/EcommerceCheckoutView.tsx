@@ -8,9 +8,7 @@ import { useRouter } from 'next/router';
 import {
   Box,
   Stack,
-  Button,
   Divider,
-  Collapse,
   Container,
   Typography,
   Unstable_Grid2 as Grid,
@@ -20,12 +18,12 @@ import { paths } from 'src/routes/paths';
 // _mock
 import { _products } from 'src/_mock';
 // components
-import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form';
 //
 import { EcommerceHeader } from '../layout';
 import {
   EcommerceCheckoutNewCardForm,
+  EcommerceCheckoutMobileMoneyForm,
   EcommerceCheckoutOrderSummary,
   EcommerceCheckoutPaymentMethod,
   EcommerceCheckoutShippingMethod,
@@ -58,19 +56,24 @@ const SHIPPING_OPTIONS = [
 
 const PAYMENT_OPTIONS = [
   {
-    label: 'Paypal',
-    value: 'paypal',
-    description: '**** **** **** 1234',
-  },
-  {
-    label: 'MasterCard',
-    value: 'mastercard',
-    description: '**** **** **** 3456',
-  },
-  {
-    label: 'Visa',
+    label: 'Carte Visa',
     value: 'visa',
-    description: '**** **** **** 6789',
+    description: 'Paiement sécurisé par carte',
+  },
+  {
+    label: 'Carte MasterCard',
+    value: 'mastercard',
+    description: 'Paiement sécurisé par carte',
+  },
+  {
+    label: 'Orange Money',
+    value: 'orange-money',
+    description: 'Paiement mobile Orange',
+  },
+  {
+    label: 'MTN Mobile Money',
+    value: 'mtn-money',
+    description: 'Paiement mobile MTN',
   },
 ];
 
@@ -78,8 +81,6 @@ const PAYMENT_OPTIONS = [
 
 export default function EcommerceCheckoutView() {
   const { replace } = useRouter();
-
-  const [openNewForm, setOpenNewForm] = useState(false);
 
   const EcommerceCheckoutSchema = Yup.object().shape({
     firstName: Yup.string().required('First name is required'),
@@ -103,13 +104,15 @@ export default function EcommerceCheckoutView() {
     country: 'United States',
     zipCode: '',
     shipping: 'free',
-    paymentMethods: 'mastercard',
+    paymentMethods: 'visa',
     newCard: {
       cardNumber: '',
       cardHolder: '',
       expirationDate: '',
       ccv: '',
     },
+    mobileMoneyPhone: '',
+    mobileMoneyName: '',
   };
 
   const methods = useForm<typeof defaultValues>({
@@ -119,9 +122,12 @@ export default function EcommerceCheckoutView() {
 
   const {
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const paymentMethod = watch('paymentMethods');
 
   const onSubmit = async (data: typeof defaultValues) => {
     try {
@@ -132,6 +138,22 @@ export default function EcommerceCheckoutView() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const renderPaymentForm = () => {
+    if (paymentMethod === 'visa' || paymentMethod === 'mastercard') {
+      return <EcommerceCheckoutNewCardForm />;
+    }
+
+    if (paymentMethod === 'orange-money') {
+      return <EcommerceCheckoutMobileMoneyForm provider="orange" />;
+    }
+
+    if (paymentMethod === 'mtn-money') {
+      return <EcommerceCheckoutMobileMoneyForm provider="mtn" />;
+    }
+
+    return null;
   };
 
   return (
@@ -173,23 +195,7 @@ export default function EcommerceCheckoutView() {
 
                   <EcommerceCheckoutPaymentMethod options={PAYMENT_OPTIONS} />
 
-                  <Divider sx={{ my: 3 }} />
-
-                  <Stack alignItems="flex-end">
-                    <Button
-                      color={openNewForm ? 'error' : 'inherit'}
-                      startIcon={
-                        <Iconify icon={openNewForm ? 'carbon:close' : 'carbon:add'} width={24} />
-                      }
-                      onClick={() => setOpenNewForm(!openNewForm)}
-                    >
-                      {openNewForm ? 'Cancel' : 'Add New Card'}
-                    </Button>
-                  </Stack>
-
-                  <Collapse in={openNewForm} unmountOnExit>
-                    <EcommerceCheckoutNewCardForm />
-                  </Collapse>
+                  {renderPaymentForm()}
                 </div>
               </Stack>
             </Grid>

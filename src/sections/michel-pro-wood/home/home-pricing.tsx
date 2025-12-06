@@ -154,10 +154,30 @@ const PLANS = [
 
 // ----------------------------------------------------------------------
 
-export default function HomePricing() {
+// ----------------------------------------------------------------------
+
+type Props = {
+  plans?: {
+    license: string;
+    duration: string;
+    price: string;
+    currency?: string;
+    description?: string;
+    options: string[];
+    icon: string;
+    color: string;
+    buttonText?: string;
+    isRecommended?: boolean;
+  }[];
+};
+
+export default function HomePricing({ plans = [] }: Props) {
   const theme = useTheme();
 
   const carouselRef = useRef<Carousel | null>(null);
+
+  // Use provided plans or fallback to default
+  const displayPlans = plans.length > 0 ? plans : PLANS;
 
   const carouselSettings = {
     dots: true,
@@ -239,7 +259,7 @@ export default function HomePricing() {
 
       <Box sx={{ position: 'relative' }}>
         <Carousel ref={carouselRef} {...carouselSettings}>
-          {PLANS.map((plan, index) => (
+          {displayPlans.map((plan, index) => (
             <Box key={index} sx={{ px: 2, py: 5 }}>
                 <PlanCard plan={plan} />
             </Box>
@@ -257,14 +277,25 @@ type PlanCardProps = {
     license: string;
     duration: string;
     price: string;
+    currency?: string;
+    description?: string;
     options: string[];
     icon: string;
     color: string;
+    buttonText?: string;
+    isRecommended?: boolean;
   };
 };
 
 function PlanCard({ plan }: PlanCardProps) {
-  const { license, duration, price, options, icon, color } = plan;
+  const { license, duration, price, currency = 'FCFA', description, options, icon, color, buttonText = 'S\'inscrire', isRecommended = false } = plan;
+
+  // Ensure options is an array, fallback to empty array if not
+  const safeOptions = options && Array.isArray(options) ? options : [];
+
+  // Ensure color is valid, fallback to 'primary' if not
+  const validColors = ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const;
+  const safeColor = validColors.includes(color as any) ? color : 'primary';
 
   return (
     <Card
@@ -275,8 +306,28 @@ function PlanCard({ plan }: PlanCardProps) {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
+        position: 'relative',
+        border: isRecommended ? (theme) => `2px solid ${theme.palette.primary.main}` : 'none',
       }}
     >
+      {isRecommended && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            bgcolor: 'primary.main',
+            color: 'primary.contrastText',
+            px: 2,
+            py: 0.5,
+            borderRadius: 1,
+            typography: 'caption',
+            fontWeight: 'bold',
+          }}
+        >
+          Recommandé
+        </Box>
+      )}
       <Stack direction="row" justifyContent="space-between">
         <div>
           <Typography variant="h5" component="div" sx={{ color: 'primary.main', mb: 2, minHeight: 64 }}>
@@ -284,19 +335,24 @@ function PlanCard({ plan }: PlanCardProps) {
           </Typography>
 
           <Stack direction="row" alignItems="center" spacing={0.5}>
-            <Typography variant="h4" component="span">{`${price} FCFA`}</Typography>
+            <Typography variant="h4" component="span">{`${price} ${currency}`}</Typography>
           </Stack>
            <Typography variant="subtitle1" component="span" sx={{ color: 'text.secondary' }}>
               / {duration}
             </Typography>
+           {description && (
+             <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
+               {description}
+             </Typography>
+           )}
         </div>
 
         <Image alt="icon" src={icon} sx={{ width: 64, height: 64 }} />
       </Stack>
 
       <Stack spacing={2} sx={{ my: 5, flexGrow: 1 }}>
-        {options.map((option) => (
-          <Stack key={option} direction="row" alignItems="center" sx={{ typography: 'body2' }}>
+        {safeOptions.map((option, index) => (
+          <Stack key={`${option}-${index}`} direction="row" alignItems="center" sx={{ typography: 'body2' }}>
             <Iconify icon="carbon:checkmark" sx={{ mr: 2, color: 'primary.main' }} /> {option}
           </Stack>
         ))}
@@ -306,9 +362,9 @@ function PlanCard({ plan }: PlanCardProps) {
         fullWidth
         size="large"
         variant="contained"
-        color={color as any}
+        color={safeColor as any}
       >
-        S'inscrire
+        {buttonText}
       </Button>
     </Card>
   );

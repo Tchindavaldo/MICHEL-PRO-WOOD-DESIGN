@@ -51,6 +51,7 @@ export default function EcommerceProductItemCountDown({ product, color = 'primar
         }}
       >
         <Image
+          ratio="1/1"
           src={product.coverImg}
           sx={{
             ...filterStyles(
@@ -64,7 +65,7 @@ export default function EcommerceProductItemCountDown({ product, color = 'primar
             {product.name}
           </TextMaxLine>
 
-          <Typography variant="h5">{`From ${fCurrency(product.price)}`}</Typography>
+          <Typography variant="h5">{`À partir de ${fCurrency(product.price)}`}</Typography>
         </Stack>
 
         <ProductCountdownBlock expired={add(new Date(), { days: 1, hours: 8 })} />

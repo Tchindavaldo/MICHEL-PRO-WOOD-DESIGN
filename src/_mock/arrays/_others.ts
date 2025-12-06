@@ -34,7 +34,7 @@ export const _testimonials = [...Array(8)].map((_, index) => ({
   postDate: _mock.time(index),
   rating: 5,
   review:
-    'Amazing experience i love it a lot. Thanks to the team that dreams come true, great! I appreciate there attitude and approach.',
+    'Une expérience incroyable avec Wood Pro. La qualité du bois et des finitions est exceptionnelle. Je recommande vivement pour tous vos projets d\'aménagement.',
 }));
 
 // ----------------------------------------------------------------------

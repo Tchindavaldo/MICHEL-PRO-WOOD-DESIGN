@@ -68,9 +68,15 @@ function OptionItem({ option, selected }: OptionItemProps) {
           icon={
             (value === 'visa' && 'logos:visa') ||
             (value === 'mastercard' && 'logos:mastercard') ||
-            'logos:paypal'
+            (value === 'orange-money' && 'simple-icons:orange') ||
+            (value === 'mtn-money' && 'simple-icons:mtn') ||
+            'carbon:payment'
           }
           width={24}
+          sx={{
+            ...(value === 'orange-money' && { color: '#FF7900' }),
+            ...(value === 'mtn-money' && { color: '#FFCC00' }),
+          }}
         />
       </Stack>
 

@@ -35,7 +35,7 @@ export default function ReviewSummary({ reviewsNumber, ratingsNumber, onOpenForm
       <Container>
         <Grid container spacing={{ xs: 5, md: 8 }}>
           <Grid xs={12} md={4}>
-            <Typography variant="h3">Reviews</Typography>
+            <Typography variant="h3">Avis</Typography>
 
             <Stack spacing={2} direction="row" alignItems="center" sx={{ my: 3 }}>
               <Typography variant="h2"> {ratingsNumber}</Typography>
@@ -51,7 +51,7 @@ export default function ReviewSummary({ reviewsNumber, ratingsNumber, onOpenForm
                     },
                   }}
                 />
-                <Typography variant="body2">{fShortenNumber(reviewsNumber)} reviews</Typography>
+                <Typography variant="body2">{fShortenNumber(reviewsNumber)} avis</Typography>
               </Stack>
             </Stack>
 
@@ -62,7 +62,7 @@ export default function ReviewSummary({ reviewsNumber, ratingsNumber, onOpenForm
               startIcon={<Iconify icon="carbon:edit" />}
               onClick={onOpenForm}
             >
-              Write a Review
+              Écrire un avis
             </Button>
           </Grid>
 

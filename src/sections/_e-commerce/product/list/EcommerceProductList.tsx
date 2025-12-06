@@ -16,9 +16,21 @@ type Props = {
   products: IProductItemProps[];
   viewMode: string;
   loading?: boolean;
+  page?: number;
+  count?: number;
+  onPageChange?: (event: React.ChangeEvent<unknown>, newPage: number) => void;
 };
 
-export default function EcommerceProductList({ loading, viewMode, products }: Props) {
+export default function EcommerceProductList({ 
+  loading, 
+  viewMode, 
+  products,
+  page = 1,
+  count = 10,
+  onPageChange 
+}: Props) {
+  const skeletonCount = viewMode === 'grid' ? 16 : 8;
+
   return (
     <>
       {viewMode === 'grid' ? (
@@ -28,7 +40,7 @@ export default function EcommerceProductList({ loading, viewMode, products }: Pr
           display="grid"
           gridTemplateColumns={{ xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)' }}
         >
-          {(loading ? [...Array(16)] : products).map((product, index) =>
+          {(loading ? [...Array(skeletonCount)] : products).map((product, index) =>
             product ? (
               <EcommerceProductViewGridItem key={product.id} product={product} />
             ) : (
@@ -38,7 +50,7 @@ export default function EcommerceProductList({ loading, viewMode, products }: Pr
         </Box>
       ) : (
         <Stack spacing={4}>
-          {(loading ? [...Array(16)] : products).map((product, index) =>
+          {(loading ? [...Array(skeletonCount)] : products).map((product, index) =>
             product ? (
               <EcommerceProductViewListItem key={product.id} product={product} />
             ) : (
@@ -49,7 +61,9 @@ export default function EcommerceProductList({ loading, viewMode, products }: Pr
       )}
 
       <Pagination
-        count={10}
+        count={count}
+        page={page}
+        onChange={onPageChange}
         color="primary"
         size="large"
         sx={{

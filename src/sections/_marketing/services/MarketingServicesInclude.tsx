@@ -40,7 +40,32 @@ const SERVICES = [
 
 // ----------------------------------------------------------------------
 
-export default function MarketingServicesInclude() {
+// ----------------------------------------------------------------------
+
+type Props = {
+  serviceIncludes?: {
+    id: string;
+    title: string;
+    description: string;
+    icon: string;
+  }[];
+};
+
+export default function MarketingServicesInclude({ serviceIncludes = [] }: Props) {
+  // Map DB data to component format if needed, or use as is if already mapped.
+  // Assuming serviceIncludes comes from getServiceIncludes which returns raw DB data (icon_url).
+  // But in services.tsx getStaticProps, I didn't map it.
+  // So I should handle mapping here or expect raw data.
+  // Let's handle raw data (icon_url) or mapped data (icon).
+  
+  const displayServices = serviceIncludes.length > 0 
+    ? serviceIncludes.map((service: any) => ({
+        title: service.title,
+        description: service.description,
+        icon: service.icon || service.icon_url || '/assets/icons/ic_statistics.svg',
+      }))
+    : SERVICES;
+
   return (
     <Container
       sx={{
@@ -76,7 +101,7 @@ export default function MarketingServicesInclude() {
           },
         }}
       >
-        {SERVICES.map((value) => (
+        {displayServices.map((value) => (
           <div key={value.title}>
             <SvgColor
               src={value.icon}

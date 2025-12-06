@@ -1,5 +1,8 @@
 // @mui
-import { Box, Typography, Container, Unstable_Grid2 as Grid } from '@mui/material';
+import { Box, Typography, Container, Unstable_Grid2 as Grid, Button } from '@mui/material';
+import NextLink from 'next/link';
+import { paths } from 'src/routes/paths';
+import Iconify from 'src/components/iconify';
 // _mock
 import { _products } from 'src/_mock';
 //
@@ -21,7 +24,7 @@ export default function EcommerceLandingFeaturedProducts() {
           textAlign: { xs: 'center', md: 'unset' },
         }}
       >
-        Featured Products
+        Produits Vedettes
       </Typography>
 
       <Grid container spacing={3}>
@@ -57,6 +60,8 @@ export default function EcommerceLandingFeaturedProducts() {
           </Box>
         </Grid>
       </Grid>
+
+
     </Container>
   );
 }

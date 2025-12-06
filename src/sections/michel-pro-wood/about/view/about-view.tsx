@@ -14,7 +14,15 @@ import {
 
 // ----------------------------------------------------------------------
 
-export default function AboutView() {
+type Props = {
+  testimonials?: any[];
+  partners?: any[];
+};
+
+export default function AboutView({ testimonials = [], partners = [] }: Props) {
+  // Use provided partners or fallback to default brands
+  const displayBrands = partners.length > 0 ? partners : _brandsColor;
+
   return (
     <>
       <MarketingAbout />
@@ -27,9 +35,9 @@ export default function AboutView() {
 
       <MarketingAboutStory />
 
-      <OurClientsMarketingAbout brands={_brandsColor} />
+      <OurClientsMarketingAbout brands={displayBrands} />
 
-      <HomeTestimonials />
+      <HomeTestimonials testimonials={testimonials} />
 
       <HomeGetQuote />
     </>

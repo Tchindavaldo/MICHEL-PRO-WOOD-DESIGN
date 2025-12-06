@@ -22,7 +22,7 @@ export default function EcommerceProductDetailsDescription({ description, specif
       }}
     >
       <Stack spacing={2}>
-        <Typography variant="h6"> Specifications </Typography>
+        <Typography variant="h6"> Caractéristiques </Typography>
 
         {specifications.map((row) => (
           <Stack

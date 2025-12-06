@@ -78,6 +78,27 @@ export default function EcommerceProductsView() {
     setMobileOpen(false);
   };
 
+  const [page, setPage] = useState(1);
+
+  const rowsPerPage = viewMode === 'grid' ? 16 : 8;
+
+  const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage);
+  };
+
+  // Reset page when view mode changes
+  useEffect(() => {
+    setPage(1);
+  }, [viewMode]);
+
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [page]);
+
+  const paginatedProducts = _products.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+  const pageCount = Math.ceil(_products.length / rowsPerPage);
+
   return (
     <>
       <EcommerceHeader />
@@ -167,7 +188,10 @@ export default function EcommerceProductsView() {
             <EcommerceProductList
               loading={loading}
               viewMode={viewMode}
-              products={_products.slice(0, 16)}
+              products={paginatedProducts}
+              page={page}
+              count={pageCount}
+              onPageChange={handleChangePage}
             />
           </Box>
         </Stack>

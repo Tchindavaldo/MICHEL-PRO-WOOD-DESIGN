@@ -18,6 +18,8 @@ import { fShortenNumber } from 'src/utils/formatNumber';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { HERO_IMAGES } from 'src/assets/data/michel-pro-wood/images-link';
+import { getHomeAboutStats, getPageContent } from 'src/lib/supabaseData';
+import { useState, useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +43,46 @@ const ROWS = [
 
 // ----------------------------------------------------------------------
 
+const DEFAULT_CONTENT = {
+  subtitle: 'À propos de nous',
+  title: 'Qui Sommes-Nous ?',
+  description: 'Michel Pro Wood Design est une entreprise spécialisée dans la menuiserie, l’ébénisterie, la conception et la fabrication assistée par ordinateur (CFAO), les constructions bois et la formation professionnelle.',
+  button_text: 'En savoir plus'
+};
+
 export default function HomeAbout() {
+  const [stats, setStats] = useState<any[]>([]);
+  const [content, setContent] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const [statsData, contentData] = await Promise.all([
+        getHomeAboutStats(),
+        getPageContent('home', 'about')
+      ]);
+
+      // Set stats from DB or fallback to defaults
+      if (statsData && statsData.length > 0) {
+        setStats(statsData);
+      } else {
+        setStats(ROWS);
+      }
+
+      // Set content from DB or fallback to defaults
+      if (contentData) {
+        setContent({
+          title: contentData.title || DEFAULT_CONTENT.title,
+          subtitle: contentData.subtitle || DEFAULT_CONTENT.subtitle,
+          description: contentData.description || contentData.content || DEFAULT_CONTENT.description,
+          button_text: contentData.button_text || DEFAULT_CONTENT.button_text
+        });
+      } else {
+        setContent(DEFAULT_CONTENT);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <Container
       sx={{
@@ -72,17 +113,15 @@ export default function HomeAbout() {
           }}
         >
           <Typography component="div" variant="overline" sx={{ color: 'text.disabled' }}>
-            À propos de nous
+            {content?.subtitle || DEFAULT_CONTENT.subtitle}
           </Typography>
 
           <Typography variant="h2" sx={{ my: 3 }}>
-            Qui Sommes-Nous ?
+            {content?.title || DEFAULT_CONTENT.title}
           </Typography>
 
           <Typography sx={{ color: 'text.secondary' }}>
-            Michel Pro Wood Design est une entreprise spécialisée dans la menuiserie, l’ébénisterie,
-            la conception et la fabrication assistée par ordinateur (CFAO), les constructions bois
-            et la formation professionnelle.
+            {content?.description || DEFAULT_CONTENT.description}
           </Typography>
 
           <Button
@@ -93,13 +132,13 @@ export default function HomeAbout() {
             endIcon={<Iconify icon="carbon:chevron-right" />}
             sx={{ my: 5 }}
           >
-            En savoir plus
+            {content?.button_text || DEFAULT_CONTENT.button_text}
           </Button>
         </Grid>
 
         <Grid xs={12} md={6}>
           <Stack spacing={5}>
-            {ROWS.map((row) => (
+            {stats.map((row) => (
               <Stack
                 key={row.label}
                 direction="row"

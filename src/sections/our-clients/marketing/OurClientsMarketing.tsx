@@ -1,10 +1,10 @@
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Container } from '@mui/material';
+import { Container, Stack, Typography, Box } from '@mui/material';
 // types
 import { IBrandProps } from 'src/types/brand';
 // components
-import SvgColor from 'src/components/svg-color';
+import Image from 'src/components/image';
 import Carousel from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
@@ -20,19 +20,20 @@ export default function OurClientsMarketing({ brands }: Props) {
     speed: 5000,
     arrows: false,
     autoplay: true,
-    slidesToShow: 6,
+    slidesToShow: 4, // Reduced from 6 to 4 to give more space for text
     slidesToScroll: 1,
     cssEase: 'linear',
     autoplaySpeed: 5000,
+    infinite: brands.length > 4, // Only loop if there are enough items
     rtl: Boolean(theme.direction === 'rtl'),
     responsive: [
       {
         breakpoint: theme.breakpoints.values.md,
-        settings: { slidesToShow: 4 },
+        settings: { slidesToShow: 3 }, // 3 on tablet
       },
       {
         breakpoint: theme.breakpoints.values.sm,
-        settings: { slidesToShow: 2 },
+        settings: { slidesToShow: 1, centerMode: true }, // 1 on mobile with center mode
       },
     ],
   };
@@ -45,11 +46,37 @@ export default function OurClientsMarketing({ brands }: Props) {
     >
       <Carousel {...carouselSettings}>
         {brands.map((brand) => (
-          <SvgColor
-            key={brand.id}
-            src={brand.image}
-            sx={{ width: 106, height: 32, color: 'grey.500', opacity: 0.8 }}
-          />
+          <Box 
+            key={brand.id} 
+            sx={{ 
+              display: 'flex !important', // Force flex to override slick carousel styles
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 1.5,
+              px: 1, 
+              height: '100%',
+              width: '100%'
+            }}
+          >
+            <Box sx={{ width: 40, height: 40, flexShrink: 0 }}>
+              <Image
+                src={brand.image}
+                alt={brand.name}
+                sx={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              />
+            </Box>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                fontWeight: 'bold', 
+                color: 'text.secondary',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {brand.name}
+            </Typography>
+          </Box>
         ))}
       </Carousel>
     </Container>

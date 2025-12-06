@@ -42,8 +42,27 @@ const BENEFITS = [
 
 // ----------------------------------------------------------------------
 
-export default function MarketingServicesBenefits() {
+// ----------------------------------------------------------------------
+
+type Props = {
+  serviceBenefits?: {
+    id: string;
+    title: string;
+    description: string;
+    iconColor?: string;
+  }[];
+};
+
+export default function MarketingServicesBenefits({ serviceBenefits = [] }: Props) {
   const isMdUp = useResponsive('up', 'md');
+
+  const displayBenefits = serviceBenefits.length > 0 
+    ? serviceBenefits.map((benefit: any) => ({
+        title: benefit.title,
+        description: benefit.description,
+        iconColor: benefit.icon_color || benefit.iconColor || 'primary',
+      }))
+    : BENEFITS;
 
   return (
     <Box
@@ -79,7 +98,7 @@ export default function MarketingServicesBenefits() {
           }}
         >
           <Stack spacing={{ xs: 4, md: 10 }}>
-            {BENEFITS.slice(0, 3).map((benefit, index) => (
+            {displayBenefits.slice(0, 3).map((benefit, index) => (
               <BenefitItem key={benefit.title} benefit={benefit} index={index} reverse />
             ))}
           </Stack>
@@ -87,7 +106,7 @@ export default function MarketingServicesBenefits() {
           {isMdUp && <Image alt="benefits" src="/assets/illustrations/illustration_benefits.svg" />}
 
           <Stack spacing={{ xs: 4, md: 10 }}>
-            {BENEFITS.slice(-3).map((benefit, index) => (
+            {displayBenefits.slice(3, 6).map((benefit, index) => (
               <BenefitItem key={benefit.title} benefit={benefit} index={index} />
             ))}
           </Stack>

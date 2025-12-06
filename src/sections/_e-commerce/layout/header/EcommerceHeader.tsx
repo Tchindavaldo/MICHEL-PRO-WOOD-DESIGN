@@ -56,7 +56,7 @@ export default function EcommerceHeader() {
                 onClick={() => setOpenMenuMobile(true)}
                 startIcon={<Iconify icon="carbon:menu" />}
               >
-                Categories
+                Catégories
               </Button>
             }
           />
@@ -100,11 +100,10 @@ export default function EcommerceHeader() {
           </Badge>
 
           <IconButton
-            component={NextLink}
-            href={paths.eCommerce.account.personal}
             size="small"
             color="inherit"
-            sx={{ p: 0 }}
+            sx={{ p: 0, cursor: 'default' }}
+            disabled
           >
             <Iconify icon="carbon:user" width={24} />
           </IconButton>

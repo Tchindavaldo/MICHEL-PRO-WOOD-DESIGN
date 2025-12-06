@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { add } from 'date-fns';
+import NextLink from 'next/link';
+import { paths } from 'src/routes/paths';
+import Iconify from 'src/components/iconify';
 // @mui
 import {
   Box,
@@ -19,25 +22,25 @@ import { ProductColorPicker, ProductOptionPicker, ProductCountdownBlock } from '
 // ----------------------------------------------------------------------
 
 const COLOR_OPTIONS = [
-  { label: '#FA541C', value: 'red' },
-  { label: '#754FFE', value: 'violet' },
-  { label: '#00B8D9', value: 'cyan' },
-  { label: '#36B37E', value: 'green' },
+  { label: '#8B4513', value: 'chene' },
+  { label: '#A0522D', value: 'noyer' },
+  { label: '#CD853F', value: 'teck' },
+  { label: '#DEB887', value: 'hetre' },
 ];
 
 const MEMORY_OPTIONS = [
-  { label: '128GB', value: '128gb' },
-  { label: '256GB', value: '256gb' },
-  { label: '512GB', value: '512gb' },
-  { label: '1TB', value: '1tb' },
+  { label: 'Brut', value: 'brut' },
+  { label: 'Vernis', value: 'vernis' },
+  { label: 'Huilé', value: 'huile' },
+  { label: 'Laqué', value: 'laque' },
 ];
 
 // ----------------------------------------------------------------------
 
 export default function EcommerceLandingSpecialOffer() {
-  const [color, setColor] = useState('red');
+  const [color, setColor] = useState('chene');
 
-  const [memory, setMemory] = useState('128gb');
+  const [memory, setMemory] = useState('vernis');
 
   const handleChangeColor = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColor((event.target as HTMLInputElement).value);
@@ -60,7 +63,7 @@ export default function EcommerceLandingSpecialOffer() {
           textAlign: { xs: 'center', md: 'unset' },
         }}
       >
-        Special Offer
+        Offre Spéciale
       </Typography>
 
       <Box
@@ -69,14 +72,17 @@ export default function EcommerceLandingSpecialOffer() {
         gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
       >
         <SpecialOfferCountdown
-          label="New 2022"
-          name="Apple iPhone 14"
-          price="From $999"
+          label="Nouveau 2023"
+          name="Ensemble Salle à Manger Premium"
+          price="À partir de 450 000 FCFA"
           expired={add(new Date(), { days: 1, hours: 8 })}
         />
 
-        <Box sx={{ borderRadius: 1.5, bgcolor: 'background.neutral' }}>
-          <Image src="/assets/images/product/product_5.png" />
+        <Box sx={{ borderRadius: 1.5, bgcolor: 'background.neutral', height: 1, overflow: 'hidden' }}>
+          <Image
+            src="/assets/images/michel-pro-wood/vente/table chaisse sale a manger.JPG"
+            sx={{ height: 1, objectFit: 'cover' }}
+          />
         </Box>
 
         <SpecialOfferBuyNow
@@ -86,6 +92,8 @@ export default function EcommerceLandingSpecialOffer() {
           onChangeMemory={handleChangeMemory}
         />
       </Box>
+
+
     </Container>
   );
 }
@@ -143,7 +151,7 @@ function SpecialOfferCountdown({
       <Divider sx={{ borderStyle: 'dashed', my: 3, width: 1 }} />
 
       <Typography variant="body2" sx={{ mb: 2 }}>
-        Deal ends in:
+        L'offre se termine dans :
       </Typography>
 
       <ProductCountdownBlock
@@ -182,26 +190,26 @@ function SpecialOfferBuyNow({
   return (
     <Stack spacing={3} alignItems="flex-start" {...other}>
       <Stack spacing={1}>
-        <Typography variant="h4">Apple iPhone 14</Typography>
+        <Typography variant="h4">Ensemble Salle à Manger Premium</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          While most people enjoy casino gambling, sports betting, lottery and bingo playing for the
-          fun.
+          Profitez de notre offre exceptionnelle sur cet ensemble salle à manger en bois massif.
+          Design élégant, confort optimal et durabilité garantie pour vos repas en famille.
         </Typography>
       </Stack>
 
       <Stack spacing={2}>
-        <Typography variant="subtitle2">Color</Typography>
+        <Typography variant="subtitle2">Essence de Bois</Typography>
         <ProductColorPicker value={color} onChange={onChangeColor} options={COLOR_OPTIONS} />
       </Stack>
 
       <Stack spacing={2}>
-        <Typography variant="subtitle2">Memory</Typography>
+        <Typography variant="subtitle2">Finition</Typography>
         <ProductOptionPicker value={memory} onChange={onChangeMemory} options={MEMORY_OPTIONS} />
       </Stack>
 
       <Button size="large" color="inherit" variant="contained">
-        Buy Now
+        Acheter Maintenant
       </Button>
     </Stack>
   );
