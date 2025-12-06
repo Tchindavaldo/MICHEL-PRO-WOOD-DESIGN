@@ -12,17 +12,11 @@ import TextMaxLine from 'src/components/text-max-line';
 
 const CATEGORIES = [
   { label: 'Mobilier', icon: 'carbon:home', path: '#' },
-  { label: 'Agencement', icon: 'carbon:chart-treemap', path: '#' },
-  { label: 'Menuiserie Ext.', icon: 'carbon:construction', path: '#' },
-  { label: 'Menuiserie Int.', icon: 'mdi:door', path: '#' },
   { label: 'Cuisine', icon: 'carbon:restaurant', path: '#' },
   { label: 'Salle de Bain', icon: 'carbon:clean', path: '#' },
+  { label: 'Menuiserie', icon: 'mdi:door', path: '#' },
   { label: 'Parquet', icon: 'carbon:grid', path: '#' },
-  { label: 'Terrasse', icon: 'carbon:sun', path: '#' },
-  { label: 'Escalier', icon: 'mdi:stairs', path: '#' },
-  { label: 'Rangement', icon: 'carbon:box', path: '#' },
   { label: 'Décoration', icon: 'carbon:color-palette', path: '#' },
-  { label: 'Jardin', icon: 'carbon:tree', path: '#' },
 ];
 
 // ----------------------------------------------------------------------
@@ -48,7 +42,7 @@ export default function EcommerceLandingCategories() {
         gap={3}
         display="grid"
         gridTemplateColumns={{
-          xs: 'repeat(2, 1fr)',
+          xs: 'repeat(3, 1fr)',
           sm: 'repeat(4, 1fr)',
           md: 'repeat(6, 1fr)',
         }}

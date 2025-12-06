@@ -22,17 +22,19 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+export interface Slide {
+  id: string | number;
+  title: string;
+  description: string;
+  image?: string;
+  coverUrl?: string;
+  hasVideo?: boolean;
+  videoUrl?: string;
+  label?: string;
+}
+
 type Props = {
-  slides?: {
-    id: string | number;
-    title: string;
-    description: string;
-    image?: string;
-    coverUrl?: string; // Add coverUrl as alternative to image
-    hasVideo?: boolean;
-    videoUrl?: string;
-    label?: string;
-  }[];
+  slides?: Slide[];
 };
 
 export default function HomeHero({ slides = [] }: Props) {
@@ -120,7 +122,7 @@ export default function HomeHero({ slides = [] }: Props) {
     ),
   };
 
-  const defaultSlides = [
+  const defaultSlides: Slide[] = [
     {
       id: 1,
       title: 'Michel Pro Wood Design – Des créations en bois uniques',
