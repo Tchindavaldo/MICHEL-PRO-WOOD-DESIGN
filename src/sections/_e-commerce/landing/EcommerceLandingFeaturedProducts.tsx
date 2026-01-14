@@ -10,7 +10,16 @@ import { EcommerceProductItemHot, EcommerceProductItemCountDown } from '../produ
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceLandingFeaturedProducts() {
+// types
+import { IProductItemProps } from 'src/types/product';
+
+// ----------------------------------------------------------------------
+
+type Props = {
+  products: IProductItemProps[];
+};
+
+export default function EcommerceLandingFeaturedProducts({ products }: Props) {
   return (
     <Container
       sx={{
@@ -34,7 +43,7 @@ export default function EcommerceLandingFeaturedProducts() {
             display="grid"
             gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
           >
-            {_products.slice(1, 3).map((product, index) => (
+            {products.slice(1, 3).map((product, index) => (
               <EcommerceProductItemCountDown
                 key={product.id}
                 product={product}
@@ -54,7 +63,7 @@ export default function EcommerceLandingFeaturedProducts() {
               lg: 'repeat(2, 1fr)',
             }}
           >
-            {_products.slice(4, 8).map((product) => (
+            {products.slice(4, 8).map((product) => (
               <EcommerceProductItemHot key={product.id} product={product} />
             ))}
           </Box>

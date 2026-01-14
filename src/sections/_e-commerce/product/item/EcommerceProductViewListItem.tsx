@@ -3,7 +3,6 @@ import NextLink from 'next/link';
 // @mui
 import { Stack, StackProps, Link, Fab } from '@mui/material';
 // routes
-import { paths } from 'src/routes/paths';
 // types
 import { IProductItemProps } from 'src/types/product';
 // components
@@ -40,7 +39,7 @@ export default function EcommerceProductViewListItem({ product, ...other }: Prop
 
       <Fab
         component={NextLink}
-        href={paths.eCommerce.product}
+        href={`/e-commerce/product/${product.id}`}
         className="add-to-cart"
         color="primary"
         size="medium"
@@ -77,7 +76,7 @@ export default function EcommerceProductViewListItem({ product, ...other }: Prop
             {product.category}
           </TextMaxLine>
 
-          <Link component={NextLink} href={paths.eCommerce.product} color="inherit">
+          <Link component={NextLink} href={`/e-commerce/product/${product.id}`} color="inherit">
             <TextMaxLine variant="h6" line={1}>
               {product.name}
             </TextMaxLine>

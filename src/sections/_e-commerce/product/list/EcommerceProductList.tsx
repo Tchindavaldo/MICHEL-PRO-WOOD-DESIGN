@@ -40,23 +40,23 @@ export default function EcommerceProductList({
           display="grid"
           gridTemplateColumns={{ xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)' }}
         >
-          {(loading ? [...Array(skeletonCount)] : products).map((product, index) =>
-            product ? (
-              <EcommerceProductViewGridItem key={product.id} product={product} />
-            ) : (
-              <EcommerceProductViewGridItemSkeleton key={index} />
-            )
-          )}
+          {loading
+            ? [...Array(skeletonCount)].map((_, index) => (
+                <EcommerceProductViewGridItemSkeleton key={index} />
+              ))
+            : products.map((product) => (
+                <EcommerceProductViewGridItem key={product.id} product={product} />
+              ))}
         </Box>
       ) : (
         <Stack spacing={4}>
-          {(loading ? [...Array(skeletonCount)] : products).map((product, index) =>
-            product ? (
-              <EcommerceProductViewListItem key={product.id} product={product} />
-            ) : (
-              <EcommerceProductViewListItemSkeleton key={index} />
-            )
-          )}
+          {loading
+            ? [...Array(skeletonCount)].map((_, index) => (
+                <EcommerceProductViewListItemSkeleton key={index} />
+              ))
+            : products.map((product) => (
+                <EcommerceProductViewListItem key={product.id} product={product} />
+              ))}
         </Stack>
       )}
 

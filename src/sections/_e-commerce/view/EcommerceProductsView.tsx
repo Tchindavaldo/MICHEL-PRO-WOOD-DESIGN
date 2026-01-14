@@ -17,7 +17,8 @@ import {
 // config
 import { NAV } from 'src/config-global';
 // _mock
-import { _products } from 'src/_mock';
+
+import { supabase } from 'src/lib/supabase';
 // components
 import Iconify from 'src/components/iconify';
 //
@@ -49,12 +50,38 @@ export default function EcommerceProductsView() {
 
   const [viewMode, setViewMode] = useState('grid');
 
+  const [products, setProducts] = useState<any[]>([]);
+
   useEffect(() => {
-    const fakeLoading = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+    const fetchProducts = async () => {
+      setLoading(true);
+      const { data, error } = await supabase.from('wood_products').select('*');
+      if (!error && data) {
+         const mapped = data.map((p) => ({
+          id: p.id,
+          name: p.name,
+          caption: p.caption || 'Création Wood Pro',
+          description: p.description,
+          coverImg: p.image_url || '/assets/images/michel-pro-wood/vente/armoir.jpg',
+          review: p.review || 45,
+          category: p.category || 'Mobilier',
+          sold: p.sold || 10,
+          inStock: p.in_stock ? p.stock_quantity : 0,
+          rating: Number(p.rating),
+          label: p.label || '',
+          price: Number(p.price),
+          slug: p.slug,
+          priceSale: Number(p.sale_price) || 0,
+          images: p.images || [p.image_url || '/assets/images/michel-pro-wood/vente/armoir.jpg'],
+        }));
+        setProducts(mapped);
+        console.log('Products from DBbb:', mapped);
+      } else if (error) {
+        console.error('Error fetching products:', error);
+      }
       setLoading(false);
     };
-    fakeLoading();
+    fetchProducts();
   }, []);
 
   const handleChangeViewMode = (
@@ -96,8 +123,9 @@ export default function EcommerceProductsView() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [page]);
 
-  const paginatedProducts = _products.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-  const pageCount = Math.ceil(_products.length / rowsPerPage);
+  const displayProducts = products;
+  const paginatedProducts = displayProducts.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+  const pageCount = Math.ceil(displayProducts.length / rowsPerPage);
 
   return (
     <>
@@ -136,7 +164,7 @@ export default function EcommerceProductsView() {
         >
           <Stack spacing={5} divider={<Divider sx={{ borderStyle: 'dashed' }} />}>
             <EcommerceFilters mobileOpen={mobileOpen} onMobileClose={handleMobileClose} />
-            <EcommerceProductListBestSellers products={_products.slice(0, 3)} />
+            <EcommerceProductListBestSellers products={products.sort((a, b) => b.sold - a.sold).slice(0, 3)} />
           </Stack>
 
           <Box

@@ -15,7 +15,14 @@ const TABS = ['Produits Vedettes', 'Mieux Notés', 'En Promotion'];
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceLandingPopularProducts() {
+// types
+import { IProductItemProps } from 'src/types/product';
+
+type Props = {
+  products: IProductItemProps[];
+};
+
+export default function EcommerceLandingPopularProducts({ products }: Props) {
   const [tab, setTab] = useState('Produits Vedettes');
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
@@ -59,7 +66,7 @@ export default function EcommerceLandingPopularProducts() {
           md: 'repeat(4, 1fr)',
         }}
       >
-        {_products.slice(0, 8).map((product) => (
+        {products.slice(0, 8).map((product) => (
           <EcommerceProductItemBestSellers key={product.id} product={product} />
         ))}
       </Box>

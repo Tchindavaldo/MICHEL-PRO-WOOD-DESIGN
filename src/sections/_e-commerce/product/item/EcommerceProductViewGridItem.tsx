@@ -3,7 +3,6 @@ import NextLink from 'next/link';
 // @mui
 import { Stack, Box, StackProps, Fab, Link } from '@mui/material';
 // routes
-import { paths } from 'src/routes/paths';
 // types
 import { IProductItemProps } from 'src/types/product';
 // components
@@ -21,7 +20,7 @@ interface Props extends StackProps {
 }
 
 export default function EcommerceProductViewGridItem({ product, sx, ...other }: Props) {
-  return (
+    return (
     <Stack
       sx={{
         position: 'relative',
@@ -42,7 +41,7 @@ export default function EcommerceProductViewGridItem({ product, sx, ...other }: 
       <Box sx={{ position: 'relative', mb: 2 }}>
         <Fab
           component={NextLink}
-          href={paths.eCommerce.product}
+          href={`/e-commerce/product/${product.id}`}
           className="add-to-cart"
           color="primary"
           size="medium"
@@ -78,7 +77,7 @@ export default function EcommerceProductViewGridItem({ product, sx, ...other }: 
           {product.category}
         </TextMaxLine>
 
-        <Link component={NextLink} href={paths.eCommerce.product} color="inherit">
+        <Link component={NextLink} href={`/e-commerce/product/${product.id}`} color="inherit">
           <TextMaxLine variant="body2" line={1} sx={{ fontWeight: 'fontWeightMedium' }}>
             {product.name}
           </TextMaxLine>

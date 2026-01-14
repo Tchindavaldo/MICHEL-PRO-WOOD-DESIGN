@@ -1,8 +1,6 @@
 import { useState } from 'react';
 // @mui
 import { Container } from '@mui/material';
-// _mock
-import { _reviews } from 'src/_mock';
 //
 import ReviewNewForm from '../components/ReviewNewForm';
 import ReviewList from './ReviewList';
@@ -10,22 +8,29 @@ import ReviewSummary from './ReviewSummary';
 
 // ----------------------------------------------------------------------
 
-export default function ReviewEcommerce() {
+interface Props { productId: string; reviews: any[]; }
+export default function ReviewEcommerce({ productId, reviews }: Props) {
   const [openForm, setOpenForm] = useState(false);
+  const [list, setList] = useState(reviews);
 
   return (
     <>
       <ReviewSummary
-        ratingsNumber={4.1}
-        reviewsNumber={123456}
+        ratingsNumber={Number((list.reduce((a,b)=>a+b.rating,0)/ Math.max(list.length,1)).toFixed(1))}
+        reviewsNumber={list.length}
         onOpenForm={() => setOpenForm(true)}
       />
 
       <Container>
-        <ReviewList reviews={_reviews} />
+        <ReviewList reviews={list} />
       </Container>
 
-      <ReviewNewForm open={openForm} onClose={() => setOpenForm(false)} />
+      <ReviewNewForm
+          productId={productId}
+          open={openForm}
+          onClose={() => setOpenForm(false)}
+          onReviewAdded={(r)=>setList([r,...list])}
+        />
     </>
   );
 }

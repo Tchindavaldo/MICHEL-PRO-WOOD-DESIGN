@@ -1,11 +1,7 @@
-import { useState, useEffect } from 'react';
 // @mui
 import { Container, Unstable_Grid2 as Grid } from '@mui/material';
-// _mock
-import { _products } from 'src/_mock';
 // components
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import LoadingScreen from 'src/components/loading-screen';
 //
 import ReviewEcommerce from '../../review/e-commerce';
 import { EcommerceHeader } from '../layout';
@@ -17,22 +13,10 @@ import {
 
 // ----------------------------------------------------------------------
 
-const _mockProduct = _products[0];
 
-export default function EcommerceProductView() {
-  const [loading, setLoading] = useState(true);
+interface Props { product: any; reviews: any[]; }
 
-  useEffect(() => {
-    const fakeLoading = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setLoading(false);
-    };
-    fakeLoading();
-  }, []);
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
+export default function EcommerceProductView({ product, reviews }: Props) {
 
   return (
     <>
@@ -48,7 +32,7 @@ export default function EcommerceProductView() {
               name: 'Mobilier',
             },
             {
-              name: _mockProduct.name,
+              name: product.name,
             },
           ]}
           sx={{ my: 5 }}
@@ -56,17 +40,17 @@ export default function EcommerceProductView() {
 
         <Grid container spacing={{ xs: 5, md: 8 }}>
           <Grid xs={12} md={6} lg={7}>
-            <EcommerceProductDetailsCarousel images={_mockProduct.images} />
+            <EcommerceProductDetailsCarousel images={product.images} />
           </Grid>
 
           <Grid xs={12} md={6} lg={5}>
             <EcommerceProductDetailsInfo
-              name={_mockProduct.name}
-              price={_mockProduct.price}
-              rating={_mockProduct.rating}
-              review={_mockProduct.review}
-              priceSale={_mockProduct.priceSale}
-              caption={_mockProduct.caption}
+              name={product.name}
+              price={product.price}
+              rating={product.rating}
+              review={reviews.length}
+              priceSale={product.sale_price}
+              caption={product.caption}
             />
           </Grid>
         </Grid>
@@ -74,7 +58,7 @@ export default function EcommerceProductView() {
         <Grid container columnSpacing={{ md: 8 }}>
           <Grid xs={12} md={6} lg={7}>
             <EcommerceProductDetailsDescription
-              description={_mockProduct.description}
+              description={product.description}
               specifications={[
                 { label: 'Catégorie', value: 'Mobilier' },
                 { label: 'Fabricant', value: 'Wood Pro' },
@@ -87,7 +71,7 @@ export default function EcommerceProductView() {
         </Grid>
       </Container>
 
-      <ReviewEcommerce />
+      <ReviewEcommerce productId={product.id} reviews={reviews} />
     </>
   );
 }

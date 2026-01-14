@@ -18,6 +18,7 @@ export type IProductItemCompareProps = {
 
 export type IProductItemProps = {
   id: string;
+  slug: string;
   name: string;
   label: string;
   caption: string;

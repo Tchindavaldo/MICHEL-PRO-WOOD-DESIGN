@@ -17,6 +17,8 @@ import {
 } from '@mui/material';
 // components
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+// data helpers
+import { addProductReview } from 'src/lib/supabaseData';
 
 // ----------------------------------------------------------------------
 
@@ -28,12 +30,14 @@ type FormValuesProps = {
 };
 
 interface Props extends DialogProps {
+  productId: string;
   onClose: VoidFunction;
+  onReviewAdded: (newReview: any) => void;
 }
 
 // ----------------------------------------------------------------------
 
-export default function ReviewNewForm({ onClose, ...other }: Props) {
+export default function ReviewNewForm({ productId, onClose, onReviewAdded, ...other }: Props) {
   const defaultValues = {
     rating: null,
     review: '',
@@ -60,12 +64,23 @@ export default function ReviewNewForm({ onClose, ...other }: Props) {
     formState: { errors, isSubmitting },
   } = methods;
 
-  const onSubmit = async (data: FormValuesProps) => {
+
+const onSubmit = async (data: FormValuesProps) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await addProductReview({
+        product_id: productId,
+        author: data.name,
+        rating: Number(data.rating),
+        comment: data.review,
+      });
+      onReviewAdded({
+        author: data.name,
+        rating: Number(data.rating),
+        comment: data.review,
+        created_at: new Date().toISOString(),
+      });
       reset();
       onClose();
-      console.log('DATA', data);
     } catch (error) {
       console.error(error);
     }

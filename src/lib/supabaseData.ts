@@ -141,6 +141,23 @@ export async function getProductBySlug(slug: string) {
     }
 }
 
+export async function getProductById(id: string) {
+    try {
+        const { data, error } = await supabase
+            .from('wood_products')
+            .select('*')
+            .eq('id', id)      
+            .maybeSingle();
+
+        if (error) throw error;
+        console.log('product id', id, 'data', data, 'err', error);
+
+        return data;
+    } catch (error) {
+        return null;
+    }
+}
+
 export async function getProductCategories() {
     try {
         const { data, error } = await supabase
@@ -490,6 +507,38 @@ export async function getRealizationFeatures() {
         // console.error('Error fetching realization features:', error);
         return [];
     }
+}
+
+// =====================================================
+// PRODUCT REVIEWS
+// =====================================================
+export async function getProductReviews(productId: string) {
+    try {
+        const { data, error } = await supabase
+            .from('wood_product_reviews')
+            .select('*')
+            .eq('product_id', productId)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        return data || [];
+    } catch (error) {
+        return [];
+    }
+}
+
+export async function addProductReview(input: {
+    product_id: string;
+    author: string;
+    rating: number;
+    comment: string;
+}) {
+    const payload = {
+        ...input,
+        created_at: new Date().toISOString(),
+    };
+    const { error } = await supabase.from('wood_product_reviews').insert(payload);
+    if (error) throw error;
 }
 
 // =====================================================

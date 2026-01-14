@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
+import { supabase } from 'src/lib/supabase';
 // _mock
 import { _products } from 'src/_mock';
 // components
@@ -132,6 +133,28 @@ export default function EcommerceCheckoutView() {
   const onSubmit = async (data: typeof defaultValues) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const total = 357.09; // Hardcoded based on summary
+
+      const { data: orderData, error: orderError } = await supabase
+        .from('wood_orders')
+        .insert({
+          customer_name: `${data.firstName} ${data.lastName}`,
+          customer_email: data.emailAddress,
+          customer_address: `${data.streetAddress}, ${data.city}, ${data.zipCode}`,
+          total_amount: total,
+          status: 'pending',
+          delivery_status: 'pending'
+        })
+        .select()
+        .single();
+
+      if (orderError) {
+        console.error('Order creation failed:', orderError);
+      } else {
+        console.log('Order created:', orderData);
+      }
+
       reset();
       replace(paths.eCommerce.orderCompleted);
       console.log('DATA', data);

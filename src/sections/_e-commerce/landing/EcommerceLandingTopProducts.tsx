@@ -10,7 +10,14 @@ import { EcommerceProductItemHot, EcommerceProductItemTop } from '../product/ite
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceLandingTopProducts() {
+// types
+import { IProductItemProps } from 'src/types/product';
+
+type Props = {
+  products: IProductItemProps[];
+};
+
+export default function EcommerceLandingTopProducts({ products }: Props) {
   return (
     <Container
       sx={{
@@ -36,7 +43,7 @@ export default function EcommerceLandingTopProducts() {
         }}
         sx={{ mb: { xs: 3, md: 8 } }}
       >
-        {_products.slice(4, 8).map((product) => (
+        {products.slice(4, 8).map((product) => (
           <EcommerceProductItemHot key={product.id} product={product} />
         ))}
       </Box>
@@ -49,7 +56,7 @@ export default function EcommerceLandingTopProducts() {
           md: 'repeat(2, 1fr)',
         }}
       >
-        <EcommerceProductItemTop variant="large" product={_products[6]} />
+        <EcommerceProductItemTop variant="large" product={products[6]} />
 
         <Box
           gap={3}
@@ -59,8 +66,8 @@ export default function EcommerceLandingTopProducts() {
             md: 'repeat(2, 1fr)',
           }}
         >
-          <EcommerceProductItemTop product={_products[4]} />
-          <EcommerceProductItemTop product={_products[10]} />
+          <EcommerceProductItemTop product={products[4]} />
+          <EcommerceProductItemTop product={products[10]} />
         </Box>
       </Box>
 
