@@ -32,6 +32,9 @@ const STEPS = [
 // ----------------------------------------------------------------------
 
 type Props = {
+  title?: string;
+  subtitle?: string;
+  description?: string;
   processSteps?: {
     id: string;
     stepNumber: string;
@@ -41,7 +44,7 @@ type Props = {
   }[];
 };
 
-export default function HomeProcess({ processSteps = [] }: Props) {
+export default function HomeProcess({ processSteps = [], title, subtitle, description }: Props) {
   // Use provided processSteps or fallback to default
   const displaySteps = processSteps.length > 0 ? processSteps : STEPS.map((step, index) => ({
     id: `step-${index}`,
@@ -67,13 +70,13 @@ export default function HomeProcess({ processSteps = [] }: Props) {
         }}
       >
         <Typography variant="overline" sx={{ color: 'text.disabled' }}>
-          Notre Processus
+          {subtitle || 'Notre Processus'}
         </Typography>
 
-        <Typography variant="h2">Comment nous travaillons</Typography>
+        <Typography variant="h2">{title || 'Comment nous travaillons'}</Typography>
 
         <Typography sx={{ color: 'text.secondary' }}>
-          Une méthodologie rigoureuse pour garantir la qualité de chaque projet, de l'idée à la pose.
+          {description || "Une méthodologie rigoureuse pour garantir la qualité de chaque projet, de l'idée à la pose."}
         </Typography>
       </Stack>
 

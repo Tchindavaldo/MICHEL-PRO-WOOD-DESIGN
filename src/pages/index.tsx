@@ -21,6 +21,7 @@ import {
   getProcessSteps,
   getVideoSlides,
   getHomeAboutStats,
+  getPageContent,
 } from 'src/lib/supabaseData';
 import { DEFAULT_HERO_SLIDES, DEFAULT_VIDEO_SLIDES, DEFAULT_REALIZATIONS } from 'src/lib/defaultHomeData';
 import { paths } from 'src/routes/paths';
@@ -280,27 +281,11 @@ export const getStaticProps = async () => {
         cta_link: slide.cta_link,
       }));
 
-  // LOGS FOR DEBUGGING
-  // console.log('--- SUPABASE DATA FETCHING DEBUG ---');
-  // console.log(`Services fetched: ${services?.length || 0}`);
-  // console.log(`Testimonials fetched: ${supabaseTestimonials?.length || 0}`);
-  // console.log(`Partners fetched: ${supabasePartners?.length || 0}`);
-  // console.log(`Realizations fetched: ${supabaseRealizations?.length || 0}`);
-  // console.log(`Products fetched: ${supabaseProducts?.length || 0}`);
-  // console.log(`Blog Posts fetched: ${supabasePosts?.length || 0}`);
-  // console.log(`Jobs fetched: ${supabaseJobs?.length || 0}`);
-  // console.log(`Pricing Plans fetched: ${supabasePlans?.length || 0}`);
-  // console.log(`Hero Slides fetched: ${supabaseSlides?.length || 0}`);
-  // console.log(`Process Steps fetched: ${supabaseProcessSteps?.length || 0}`);
-  // console.log(`Video Slides fetched: ${supabaseVideoSlides?.length || 0}`);
-  
-  // if (supabaseSlides?.length > 0) {
-  //   console.log('Sample Slide:', JSON.stringify(supabaseSlides[0], null, 2));
-  // }
-  // if (supabaseProcessSteps?.length > 0) {
-  //   console.log('Sample Process Step:', JSON.stringify(supabaseProcessSteps[0], null, 2));
-  // }
-  // console.log('------------------------------------');
+  // Fetch page content for headers (managed in services page CMS)
+  const servicesPageContent = await getPageContent('services');
+  const servicesHeader = servicesPageContent?.find((item: any) => item.section_key === 'services_header');
+  const pricingHeader = servicesPageContent?.find((item: any) => item.section_key === 'pricing_header');
+  const howItWorkHeader = servicesPageContent?.find((item: any) => item.section_key === 'how_it_work');
 
   return {
     props: {
@@ -315,6 +300,9 @@ export const getStaticProps = async () => {
       slides: mappedSlides,
       processSteps: mappedProcessSteps,
       videoSlides: mappedVideoSlides,
+      servicesHeader: servicesHeader || null,
+      pricingHeader: pricingHeader || null,
+      processHeader: howItWorkHeader || null,
     },
     revalidate: 60, // Revalidate every 60 seconds
   };
@@ -331,7 +319,10 @@ export default function HomePage({
   plans,
   slides,
   processSteps,
-  videoSlides
+  videoSlides,
+  servicesHeader,
+  pricingHeader,
+  processHeader,
 }: { 
   services: any[]; 
   testimonials: any[]; 
@@ -344,24 +335,10 @@ export default function HomePage({
   slides: any[];
   processSteps: any[];
   videoSlides: any[];
+  servicesHeader: any;
+  pricingHeader: any;
+  processHeader: any;
 }) {
-  // useEffect(() => {
-  //   console.log('--- CLIENT SIDE DEBUG ---');
-  //   console.log('Services received:', services?.length);
-  //   console.log('Testimonials received:', testimonials?.length);
-  //   console.log('Realizations received:', realizations?.length);
-  //   console.log('Slides received:', slides?.length);
-  //   console.log('Process Steps received:', processSteps?.length);
-  //   console.log('Video Slides received:', videoSlides?.length);
-  //   
-  //   // Check if we are using fallback data (heuristic: check IDs or specific fields)
-  //   const isUsingMockServices = services?.length > 0 && !services[0].id; // Mock data might not have DB IDs depending on mapping
-  //   console.log('Data Source Check (Services):', isUsingMockServices ? 'Likely Mock/Static' : 'Likely Supabase');
-  //   
-  //   console.log('Full Props:', { services, testimonials, partners, realizations, products, posts, jobs, plans, slides, processSteps, videoSlides });
-  //   console.log('-------------------------');
-  // }, [services, testimonials, partners, realizations, products, posts, jobs, plans, slides, processSteps, videoSlides]);
-
   return (
     <>
       <Head>
@@ -380,6 +357,9 @@ export default function HomePage({
         slides={slides}
         processSteps={processSteps}
         videoSlides={videoSlides}
+        servicesHeader={servicesHeader}
+        pricingHeader={pricingHeader}
+        processHeader={processHeader}
       />
     </>
   );

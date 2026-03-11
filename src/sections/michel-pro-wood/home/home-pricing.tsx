@@ -157,6 +157,9 @@ const PLANS = [
 // ----------------------------------------------------------------------
 
 type Props = {
+  title?: string;
+  subtitle?: string;
+  description?: string;
   plans?: {
     license: string;
     duration: string;
@@ -171,7 +174,7 @@ type Props = {
   }[];
 };
 
-export default function HomePricing({ plans = [] }: Props) {
+export default function HomePricing({ plans = [], title, subtitle, description }: Props) {
   const theme = useTheme();
 
   const carouselRef = useRef<Carousel | null>(null);
@@ -233,16 +236,20 @@ export default function HomePricing({ plans = [] }: Props) {
           }}
         >
           <Typography variant="overline" sx={{ color: 'text.disabled' }}>
-            Nos Tarifs
+            {subtitle || 'Nos Tarifs'}
           </Typography>
 
-          <Typography variant="h2">Plans de Formation</Typography>
+          <Typography variant="h2">{title || 'Plans de Formation'}</Typography>
 
           <Typography sx={{ color: 'text.secondary' }}>
-            À l’issue de la formation et après validation, l’entreprise délivrera : CQP, AQP, DQP ou Attestation de fin de formation.
-            <br />
-            <br />
-            Moyens de paiement : Mobile Money (MTN, Orange), Espèces, Virement bancaire.
+            {description || (
+              <>
+                À l’issue de la formation et après validation, l’entreprise délivrera : CQP, AQP, DQP ou Attestation de fin de formation.
+                <br />
+                <br />
+                Moyens de paiement : Mobile Money (MTN, Orange), Espèces, Virement bancaire.
+              </>
+            )}
           </Typography>
         </Stack>
 

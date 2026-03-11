@@ -36,7 +36,9 @@ export default function ServicesView({
   pageContent = []
 }: Props) {
   const heroContent = pageContent?.find(item => item.section_key === 'hero');
+  const servicesHeaderContent = pageContent?.find(item => item.section_key === 'services_header');
   const includeContent = pageContent?.find(item => item.section_key === 'include');
+  const pricingHeaderContent = pageContent?.find(item => item.section_key === 'pricing_header');
   const benefitsContent = pageContent?.find(item => item.section_key === 'benefits');
   const howItWorkContent = pageContent?.find(item => item.section_key === 'how_it_work');
 
@@ -44,7 +46,12 @@ export default function ServicesView({
     <>
       <MarketingServicesHero pageContent={heroContent} />
 
-      <HomeServices services={services} />
+      <HomeServices 
+        services={services} 
+        title={servicesHeaderContent?.title}
+        subtitle={servicesHeaderContent?.subtitle}
+        description={servicesHeaderContent?.content}
+      />
 
       <MarketingServicesInclude 
         title={includeContent?.title}
@@ -52,7 +59,12 @@ export default function ServicesView({
         serviceIncludes={serviceIncludes} 
       />
 
-      <HomePricing plans={plans} />
+      <HomePricing 
+        plans={plans} 
+        title={pricingHeaderContent?.title}
+        subtitle={pricingHeaderContent?.subtitle}
+        description={pricingHeaderContent?.content}
+      />
 
       <MarketingServicesBenefits 
         title={benefitsContent?.title}

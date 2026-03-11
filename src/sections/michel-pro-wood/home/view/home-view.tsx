@@ -35,6 +35,9 @@ type Props = {
   slides?: any[];
   processSteps?: any[];
   videoSlides?: any[];
+  servicesHeader?: any;
+  pricingHeader?: any;
+  processHeader?: any;
 };
 
 export default function HomeView({ 
@@ -48,7 +51,10 @@ export default function HomeView({
   plans = [],
   slides = [],
   processSteps = [],
-  videoSlides = []
+  videoSlides = [],
+  servicesHeader,
+  pricingHeader,
+  processHeader,
 }: Props) {
   // Use provided partners or fallback to default brands
   const displayBrands = partners.length > 0 ? partners : _brands;
@@ -67,15 +73,30 @@ export default function HomeView({
 
       <HomeAbout />
 
-      <HomeServices services={services} />
+      <HomeServices 
+        services={services} 
+        title={servicesHeader?.title}
+        subtitle={servicesHeader?.subtitle}
+        description={servicesHeader?.content}
+      />
 
-      <HomeProcess processSteps={processSteps} />
+      <HomeProcess 
+        processSteps={processSteps} 
+        title={processHeader?.title}
+        subtitle={processHeader?.subtitle}
+        description={processHeader?.content}
+      />
 
       <HomeRealizations realizations={realizations} />
 
       <HomeShop products={products} />
 
-      <HomePricing plans={plans} />
+      <HomePricing 
+        plans={plans} 
+        title={pricingHeader?.title}
+        subtitle={pricingHeader?.subtitle}
+        description={pricingHeader?.content}
+      />
 
       <HomeJobs jobs={jobs} />
 

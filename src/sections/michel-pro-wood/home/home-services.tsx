@@ -45,6 +45,9 @@ const SERVICES = [
 // ----------------------------------------------------------------------
 
 type Props = {
+  title?: string;
+  subtitle?: string;
+  description?: string;
   services?: {
     name: string;
     content: string;
@@ -54,7 +57,7 @@ type Props = {
   }[];
 };
 
-export default function HomeServices({ services = [] }: Props) {
+export default function HomeServices({ services = [], title, subtitle, description }: Props) {
   const displayServices = services.length > 0 ? services : SERVICES;
 
   return (
@@ -73,13 +76,13 @@ export default function HomeServices({ services = [] }: Props) {
         }}
       >
         <Typography variant="overline" sx={{ color: 'text.disabled' }}>
-          Nos Services
+          {subtitle || 'Nos Services'}
         </Typography>
 
-        <Typography variant="h2">Ce que nous offrons</Typography>
+        <Typography variant="h2">{title || 'Ce que nous offrons'}</Typography>
 
         <Typography sx={{ color: 'text.secondary' }}>
-          Des solutions complètes allant de la conception à la réalisation, en passant par la formation.
+          {description || 'Des solutions complètes allant de la conception à la réalisation, en passant par la formation.'}
         </Typography>
       </Stack>
 
