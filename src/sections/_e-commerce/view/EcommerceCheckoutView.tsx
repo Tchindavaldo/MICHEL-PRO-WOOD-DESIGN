@@ -34,6 +34,11 @@ import {
 
 // ----------------------------------------------------------------------
 
+// context
+import { useCart } from 'src/context/CartContext';
+
+// ----------------------------------------------------------------------
+
 const SHIPPING_OPTIONS = [
   {
     label: 'Free',
@@ -82,11 +87,12 @@ const PAYMENT_OPTIONS = [
 
 export default function EcommerceCheckoutView() {
   const { replace } = useRouter();
+  const { cart, subtotal, totalItems, clearCart } = useCart();
 
   const EcommerceCheckoutSchema = Yup.object().shape({
     firstName: Yup.string().required('First name is required'),
     lastName: Yup.string().required('Last name is required'),
-    emailAddress: Yup.string().required('Email address is required'),
+    emailAddress: Yup.string(), // Optional
     phoneNumber: Yup.string().required('Phone number is required'),
     streetAddress: Yup.string().required('Street address is required'),
     city: Yup.string().required('City is required'),
@@ -96,7 +102,7 @@ export default function EcommerceCheckoutView() {
   const defaultValues = {
     firstName: 'Jayvion',
     lastName: 'Simon',
-    emailAddress: 'nannie_abernathy70@yahoo.com',
+    emailAddress: '',
     phoneNumber: '365-374-4961',
     password: '',
     confirmPassword: '',
@@ -129,23 +135,36 @@ export default function EcommerceCheckoutView() {
   } = methods;
 
   const paymentMethod = watch('paymentMethods');
+  const shippingMethod = watch('shipping');
+
+  const shippingCost = SHIPPING_OPTIONS.find(option => option.value === shippingMethod)?.price || 0;
+  const tax = subtotal * 0.07;
+  const discount = 0;
+  const total = subtotal + tax + shippingCost - discount;
 
   const onSubmit = async (data: typeof defaultValues) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const total = 357.09; // Hardcoded based on summary
+      const orderPayload = {
+        customer_name: `${data.firstName} ${data.lastName}`,
+        customer_email: data.emailAddress,
+        customer_phone: data.phoneNumber,
+        customer_country: data.country,
+        customer_address: `${data.streetAddress}, ${data.city}, ${data.zipCode}, ${data.country}`,
+        total_amount: total,
+        status: 'pending',
+        delivery_status: 'pending',
+        payment_method: data.paymentMethods,
+        shipping_method: data.shipping,
+        items: cart // Storing the cart items directly as JSONB
+      };
+
+      console.log('Submitting Order Payload to Supabase:', orderPayload);
 
       const { data: orderData, error: orderError } = await supabase
         .from('wood_orders')
-        .insert({
-          customer_name: `${data.firstName} ${data.lastName}`,
-          customer_email: data.emailAddress,
-          customer_address: `${data.streetAddress}, ${data.city}, ${data.zipCode}`,
-          total_amount: total,
-          status: 'pending',
-          delivery_status: 'pending'
-        })
+        .insert(orderPayload)
         .select()
         .single();
 
@@ -153,11 +172,12 @@ export default function EcommerceCheckoutView() {
         console.error('Order creation failed:', orderError);
       } else {
         console.log('Order created:', orderData);
+        // Clear the cart after successful order
+        clearCart();
       }
 
       reset();
       replace(paths.eCommerce.orderCompleted);
-      console.log('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -225,12 +245,12 @@ export default function EcommerceCheckoutView() {
 
             <Grid xs={12} md={4}>
               <EcommerceCheckoutOrderSummary
-                tax={7}
-                total={357.09}
-                subtotal={89.09}
-                shipping={55.47}
-                discount={16.17}
-                products={_products.slice(0, 3)}
+                tax={tax}
+                total={total}
+                subtotal={subtotal}
+                shipping={shippingCost}
+                discount={discount}
+                products={cart}
                 loading={isSubmitting}
               />
             </Grid>

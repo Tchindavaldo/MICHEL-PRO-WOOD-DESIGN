@@ -59,23 +59,24 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-// ----------------------------------------------------------------------
-
 type Props = {
+  title?: string;
+  description?: string;
   processSteps?: {
     id: string;
-    stepNumber: string;
+    stepNumber?: string;
+    step_number?: string;
     title: string;
     description: string;
   }[];
 };
 
-export default function MarketingServicesHowItWork({ processSteps = [] }: Props) {
+export default function MarketingServicesHowItWork({ title, description, processSteps = [] }: Props) {
   const isMdUp = useResponsive('up', 'md');
 
   const displayTimelines = processSteps.length > 0 
     ? processSteps.map((step: any) => ({
-        step: step.stepNumber,
+        step: step.step_number || step.stepNumber,
         title: step.title,
         description: step.description,
       }))
@@ -85,7 +86,7 @@ export default function MarketingServicesHowItWork({ processSteps = [] }: Props)
     <StyledRoot>
       <Container>
         <Typography variant="h2" sx={{ textAlign: 'center' }}>
-          Comment Ça Marche
+          {title || 'Comment Ça Marche'}
         </Typography>
 
         <Typography
@@ -98,7 +99,7 @@ export default function MarketingServicesHowItWork({ processSteps = [] }: Props)
             mb: { xs: 8, md: 10 },
           }}
         >
-          De la conception à la livraison, découvrez notre processus de travail éprouvé pour des résultats exceptionnels.
+          {description || 'De la conception à la livraison, découvrez notre processus de travail éprouvé pour des résultats exceptionnels.'}
         </Typography>
 
         <Timeline position={isMdUp ? 'alternate' : 'right'}>

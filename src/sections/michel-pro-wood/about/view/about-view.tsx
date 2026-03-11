@@ -1,3 +1,5 @@
+// React
+import { useState, useEffect } from 'react';
 // _mock
 import { _brandsColor } from 'src/_mock';
 // sections
@@ -17,23 +19,58 @@ import {
 type Props = {
   testimonials?: any[];
   partners?: any[];
+  values?: any[];
+  pageContent?: any[];
+  aboutStats?: any[];
+  aboutTimeline?: any[];
 };
 
-export default function AboutView({ testimonials = [], partners = [] }: Props) {
+export default function AboutView({ 
+  testimonials = [], 
+  partners = [], 
+  values = [], 
+  pageContent = [],
+  aboutStats = [],
+  aboutTimeline = []
+}: Props) {
+  const heroContent = pageContent?.find(item => item.section_key === 'hero');
+  const storyContent = pageContent?.find(item => item.section_key === 'story');
+  const valuesContent = pageContent?.find(item => item.section_key === 'values');
+  const visionContent = pageContent?.find(item => item.section_key === 'vision');
+
   // Use provided partners or fallback to default brands
   const displayBrands = partners.length > 0 ? partners : _brandsColor;
 
   return (
     <>
-      <MarketingAbout />
+      <MarketingAbout 
+        title={heroContent?.title}
+        subtitle={heroContent?.subtitle}
+        description={heroContent?.content}
+        stats={aboutStats}
+      />
 
       <HomeAbout />
 
-      <MarketingAboutOurVision />
+      <MarketingAboutOurVision 
+        title={visionContent?.title}
+        description={visionContent?.content}
+        videoUrl={visionContent?.video_url}
+      />
 
-      <MarketingAboutCoreValues />
+      {/* Section NOS VALEURS - Design Grille */}
+      <MarketingAboutCoreValues 
+        title={valuesContent?.title || 'Nos Valeurs Fondamentales'}
+        description={valuesContent?.content}
+        values={values}
+      />
 
-      <MarketingAboutStory />
+      {/* Section NOTRE HISTOIRE - Design Timeline */}
+      <MarketingAboutStory 
+        title={storyContent?.title || 'Notre Histoire'}
+        description={storyContent?.content}
+        timelines={aboutTimeline}
+      />
 
       <OurClientsMarketingAbout brands={displayBrands} />
 

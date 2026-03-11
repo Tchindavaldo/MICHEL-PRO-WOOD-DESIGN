@@ -40,9 +40,9 @@ const SERVICES = [
 
 // ----------------------------------------------------------------------
 
-// ----------------------------------------------------------------------
-
 type Props = {
+  title?: string;
+  description?: string;
   serviceIncludes?: {
     id: string;
     title: string;
@@ -51,13 +51,7 @@ type Props = {
   }[];
 };
 
-export default function MarketingServicesInclude({ serviceIncludes = [] }: Props) {
-  // Map DB data to component format if needed, or use as is if already mapped.
-  // Assuming serviceIncludes comes from getServiceIncludes which returns raw DB data (icon_url).
-  // But in services.tsx getStaticProps, I didn't map it.
-  // So I should handle mapping here or expect raw data.
-  // Let's handle raw data (icon_url) or mapped data (icon).
-  
+export default function MarketingServicesInclude({ title, description, serviceIncludes = [] }: Props) {
   const displayServices = serviceIncludes.length > 0 
     ? serviceIncludes.map((service: any) => ({
         title: service.title,
@@ -74,7 +68,7 @@ export default function MarketingServicesInclude({ serviceIncludes = [] }: Props
         pb: { xs: 10, md: 15 },
       }}
     >
-      <Typography variant="h2">Nos Services</Typography>
+      <Typography variant="h2">{title || 'Nos Services'}</Typography>
 
       <Typography
         sx={{
@@ -85,8 +79,7 @@ export default function MarketingServicesInclude({ serviceIncludes = [] }: Props
           mb: { xs: 8, md: 10 },
         }}
       >
-        De la conception à la réalisation, nous offrons une gamme complète de services 
-        alliant savoir-faire artisanal et technologie moderne.
+        {description || 'De la conception à la réalisation, nous offrons une gamme complète de services alliant savoir-faire artisanal et technologie moderne.'}
       </Typography>
 
       <Box

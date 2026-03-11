@@ -2,20 +2,22 @@
 import { Stack, TextField, IconButton, Typography } from '@mui/material';
 // utils
 import { fCurrency } from 'src/utils/formatNumber';
-// types
-import { IProductItemProps } from 'src/types/product';
 // components
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
+// context
+import { useCart, CartItem } from 'src/context/CartContext';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IProductItemProps;
+  product: CartItem;
   wishlist: boolean;
 };
 
 export default function EcommerceCartItem({ product, wishlist }: Props) {
+  const { removeFromCart, updateQuantity } = useCart();
+
   return (
     <Stack
       direction="row"
@@ -28,7 +30,7 @@ export default function EcommerceCartItem({ product, wishlist }: Props) {
     >
       <Stack direction="row" alignItems="center" flexGrow={1}>
         <Image
-          src={product.coverImg}
+          src={product.coverUrl}
           sx={{
             width: 80,
             height: 80,
@@ -41,7 +43,7 @@ export default function EcommerceCartItem({ product, wishlist }: Props) {
         <Stack spacing={0.5} sx={{ p: 2 }}>
           <Typography variant="subtitle2">{product.name}</Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Color: Grey Space
+            Essence: {product.woodType}, Finition: {product.finish}
           </Typography>
         </Stack>
       </Stack>
@@ -55,6 +57,8 @@ export default function EcommerceCartItem({ product, wishlist }: Props) {
             native: true,
           }}
           sx={{ width: 80 }}
+          value={product.quantity}
+          onChange={(e) => updateQuantity(product.cartId, Number(e.target.value))}
         >
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((option) => (
             <option key={option} value={option}>
@@ -64,9 +68,9 @@ export default function EcommerceCartItem({ product, wishlist }: Props) {
         </TextField>
       </Stack>
 
-      <Stack sx={{ width: 120, typography: 'subtitle2' }}> {fCurrency(product.price)} </Stack>
+      <Stack sx={{ width: 120, typography: 'subtitle2' }}> {fCurrency(product.price * product.quantity)} </Stack>
 
-      <IconButton>
+      <IconButton onClick={() => removeFromCart(product.cartId)}>
         <Iconify icon="carbon:trash-can" />
       </IconButton>
 

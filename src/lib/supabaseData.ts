@@ -146,7 +146,7 @@ export async function getProductById(id: string) {
         const { data, error } = await supabase
             .from('wood_products')
             .select('*')
-            .eq('id', id)      
+            .eq('id', id)
             .maybeSingle();
 
         if (error) throw error;
@@ -556,6 +556,40 @@ export async function getHomeAboutStats() {
         return data || [];
     } catch (error) {
         // console.error('Error fetching home about stats:', error);
+        return [];
+    }
+}
+// =====================================================
+// ABOUT PAGE STATS
+// =====================================================
+export async function getAboutStats() {
+    try {
+        const { data, error } = await supabase
+            .from('wood_about_stats')
+            .select('*')
+            .order('display_order', { ascending: true });
+
+        if (error) throw error;
+        return data || [];
+    } catch (error) {
+        // console.error('Error fetching about stats:', error);
+        return [];
+    }
+}
+// =====================================================
+// ABOUT PAGE TIMELINE (HISTORY)
+// =====================================================
+export async function getAboutTimeline() {
+    try {
+        const { data, error } = await supabase
+            .from('wood_about_timeline')
+            .select('*')
+            .order('display_order', { ascending: true });
+
+        if (error) throw error;
+        return data || [];
+    } catch (error) {
+        // console.error('Error fetching about timeline:', error);
         return [];
     }
 }

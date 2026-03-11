@@ -47,7 +47,13 @@ const StyledVideo = styled('video')({
 
 // ----------------------------------------------------------------------
 
-export default function MarketingAboutOurVision() {
+type Props = {
+  title?: string;
+  description?: string;
+  videoUrl?: string;
+};
+
+export default function MarketingAboutOurVision({ title, description, videoUrl }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -72,7 +78,7 @@ export default function MarketingAboutOurVision() {
             top: { md: 80 },
           }}
         >
-          Notre Vision
+          {title || 'Notre Vision'}
         </StyledTypography>
 
         <Stack
@@ -99,7 +105,7 @@ export default function MarketingAboutOurVision() {
 
           <StyledVideo
             ref={videoRef}
-            src={HOME_VIDEOS.entreprise}
+            src={videoUrl || HOME_VIDEOS.entreprise}
             poster={HERO_IMAGES[2]}
             loop
             playsInline
@@ -117,10 +123,10 @@ export default function MarketingAboutOurVision() {
             mt: 5,
             bottom: { md: 80 },
             opacity: { md: 0.72 },
+            whiteSpace: 'pre-line',
           }}
         >
-          Former une nouvelle génération de jeunes artisans qualifiés et transformer le secteur bois 
-          camerounais par l'excellence, l'innovation et le savoir-faire.
+          {description || "Former une nouvelle génération de jeunes artisans qualifiés et transformer le secteur bois camerounais par l'excellence, l'innovation et le savoir-faire."}
         </StyledTypography>
       </Stack>
     </Container>

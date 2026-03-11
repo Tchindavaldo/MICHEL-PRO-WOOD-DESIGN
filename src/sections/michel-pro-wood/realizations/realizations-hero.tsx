@@ -1,15 +1,17 @@
 // @mui
-import { alpha, styled } from '@mui/material/styles';
+import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Container, Typography, Stack, Box, Unstable_Grid2 as Grid } from '@mui/material';
 // utils
 import { bgGradient } from 'src/utils/cssStyles';
 
 // ----------------------------------------------------------------------
 
-const StyledRoot = styled('div')(({ theme }) => ({
+const StyledRoot = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'imageUrl',
+})<{ imageUrl?: string }>(({ theme, imageUrl }) => ({
   ...bgGradient({
     color: alpha(theme.palette.grey[900], 0.8),
-    imgUrl: '/assets/images/michel-pro-wood/hero/878ebad3-fa90-4a0b-b0d1-0054159bf4f4.jpg',
+    imgUrl: imageUrl || '/assets/images/michel-pro-wood/hero/878ebad3-fa90-4a0b-b0d1-0054159bf4f4.jpg',
   }),
   position: 'relative',
   height: '50vh',
@@ -42,9 +44,40 @@ const StyledCard = styled(Box)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function RealizationsHero() {
+type Props = {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  overline?: string;
+  imageUrl?: string;
+  features?: {
+    label: string;
+    icon: string;
+    color: string;
+  }[];
+};
+
+export default function RealizationsHero({ 
+  title, 
+  subtitle, 
+  description, 
+  overline, 
+  imageUrl, 
+  features 
+}: Props) {
+  const theme = useTheme();
+
+  const DEFAULT_FEATURES = [
+    { label: 'Menuiserie & Ébénisterie d\'excellence', icon: '🪵', color: 'primary' },
+    { label: 'Construction bois innovante', icon: '🏗️', color: 'success' },
+    { label: 'Finitions artisanales premium', icon: '⭐', color: 'warning' },
+    { label: 'Solutions 100% personnalisées', icon: '🎯', color: 'info' },
+  ];
+
+  const displayFeatures = features && features.length > 0 ? features : DEFAULT_FEATURES;
+
   return (
-    <StyledRoot>
+    <StyledRoot imageUrl={imageUrl}>
       <Container>
         <Stack spacing={4} sx={{ color: 'common.white', maxWidth: 800 }}>
           <Box>
@@ -58,7 +91,7 @@ export default function RealizationsHero() {
                 display: 'block',
               }}
             >
-              NOS EXPERTISES
+              {overline || 'NOS EXPERTISES'}
             </Typography>
             <Typography
               variant="h1"
@@ -76,134 +109,51 @@ export default function RealizationsHero() {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              Nos Réalisations
+              {title || 'Nos Réalisations'}
             </Typography>
+            {(subtitle || description) && (
+               <Typography sx={{ mt: 2, opacity: 0.8, whiteSpace: 'pre-line' }}>
+                 {subtitle || description}
+               </Typography>
+            )}
           </Box>
 
           <Grid container spacing={2}>
-            <Grid xs={6} sm={6}>
-              <StyledCard>
-                <Stack
-                  direction={{ xs: 'column', md: 'row' }}
-                  spacing={2}
-                  alignItems={{ xs: 'flex-start', md: 'center' }}
-                >
-                  <Box
-                    sx={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: '12px',
-                      background: (theme) =>
-                        `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                      🪵
-                    </Typography>
-                  </Box>
-                  <Typography sx={{ fontWeight: 'bold', typography: { xs: 'caption', md: 'body1' } }}>
-                    Menuiserie & Ébénisterie d&apos;excellence
-                  </Typography>
-                </Stack>
-              </StyledCard>
-            </Grid>
-
-            <Grid xs={6} sm={6}>
-              <StyledCard>
-                <Stack
-                  direction={{ xs: 'column', md: 'row' }}
-                  spacing={2}
-                  alignItems={{ xs: 'flex-start', md: 'center' }}
-                >
-                  <Box
-                    sx={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: '12px',
-                      background: (theme) =>
-                        `linear-gradient(135deg, ${theme.palette.success.main} 0%, ${theme.palette.success.dark} 100%)`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                      🏗️
-                    </Typography>
-                  </Box>
-                  <Typography sx={{ fontWeight: 500, typography: { xs: 'caption', md: 'body1' } }}>
-                    Construction bois innovante
-                  </Typography>
-                </Stack>
-              </StyledCard>
-            </Grid>
-
-            <Grid xs={6} sm={6}>
-              <StyledCard>
-                <Stack
-                  direction={{ xs: 'column', md: 'row' }}
-                  spacing={2}
-                  alignItems={{ xs: 'flex-start', md: 'center' }}
-                >
-                  <Box
-                    sx={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: '12px',
-                      background: (theme) =>
-                        `linear-gradient(135deg, ${theme.palette.warning.main} 0%, ${theme.palette.warning.dark} 100%)`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                      ⭐
-                    </Typography>
-                  </Box>
-                  <Typography sx={{ fontWeight: 500, typography: { xs: 'caption', md: 'body1' } }}>
-                    Finitions artisanales premium
-                  </Typography>
-                </Stack>
-              </StyledCard>
-            </Grid>
-
-            <Grid xs={6} sm={6}>
-              <StyledCard>
-                <Stack
-                  direction={{ xs: 'column', md: 'row' }}
-                  spacing={2}
-                  alignItems={{ xs: 'flex-start', md: 'center' }}
-                >
-                  <Box
-                    sx={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: '12px',
-                      background: (theme) =>
-                        `linear-gradient(135deg, ${theme.palette.info.main} 0%, ${theme.palette.info.dark} 100%)`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                      🎯
-                    </Typography>
-                  </Box>
-                  <Typography sx={{ fontWeight: 500, typography: { xs: 'caption', md: 'body1' } }}>
-                    Solutions 100% personnalisées
-                  </Typography>
-                </Stack>
-              </StyledCard>
-            </Grid>
+            {displayFeatures.map((feature, index) => (
+               <Grid key={index} xs={6} sm={6}>
+               <StyledCard>
+                 <Stack
+                   direction={{ xs: 'column', md: 'row' }}
+                   spacing={2}
+                   alignItems={{ xs: 'flex-start', md: 'center' }}
+                 >
+                   <Box
+                     sx={{
+                       width: 48,
+                       height: 48,
+                       borderRadius: '12px',
+                       background: (theme) => {
+                         const color = (theme.palette as any)[feature.color]?.main || theme.palette.primary.main;
+                         const darkColor = (theme.palette as any)[feature.color]?.dark || theme.palette.primary.dark;
+                         return `linear-gradient(135deg, ${color} 0%, ${darkColor} 100%)`;
+                       },
+                       display: 'flex',
+                       alignItems: 'center',
+                       justifyContent: 'center',
+                       flexShrink: 0,
+                     }}
+                   >
+                     <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                       {feature.icon}
+                     </Typography>
+                   </Box>
+                   <Typography sx={{ fontWeight: 500, typography: { xs: 'caption', md: 'body1' } }}>
+                     {feature.label}
+                   </Typography>
+                 </Stack>
+               </StyledCard>
+             </Grid>
+            ))}
           </Grid>
         </Stack>
       </Container>

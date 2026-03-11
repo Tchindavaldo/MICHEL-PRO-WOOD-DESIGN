@@ -8,8 +8,22 @@ import Image from 'src/components/image';
 
 // ----------------------------------------------------------------------
 
-export default function ContactMarketingInfo() {
+type Props = {
+  contactData?: {
+    address: string;
+    phones: string[];
+    email: string;
+    openingHours: string[];
+  };
+};
+
+export default function ContactMarketingInfo({ contactData }: Props) {
   const isMdUp = useResponsive('up', 'md');
+
+  const address = contactData?.address || 'Yaoundé, Cameroun';
+  const phones = contactData?.phones || ['+237 6 96 50 34 39', '+237 6 50 34 39 96'];
+  const email = contactData?.email || 'contact@michelprowood.com';
+  const openingHours = contactData?.openingHours || ['Lun-Ven : 8h00 — 18h00', 'Sam : 8h00 — 14h00'];
 
   return (
     <Stack spacing={3}>
@@ -33,7 +47,7 @@ export default function ContactMarketingInfo() {
             </Link>
           </Stack>
 
-          <Typography variant="body2">Yaoundé, Cameroun</Typography>
+          <Typography variant="body2">{address}</Typography>
         </Stack>
       </Stack>
 
@@ -41,8 +55,9 @@ export default function ContactMarketingInfo() {
         <Iconify width={28} icon="carbon:mobile" />
         <Stack spacing={0.5}>
           <Typography variant="h6">Appelez-nous</Typography>
-          <Typography variant="body2">+237 6 96 50 34 39</Typography>
-          <Typography variant="body2">+237 6 50 34 39 96</Typography>
+          {phones.map((phone, index) => (
+             <Typography key={index} variant="body2">{phone}</Typography>
+          ))}
         </Stack>
       </Stack>
 
@@ -50,8 +65,8 @@ export default function ContactMarketingInfo() {
         <Iconify width={28} icon="carbon:email" />
         <Stack spacing={0.5}>
           <Typography variant="h6">Écrivez-nous</Typography>
-          <Link color="inherit" variant="body2" href="mailto:contact@michelprowood.com">
-            contact@michelprowood.com
+          <Link color="inherit" variant="body2" href={`mailto:${email}`}>
+            {email}
           </Link>
         </Stack>
       </Stack>
@@ -60,8 +75,9 @@ export default function ContactMarketingInfo() {
         <Iconify width={28} icon="carbon:time" />
         <Stack spacing={0.5}>
           <Typography variant="h6">Horaires d'Ouverture</Typography>
-          <Typography variant="body2">Lun-Ven : 8h00 — 18h00</Typography>
-          <Typography variant="body2">Sam : 8h00 — 14h00</Typography>
+          {openingHours.map((hour, index) => (
+             <Typography key={index} variant="body2">{hour}</Typography>
+          ))}
         </Stack>
       </Stack>
     </Stack>

@@ -58,7 +58,18 @@ const StyledIcon = styled('div', {
 
 // ----------------------------------------------------------------------
 
-export default function MarketingAbout() {
+type Props = {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  stats?: {
+    title: string;
+    total: number;
+    icon: string;
+  }[];
+};
+
+export default function MarketingAbout({ title, subtitle, description, stats }: Props) {
   const isMdUp = useResponsive('up', 'md');
 
   return (
@@ -83,18 +94,27 @@ export default function MarketingAbout() {
             textAlign: { xs: 'center', md: 'left' },
           }}
         >
-          <Typography variant="h2">Qui Sommes-Nous ?</Typography>
+          <Typography variant="h2">{title || 'Qui Sommes-Nous ?'}</Typography>
+          {subtitle && (
+            <Typography variant="h5" sx={{ mt: 1, color: 'text.secondary' }}>
+              {subtitle}
+            </Typography>
+          )}
 
-          <Typography sx={{ mt: 3, mb: 5, color: 'text.secondary' }}>
-            Michel Pro Wood Design est une entreprise spécialisée dans la menuiserie, l'ébénisterie, 
-            la conception et la fabrication assistée par ordinateur (CFAO), les constructions bois 
-            et la formation professionnelle.
-            <br />
-            <br />
-            Notre mission est de transformer le secteur bois camerounais en intégrant l'artisanat 
-            traditionnel, la technologie numérique, la modélisation 3D, l'usinage CNC et un système 
-            de gestion moderne pour produire des ouvrages en bois de haute qualité, durables, 
-            esthétiques et personnalisés.
+          <Typography sx={{ mt: 3, mb: 5, color: 'text.secondary', whiteSpace: 'pre-line' }}>
+            {description || (
+              <>
+                Michel Pro Wood Design est une entreprise spécialisée dans la menuiserie, l'ébénisterie, 
+                la conception et la fabrication assistée par ordinateur (CFAO), les constructions bois 
+                et la formation professionnelle.
+                <br />
+                <br />
+                Notre mission est de transformer le secteur bois camerounais en intégrant l'artisanat 
+                traditionnel, la technologie numérique, la modélisation 3D, l'usinage CNC et un système 
+                de gestion moderne pour produire des ouvrages en bois de haute qualité, durables, 
+                esthétiques et personnalisés.
+              </>
+            )}
           </Typography>
 
           <Button
@@ -120,7 +140,7 @@ export default function MarketingAbout() {
           },
         }}
       >
-        {SUMMARY.map((value, index) => (
+        {(stats && stats.length > 0 ? stats : SUMMARY).map((value, index) => (
           <div key={value.title}>
             <StyledIcon color={COLORS[index]}>
               <Iconify icon={value.icon} width={48} />

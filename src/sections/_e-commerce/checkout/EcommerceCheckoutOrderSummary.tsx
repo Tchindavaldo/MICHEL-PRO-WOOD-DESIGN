@@ -15,7 +15,7 @@ import { LoadingButton } from '@mui/lab';
 // utils
 import { fCurrency, fPercent } from 'src/utils/formatNumber';
 // types
-import { IProductItemProps } from 'src/types/product';
+import { CartItem } from 'src/context/CartContext';
 // components
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
@@ -29,7 +29,7 @@ type Props = {
   subtotal: number;
   shipping: number;
   discount: number;
-  products?: IProductItemProps[];
+  products?: CartItem[];
   loading?: boolean;
 };
 
@@ -56,7 +56,7 @@ export default function EcommerceCheckoutOrderSummary({
       {!!products?.length && (
         <>
           {products.map((product) => (
-            <ProductItem key={product.id} product={product} />
+            <ProductItem key={product.cartId} product={product} />
           ))}
 
           <Divider sx={{ borderStyle: 'dashed' }} />
@@ -112,14 +112,14 @@ export default function EcommerceCheckoutOrderSummary({
 // ----------------------------------------------------------------------
 
 type ProductItemProps = StackProps & {
-  product: IProductItemProps;
+  product: CartItem;
 };
 
 function ProductItem({ product, ...other }: ProductItemProps) {
   return (
     <Stack direction="row" alignItems="flex-start" {...other}>
       <Image
-        src={product.coverImg}
+        src={product.coverUrl}
         sx={{
           mr: 2,
           width: 64,
@@ -135,30 +135,14 @@ function ProductItem({ product, ...other }: ProductItemProps) {
           {product.name}
         </TextMaxLine>
 
-        <Typography variant="subtitle2" sx={{ mt: 0.5, mb: 1.5 }}>
-          {fCurrency(product.price)}
+        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+          {product.woodType} - {product.finish}
         </Typography>
 
-        <TextField
-          select
-          size="small"
-          variant="outlined"
-          SelectProps={{
-            native: true,
-          }}
-          sx={{ width: 80 }}
-        >
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </TextField>
+        <Typography variant="subtitle2" sx={{ mt: 0.5, mb: 1.5 }}>
+          {fCurrency(product.price)} (x{product.quantity})
+        </Typography>
       </Stack>
-
-      <IconButton>
-        <Iconify icon="carbon:trash-can" />
-      </IconButton>
     </Stack>
   );
 }

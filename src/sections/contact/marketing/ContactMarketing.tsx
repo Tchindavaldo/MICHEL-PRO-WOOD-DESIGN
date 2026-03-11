@@ -6,7 +6,17 @@ import ContactMarketingForm from './ContactMarketingForm';
 
 // ----------------------------------------------------------------------
 
-export default function ContactMarketing() {
+type Props = {
+  contactData?: {
+    title: string;
+    address: string;
+    phones: string[];
+    email: string;
+    openingHours: string[];
+  };
+};
+
+export default function ContactMarketing({ contactData }: Props) {
   return (
     <Container
       sx={{
@@ -22,12 +32,11 @@ export default function ContactMarketing() {
         direction={{ xs: 'column-reverse', md: 'row' }}
       >
         <Grid xs={12} md={6} lg={5}>
-          <ContactMarketingInfo />
+          <ContactMarketingInfo contactData={contactData} />
         </Grid>
-
         <Grid xs={12} md={6} lg={6}>
           <Typography variant="h3" sx={{ mb: 5 }}>
-            Prêt à Démarrer Votre Projet ?
+            {contactData?.title || 'Prêt à Démarrer Votre Projet ?'}
           </Typography>
 
           <ContactMarketingForm />

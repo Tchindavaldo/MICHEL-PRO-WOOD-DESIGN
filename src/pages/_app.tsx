@@ -30,7 +30,9 @@ import createEmotionCache from 'src/utils/createEmotionCache';
 // components
 import ProgressBar from 'src/components/progress-bar';
 import { ThemeSettings, SettingsProvider } from 'src/components/settings';
+import { SnackbarProvider } from 'notistack';
 import MotionLazyContainer from 'src/components/animate/MotionLazyContainer';
+import { CartProvider } from 'src/context/CartContext';
 
 // ----------------------------------------------------------------------
 
@@ -61,8 +63,12 @@ export default function MyApp(props: MyAppProps) {
           <ThemeProvider>
             <ThemeSettings>
               <MotionLazyContainer>
-                <ProgressBar />
-                {getLayout(<Component {...pageProps} />)}
+                <CartProvider>
+                  <SnackbarProvider>
+                    <ProgressBar />
+                    {getLayout(<Component {...pageProps} />)}
+                  </SnackbarProvider>
+                </CartProvider>
               </MotionLazyContainer>
             </ThemeSettings>
           </ThemeProvider>

@@ -18,6 +18,10 @@ import { data } from './config-navigation';
 
 // ----------------------------------------------------------------------
 
+import { useCart } from 'src/context/CartContext';
+
+// ----------------------------------------------------------------------
+
 const StyledRoot = styled('div')(({ theme }) => ({
   ...bgGradient({
     color: alpha(theme.palette.background.default, 0.9),
@@ -29,6 +33,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 export default function EcommerceHeader() {
   const isMdUp = useResponsive('up', 'md');
+  const { totalItems } = useCart();
 
   const [openMenuMobile, setOpenMenuMobile] = useState(false);
 
@@ -69,25 +74,14 @@ export default function EcommerceHeader() {
           flexGrow={1}
           justifyContent="flex-end"
         >
+
           {!isMdUp && (
             <IconButton size="small" color="inherit" sx={{ p: 0 }}>
               <Iconify icon="carbon:search" width={24} />
             </IconButton>
           )}
 
-          <Badge badgeContent={2} color="info">
-            <IconButton
-              component={NextLink}
-              href={paths.eCommerce.wishlist}
-              size="small"
-              color="inherit"
-              sx={{ p: 0 }}
-            >
-              <Iconify icon="carbon:favorite" width={24} />
-            </IconButton>
-          </Badge>
-
-          <Badge badgeContent={4} color="error">
+          <Badge badgeContent={totalItems} color="error">
             <IconButton
               component={NextLink}
               href={paths.eCommerce.cart}

@@ -17,11 +17,9 @@ export default function EcommerceCheckoutPersonalDetails() {
 
       <RHFTextField name="lastName" label="Nom" />
 
-      <RHFTextField 
-        name="phoneNumber" 
-        label="Numéro de téléphone"
-        sx={{ gridColumn: { md: 'span 2' } }}
-      />
+      <RHFTextField name="emailAddress" label="Adresse Email (Optionnel)" />
+
+      <RHFTextField name="phoneNumber" label="Numéro de téléphone" />
     </Box>
   );
 }

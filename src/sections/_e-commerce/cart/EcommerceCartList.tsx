@@ -1,7 +1,7 @@
 // @mui
 import { Stack } from '@mui/material';
 // types
-import { IProductItemProps } from 'src/types/product';
+import { CartItem } from 'src/context/CartContext';
 // components
 import Scrollbar from 'src/components/scrollbar';
 //
@@ -10,7 +10,7 @@ import EcommerceCartItem from './EcommerceCartItem';
 // ----------------------------------------------------------------------
 
 type Props = {
-  products: IProductItemProps[];
+  products: CartItem[];
   wishlist?: boolean;
 };
 
@@ -35,7 +35,7 @@ export default function EcommerceCartList({ products, wishlist = false }: Props)
       </Stack>
 
       {products.map((product) => (
-        <EcommerceCartItem key={product.id} product={product} wishlist={wishlist} />
+        <EcommerceCartItem key={product.cartId} product={product} wishlist={wishlist} />
       ))}
     </Scrollbar>
   );

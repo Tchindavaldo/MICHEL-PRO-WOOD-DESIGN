@@ -2,25 +2,35 @@
 import { Container } from '@mui/material';
 // sections
 import { MarketingCaseStudyList } from 'src/sections/_marketing/case-study/list';
-// data
-import { REALIZATIONS_CASE_STUDIES } from 'src/assets/data/michel-pro-wood/realizations-data';
 //
 import HomeGetQuote from '../../home/home-get-quote';
 import RealizationsHero from '../realizations-hero';
 
 // ----------------------------------------------------------------------
 
-export default function RealizationsView() {
+type Props = {
+  realizations?: any[];
+  features?: any[];
+  pageContent?: any[];
+};
+
+export default function RealizationsView({ realizations = [], features = [], pageContent = [] }: Props) {
+  const heroContent = pageContent?.find(item => item.section_key === 'hero');
+
   return (
     <>
-      <RealizationsHero />
- 
+      <RealizationsHero 
+        title={heroContent?.title}
+        subtitle={heroContent?.subtitle}
+        description={heroContent?.content}
+        overline={heroContent?.metadata?.overline}
+        imageUrl={heroContent?.image_url}
+        features={features}
+      />
 
       <Container sx={{ my: 10 }}>
-        <MarketingCaseStudyList caseStudies={REALIZATIONS_CASE_STUDIES} />
+        <MarketingCaseStudyList caseStudies={realizations} />
       </Container>
- 
- 
 
       <HomeGetQuote />
     </>

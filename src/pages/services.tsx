@@ -64,7 +64,7 @@ export async function getStaticProps() {
     getProcessSteps(),
     getTestimonials(),
     getBlogPosts(),
-    getPageContent('services', 'hero')
+    getPageContent('services')
   ]);
 
   // Map services (SAME AS HOMEPAGE)

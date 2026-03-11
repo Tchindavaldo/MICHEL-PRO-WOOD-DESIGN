@@ -21,9 +21,13 @@ type Props = {
   reviewsNumber: number;
   ratingsNumber: number;
   onOpenForm: VoidFunction;
+  ratingsDistribution: {
+    value: string;
+    number: number;
+  }[];
 };
 
-export default function ReviewSummary({ reviewsNumber, ratingsNumber, onOpenForm }: Props) {
+export default function ReviewSummary({ reviewsNumber, ratingsNumber, onOpenForm, ratingsDistribution }: Props) {
   return (
     <Box
       sx={{
@@ -45,11 +49,6 @@ export default function ReviewSummary({ reviewsNumber, ratingsNumber, onOpenForm
                   value={ratingsNumber}
                   readOnly
                   precision={0.1}
-                  sx={{
-                    '& svg': {
-                      color: 'text.primary',
-                    },
-                  }}
                 />
                 <Typography variant="body2">{fShortenNumber(reviewsNumber)} avis</Typography>
               </Stack>
@@ -67,7 +66,7 @@ export default function ReviewSummary({ reviewsNumber, ratingsNumber, onOpenForm
           </Grid>
 
           <Grid xs={12} md={4}>
-            <ReviewProgress />
+            <ReviewProgress ratings={ratingsDistribution} />
           </Grid>
         </Grid>
       </Container>

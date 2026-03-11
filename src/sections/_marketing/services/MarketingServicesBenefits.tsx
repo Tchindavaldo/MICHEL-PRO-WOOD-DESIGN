@@ -42,9 +42,9 @@ const BENEFITS = [
 
 // ----------------------------------------------------------------------
 
-// ----------------------------------------------------------------------
-
 type Props = {
+  title?: string;
+  description?: string;
   serviceBenefits?: {
     id: string;
     title: string;
@@ -53,7 +53,7 @@ type Props = {
   }[];
 };
 
-export default function MarketingServicesBenefits({ serviceBenefits = [] }: Props) {
+export default function MarketingServicesBenefits({ title, description, serviceBenefits = [] }: Props) {
   const isMdUp = useResponsive('up', 'md');
 
   const displayBenefits = serviceBenefits.length > 0 
@@ -73,7 +73,7 @@ export default function MarketingServicesBenefits({ serviceBenefits = [] }: Prop
     >
       <Container>
         <Typography variant="h2" sx={{ textAlign: 'center' }}>
-          Nos Caractéristiques
+          {title || 'Nos Caractéristiques'}
         </Typography>
 
         <Typography
@@ -86,7 +86,7 @@ export default function MarketingServicesBenefits({ serviceBenefits = [] }: Prop
             mb: { xs: 8, md: 10 },
           }}
         >
-          Ce qui nous distingue et fait notre réputation d'excellence dans le secteur bois.
+          {description || 'Ce qui nous distingue et fait notre réputation d\'excellence dans le secteur bois.'}
         </Typography>
 
         <Box

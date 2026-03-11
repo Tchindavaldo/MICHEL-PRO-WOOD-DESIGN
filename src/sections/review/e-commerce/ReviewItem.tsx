@@ -28,9 +28,6 @@ export default function ReviewItem({ name, rating, message, postedAt, avatarUrl 
           value={rating}
           precision={0.5}
           readOnly
-          sx={{
-            '& svg': { color: 'text.primary' },
-          }}
         />
 
         <Typography variant="subtitle1">{name}</Typography>

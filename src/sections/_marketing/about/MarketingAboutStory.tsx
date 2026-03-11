@@ -44,8 +44,19 @@ const COLORS = ['primary', 'secondary', 'warning', 'success'] as const;
 
 // ----------------------------------------------------------------------
 
-export default function MarketingAboutStory() {
+type Props = {
+  title?: string;
+  description?: string;
+  timelines?: {
+    year: string;
+    title: string;
+    description: string;
+  }[];
+};
+
+export default function MarketingAboutStory({ title, description, timelines }: Props) {
   const isMdUp = useResponsive('up', 'md');
+  const displayTimelines = timelines && timelines.length > 0 ? timelines : TIMELINES;
 
   return (
     <Box
@@ -64,16 +75,15 @@ export default function MarketingAboutStory() {
             mb: { xs: 8, md: 10 },
           }}
         >
-          <Typography variant="h2">Notre Histoire</Typography>
+          <Typography variant="h2">{title || 'Notre Histoire'}</Typography>
 
-          <Typography sx={{ color: 'text.secondary' }}>
-            Une aventure débutée en 2015 avec la passion du bois et la volonté de transformer 
-            l'artisanat traditionnel par l'innovation technologique.
+          <Typography sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
+            {description || "Une aventure débutée en 2015 avec la passion du bois et la volonté de transformer l'artisanat traditionnel par l'innovation technologique."}
           </Typography>
         </Stack>
 
         <Timeline position={isMdUp ? 'alternate' : 'right'}>
-          {TIMELINES.map((value, index) => (
+          {displayTimelines.map((value, index) => (
             <TimelineItem
               key={value.title}
               sx={{
@@ -83,12 +93,12 @@ export default function MarketingAboutStory() {
               }}
             >
               <TimelineSeparator>
-                <TimelineDot color={COLORS[index]} />
+                <TimelineDot color={COLORS[index % COLORS.length]} />
                 <TimelineConnector />
               </TimelineSeparator>
 
               <TimelineContent sx={{ pb: { xs: 3, md: 5 } }}>
-                <Typography variant="overline" sx={{ color: `${COLORS[index]}.main` }}>
+                <Typography variant="overline" sx={{ color: `${COLORS[index % COLORS.length]}.main` }}>
                   {value.year}
                 </Typography>
 

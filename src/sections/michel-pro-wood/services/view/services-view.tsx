@@ -14,8 +14,6 @@ import HomePricing from '../../home/home-pricing';
 
 // ----------------------------------------------------------------------
 
-// ----------------------------------------------------------------------
-
 type Props = {
   services?: any[];
   serviceIncludes?: any[];
@@ -24,7 +22,7 @@ type Props = {
   processSteps?: any[];
   testimonials?: any[];
   posts?: any[];
-  pageContent?: any;
+  pageContent?: any[];
 };
 
 export default function ServicesView({
@@ -35,21 +33,38 @@ export default function ServicesView({
   processSteps = [],
   testimonials = [],
   posts = [],
-  pageContent
+  pageContent = []
 }: Props) {
+  const heroContent = pageContent?.find(item => item.section_key === 'hero');
+  const includeContent = pageContent?.find(item => item.section_key === 'include');
+  const benefitsContent = pageContent?.find(item => item.section_key === 'benefits');
+  const howItWorkContent = pageContent?.find(item => item.section_key === 'how_it_work');
+
   return (
     <>
-      <MarketingServicesHero pageContent={pageContent} />
+      <MarketingServicesHero pageContent={heroContent} />
 
       <HomeServices services={services} />
 
-      <MarketingServicesInclude serviceIncludes={serviceIncludes} />
+      <MarketingServicesInclude 
+        title={includeContent?.title}
+        description={includeContent?.content}
+        serviceIncludes={serviceIncludes} 
+      />
 
       <HomePricing plans={plans} />
 
-      <MarketingServicesBenefits serviceBenefits={serviceBenefits} />
+      <MarketingServicesBenefits 
+        title={benefitsContent?.title}
+        description={benefitsContent?.content}
+        serviceBenefits={serviceBenefits} 
+      />
 
-      <MarketingServicesHowItWork processSteps={processSteps} />
+      <MarketingServicesHowItWork 
+        title={howItWorkContent?.title}
+        description={howItWorkContent?.content}
+        processSteps={processSteps} 
+      />
 
       <HomeTestimonials testimonials={testimonials} />
 

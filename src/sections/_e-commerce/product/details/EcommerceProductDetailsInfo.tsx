@@ -10,6 +10,9 @@ import { paths } from 'src/routes/paths';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+// context
+import { useCart } from 'src/context/CartContext';
+import { useSnackbar } from 'notistack';
 //
 import { ProductColorPicker, ProductOptionPicker, ProductPrice } from '../../components';
 
@@ -20,6 +23,7 @@ const COLOR_OPTIONS = [
   { label: '#A0522D', value: 'noyer' },
   { label: '#CD853F', value: 'teck' },
   { label: '#DEB887', value: 'hetre' },
+  { label: '#F5DEB3', value: 'pin' }, // Added Pin
 ];
 
 const MEMORY_OPTIONS = [
@@ -32,27 +36,43 @@ const MEMORY_OPTIONS = [
 // ----------------------------------------------------------------------
 
 type Props = {
+  id: string;
   name: string;
   price: number;
   rating: number;
   review: number;
   priceSale: number;
   caption: string;
+  woodType?: string;
+  finish?: string;
+  coverUrl: string;
 };
 
 export default function EcommerceProductDetailsInfo({
+  id,
   name,
   price,
   rating,
   review,
   priceSale,
   caption,
+  woodType = 'Chêne',
+  finish = 'Vernis',
+  coverUrl,
 }: Props) {
   const isMdUp = useResponsive('up', 'md');
 
-  const [color, setColor] = useState('chene');
+  const { addToCart } = useCart();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const [memory, setMemory] = useState('vernis');
+  // Normalize backend values to frontend keys
+  const normalizeValue = (val: string) => {
+    return val?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") || "";
+  };
+
+  const [color, setColor] = useState(normalizeValue(woodType));
+  const [memory, setMemory] = useState(normalizeValue(finish));
+  const [quantity, setQuantity] = useState(1);
 
   const handleChangeColor = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColor((event.target as HTMLInputElement).value);
@@ -60,6 +80,33 @@ export default function EcommerceProductDetailsInfo({
 
   const handleChangeMemory = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMemory((event.target as HTMLInputElement).value);
+  };
+
+  const handleChangeQuantity = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuantity(Number(event.target.value));
+  };
+
+  const handleAddCart = () => {
+    const newProduct = {
+      id,
+      name,
+      price: priceSale > 0 ? priceSale : price,
+      coverUrl,
+      quantity,
+      woodType: color,
+      finish: memory,
+    };
+    try {
+      const status = addToCart(newProduct);
+      if (status === 'added') {
+        enqueueSnackbar('Ajouté au panier avec succès !', { variant: 'success' });
+      } else {
+        enqueueSnackbar('Panier mis à jour avec succès !', { variant: 'info' });
+      }
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Erreur lors de l\'ajout au panier', { variant: 'error' });
+    }
   };
 
   return (
@@ -114,6 +161,8 @@ export default function EcommerceProductDetailsInfo({
           sx={{
             minWidth: 100,
           }}
+          value={quantity}
+          onChange={handleChangeQuantity}
         >
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((option) => (
             <option key={option} value={option}>
@@ -124,13 +173,12 @@ export default function EcommerceProductDetailsInfo({
 
         <Stack direction="row" spacing={2}>
           <Button
-            component={NextLink}
-            href={paths.eCommerce.cart}
             fullWidth={!isMdUp}
             size="large"
             color="inherit"
             variant="contained"
             startIcon={<Iconify icon="carbon:shopping-cart-plus" />}
+            onClick={handleAddCart}
           >
             Ajouter au Panier
           </Button>
@@ -148,21 +196,6 @@ export default function EcommerceProductDetailsInfo({
         </Stack>
       </Stack>
 
-      <Divider sx={{ borderStyle: 'dashed', my: 3 }} />
-
-      <Stack spacing={3} direction="row" justifyContent={{ xs: 'center', md: 'unset' }}>
-        <Stack direction="row" alignItems="center" sx={{ typography: 'subtitle2' }}>
-          <Iconify icon="carbon:add-alt" sx={{ mr: 1 }} /> Comparer
-        </Stack>
-
-        <Stack direction="row" alignItems="center" sx={{ typography: 'subtitle2' }}>
-          <Iconify icon="carbon:favorite" sx={{ mr: 1 }} /> Favoris
-        </Stack>
-
-        <Stack direction="row" alignItems="center" sx={{ typography: 'subtitle2' }}>
-          <Iconify icon="carbon:share" sx={{ mr: 1 }} /> Partager
-        </Stack>
-      </Stack>
     </>
   );
 }

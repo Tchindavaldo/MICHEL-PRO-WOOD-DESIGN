@@ -4,10 +4,10 @@ import NextLink from 'next/link';
 import { Container, Typography, Button, Unstable_Grid2 as Grid } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
-// _mock
-import { _products } from 'src/_mock';
 // components
 import Iconify from 'src/components/iconify';
+// context
+import { useCart } from 'src/context/CartContext';
 //
 import { EcommerceHeader } from '../layout';
 import { EcommerceCartList, EcommerceCartSummary } from '../cart';
@@ -15,6 +15,13 @@ import { EcommerceCartList, EcommerceCartSummary } from '../cart';
 // ----------------------------------------------------------------------
 
 export default function EcommerceCartView() {
+  const { cart, subtotal } = useCart();
+
+  const tax = subtotal * 0.07;
+  const shipping = 0;
+  const discount = 0;
+  const total = subtotal + tax + shipping - discount;
+
   return (
     <>
       <EcommerceHeader />
@@ -32,16 +39,16 @@ export default function EcommerceCartView() {
 
         <Grid container spacing={{ xs: 5, md: 8 }}>
           <Grid xs={12} md={8}>
-            <EcommerceCartList products={_products.slice(0, 4)} />
+            <EcommerceCartList products={cart} />
           </Grid>
 
           <Grid xs={12} md={4}>
             <EcommerceCartSummary
-              tax={7}
-              total={357.09}
-              subtotal={89.09}
-              shipping={55.47}
-              discount={16.17}
+              tax={tax}
+              total={total}
+              subtotal={subtotal}
+              shipping={shipping}
+              discount={discount}
             />
           </Grid>
         </Grid>

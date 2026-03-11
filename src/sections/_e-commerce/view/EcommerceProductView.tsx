@@ -51,6 +51,10 @@ export default function EcommerceProductView({ product, reviews }: Props) {
               review={reviews.length}
               priceSale={product.sale_price}
               caption={product.caption}
+              woodType={product.wood_type}
+              finish={product.finish}
+              id={product.id}
+              coverUrl={product.image_url || product.images[0]}
             />
           </Grid>
         </Grid>
@@ -60,11 +64,13 @@ export default function EcommerceProductView({ product, reviews }: Props) {
             <EcommerceProductDetailsDescription
               description={product.description}
               specifications={[
-                { label: 'Catégorie', value: 'Mobilier' },
-                { label: 'Fabricant', value: 'Wood Pro' },
-                { label: 'Garantie', value: '2 Ans' },
-                { label: 'Référence', value: 'WP-2023-001' },
-                { label: 'Origine', value: 'Cameroun' },
+                { label: 'Catégorie', value: product.category || 'Mobilier' },
+                { label: 'Fabricant', value: product.manufacturer || 'Wood Pro' },
+                { label: 'Garantie', value: product.warranty || '2 Ans' },
+                { label: 'Référence', value: product.reference || 'WP-2023-001' },
+                { label: 'Origine', value: product.origin || 'Cameroun' },
+                { label: 'Finition', value: product.finish || 'Vernis' },
+                { label: 'Essence de Bois', value: product.wood_type || 'Chêne' },
               ]}
             />
           </Grid>
