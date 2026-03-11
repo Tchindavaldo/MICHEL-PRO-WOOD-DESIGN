@@ -1,7 +1,9 @@
+// next
+import Head from 'next/head';
 // layouts
 import MainLayout from 'src/layouts/main';
 // sections
-import { ShopView } from 'src/sections/michel-pro-wood/shop/view';
+import { EcommerceLandingView } from 'src/sections/_e-commerce/view';
 
 // ----------------------------------------------------------------------
 
@@ -10,5 +12,13 @@ ShopPage.getLayout = (page: React.ReactElement) => <MainLayout>{page}</MainLayou
 // ----------------------------------------------------------------------
 
 export default function ShopPage() {
-  return <ShopView />;
+  return (
+    <>
+      <Head>
+        <title>Boutique | Michel Pro Wood</title>
+      </Head>
+
+      <EcommerceLandingView />
+    </>
+  );
 }

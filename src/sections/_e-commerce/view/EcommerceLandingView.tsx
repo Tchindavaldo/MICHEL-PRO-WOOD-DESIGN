@@ -1,5 +1,5 @@
 // _mock
-import { _testimonials } from 'src/_mock';
+import { _testimonials, _products } from 'src/_mock';
 //
 import TestimonialEcommerce from '../../testimonial/e-commerce';
 import { EcommerceHeader } from '../layout';
@@ -27,15 +27,15 @@ export default function EcommerceLandingView() {
 
       <EcommerceLandingHotDealToday />
 
-      <EcommerceLandingFeaturedProducts />
+      <EcommerceLandingFeaturedProducts products={_products} />
 
       <EcommerceLandingSpecialOffer />
 
       <EcommerceLandingFeaturedBrands />
 
-      <EcommerceLandingPopularProducts />
+      <EcommerceLandingPopularProducts products={_products} />
 
-      <EcommerceLandingTopProducts />
+      <EcommerceLandingTopProducts products={_products} />
 
       <TestimonialEcommerce testimonials={_testimonials} />
     </>
