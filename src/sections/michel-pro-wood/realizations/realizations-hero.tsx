@@ -127,26 +127,50 @@ export default function RealizationsHero({
                    spacing={2}
                    alignItems={{ xs: 'flex-start', md: 'center' }}
                  >
-                   <Box
-                     sx={{
-                       width: 48,
-                       height: 48,
-                       borderRadius: '12px',
-                       background: (theme) => {
-                         const color = (theme.palette as any)[feature.color]?.main || theme.palette.primary.main;
-                         const darkColor = (theme.palette as any)[feature.color]?.dark || theme.palette.primary.dark;
-                         return `linear-gradient(135deg, ${color} 0%, ${darkColor} 100%)`;
-                       },
-                       display: 'flex',
-                       alignItems: 'center',
-                       justifyContent: 'center',
-                       flexShrink: 0,
-                     }}
-                   >
-                     <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                       {feature.icon}
-                     </Typography>
-                   </Box>
+                    <Box
+                      sx={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: "12px",
+                        background: (theme) => {
+                          const color = (theme.palette as any)[feature.color]?.main || theme.palette.primary.main;
+                          const darkColor = (theme.palette as any)[feature.color]?.dark || theme.palette.primary.dark;
+                          return `linear-gradient(135deg, ${color} 0%, ${darkColor} 100%)`;
+                        },
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                        overflow: "hidden",
+                        color: "common.white",
+                      }}
+                    >
+                      {feature.icon && (feature.icon.includes("/") || feature.icon.includes("http")) ? (
+                        feature.icon.endsWith(".svg") ? (
+                          <Box
+                            component="span"
+                            sx={{
+                              width: 28,
+                              height: 28,
+                              display: "block",
+                              bgcolor: "currentColor",
+                              mask: `url(${feature.icon}) no-repeat center / contain`,
+                              WebkitMask: `url(${feature.icon}) no-repeat center / contain`,
+                            }}
+                          />
+                        ) : (
+                          <Box
+                            component="img"
+                            src={feature.icon}
+                            sx={{ width: 28, height: 28, objectFit: "contain" }}
+                          />
+                        )
+                      ) : (
+                        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+                          {feature.icon || '🪵'}
+                        </Typography>
+                      )}
+                    </Box>
                    <Typography sx={{ fontWeight: 500, typography: { xs: 'caption', md: 'body1' } }}>
                      {feature.label}
                    </Typography>

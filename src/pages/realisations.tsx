@@ -24,18 +24,18 @@ export async function getStaticProps() {
 
   // Map realizations to component format
   const mappedRealizations = realizations.map((item: any) => ({
-    id: item.id,
-    title: item.title,
-    description: item.description,
+    id: item.id || null,
+    title: item.title || null,
+    description: item.description || null,
     category: item.wood_realization_categories?.name || 'Projet',
-    coverImg: item.image_url,
-    slug: item.slug,
+    coverImg: item.cover_image_url || null,
+    slug: item.slug || null,
   }));
 
   // Map features to component format
   const mappedFeatures = features.map((item: any) => ({
-    label: item.title,
-    icon: item.emoji || '🪵',
+    label: item.title || null,
+    icon: item.icon_url || null,
     color: item.color || 'primary',
   }));
 
