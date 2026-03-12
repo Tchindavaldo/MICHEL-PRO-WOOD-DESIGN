@@ -4,7 +4,8 @@ import NextLink from 'next/link';
 import { Stack, StackProps, Link, Fab } from '@mui/material';
 // routes
 // types
-import { IProductItemProps } from 'src/types/product';
+import { IShopProduct } from 'src/types/shop';
+
 // components
 import Label from 'src/components/label';
 import Image from 'src/components/image';
@@ -16,8 +17,9 @@ import { ProductRating, ProductPrice } from '../../components';
 // ----------------------------------------------------------------------
 
 interface Props extends StackProps {
-  product: IProductItemProps;
+  product: IShopProduct;
 }
+
 
 export default function EcommerceProductViewListItem({ product, ...other }: Props) {
   return (
@@ -83,7 +85,7 @@ export default function EcommerceProductViewListItem({ product, ...other }: Prop
           </Link>
         </Stack>
 
-        <ProductRating rating={product.rating} label={`${product.sold} sold`} />
+        <ProductRating rating={product.rating} label={`${product.sold} vendus`} />
 
         <TextMaxLine variant="body2" line={1} sx={{ color: 'text.secondary' }}>
           {product.caption}
@@ -92,6 +94,7 @@ export default function EcommerceProductViewListItem({ product, ...other }: Prop
         <ProductPrice
           price={product.price}
           priceSale={product.priceSale}
+          expiresAt={product.hot_deal_expires_at}
           sx={{ typography: 'h6' }}
         />
       </Stack>

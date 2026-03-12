@@ -2,7 +2,7 @@
 import NextLink from 'next/link';
 // @mui
 import { Theme } from '@mui/material/styles';
-import { Stack, Box, Paper, Button, SxProps } from '@mui/material';
+import { Stack, Box, Paper, Button, SxProps, Typography, LinearProgress } from '@mui/material';
 // hooks
 import useResponsive from 'src/hooks/useResponsive';
 // types
@@ -12,7 +12,8 @@ import Iconify from 'src/components/iconify';
 import Image from 'src/components/image';
 import TextMaxLine from 'src/components/text-max-line';
 //
-import { ProductPrice } from '../../components';
+import { ProductPrice, ProductRating } from '../../components';
+
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +37,24 @@ export default function EcommerceProductItemTop({ product, variant = 'small', sx
   );
 
   const priceText = (
-    <ProductPrice price={product.price} priceSale={product.priceSale} sx={{ typography: 'h5', color: 'text.disabled' }} />
+    <Stack spacing={1}>
+      <ProductPrice 
+        price={product.price} 
+        priceSale={product.priceSale} 
+        expiresAt={product.hot_deal_expires_at}
+        sx={{ typography: 'h5' }} 
+      />
+      <Stack spacing={1}>
+        <ProductRating rating={product.rating} label={`${product.sold} vendus`} />
+        <LinearProgress
+          color="inherit"
+          variant="determinate"
+          value={(product.sold / (product.inStock || 100)) * 100}
+          sx={{ width: 1, height: 4 }}
+        />
+      </Stack>
+
+    </Stack>
   );
 
   const moreBtn = (

@@ -15,8 +15,10 @@ import Carousel, { CarouselArrows, CarouselDots } from 'src/components/carousel'
 import { varHover, varTranHover } from 'src/components/animate';
 import NextLink from 'next/link';
 import { paths } from 'src/routes/paths';
+import { fCurrency } from 'src/utils/formatNumber';
 // assets
 import { PRODUCT_IMAGES } from 'src/assets/data/michel-pro-wood/products-link';
+
 
 // ----------------------------------------------------------------------
 
@@ -277,7 +279,7 @@ function ShopProduct({ product }: ShopProductProps) {
         <Typography variant="h6">{name}</Typography>
 
         <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-          {price.toLocaleString('fr-FR')} FCFA
+          {fCurrency(price)}
         </Typography>
       </Stack>
     </Stack>

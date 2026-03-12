@@ -1,7 +1,8 @@
 // @mui
 import { Box, Stack, Pagination } from '@mui/material';
 // types
-import { IProductItemProps } from 'src/types/product';
+import { IShopProduct } from 'src/types/shop';
+
 //
 import {
   EcommerceProductViewListItem,
@@ -13,8 +14,9 @@ import {
 // ----------------------------------------------------------------------
 
 type Props = {
-  products: IProductItemProps[];
+  products: IShopProduct[];
   viewMode: string;
+
   loading?: boolean;
   page?: number;
   count?: number;

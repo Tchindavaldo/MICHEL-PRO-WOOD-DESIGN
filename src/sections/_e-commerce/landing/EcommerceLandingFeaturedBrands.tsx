@@ -1,5 +1,6 @@
+import { useRef } from 'react';
 import NextLink from 'next/link';
-import { alpha } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import {
   Box,
   Stack,
@@ -11,8 +12,8 @@ import {
 } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import { paths } from 'src/routes/paths';
+import Carousel, { CarouselArrows } from 'src/components/carousel';
 import { EcommerceProductItemFeaturedByBrand } from '../product/item';
-
 
 // ----------------------------------------------------------------------
 
@@ -37,17 +38,48 @@ type Props = {
   content?: ContentData;
 };
 
+function chunkArray(array: any[], size: number) {
+  const chunked = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunked.push(array.slice(i, i + size));
+  }
+  return chunked;
+}
+
 // ----------------------------------------------------------------------
 
 export default function EcommerceLandingFeaturedBrands({ products, content }: Props) {
+  const theme = useTheme();
+  const carouselRef = useRef<Carousel | null>(null);
+
   const collectionName = content?.title || 'Collection Prestige';
   const collectionDescription = content?.content || "Découvrez notre collection la plus exclusive, alliant bois rares et finitions d'exception.";
 
+  const chunkedProducts = chunkArray(products, 4);
+
+  const carouselSettings = {
+    arrows: false,
+    dots: chunkedProducts.length > 1,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    infinite: chunkedProducts.length > 1,
+    rtl: Boolean(theme.direction === 'rtl'),
+  };
+
   return (
     <Container sx={{ py: { xs: 5, md: 8 } }}>
-      <Typography variant="h3" sx={{ mb: 8, textAlign: { xs: 'center', md: 'unset' } }}>
-        Nos Collections
-      </Typography>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 8 }}>
+        <Typography variant="h3" sx={{ textAlign: { xs: 'center', md: 'unset' } }}>
+          Nos Collections
+        </Typography>
+
+        {chunkedProducts.length > 1 && (
+          <CarouselArrows
+            onNext={() => carouselRef.current?.slickNext()}
+            onPrev={() => carouselRef.current?.slickPrev()}
+          />
+        )}
+      </Stack>
 
       <Grid container spacing={3}>
         <Grid xs={12} md={4}>
@@ -60,15 +92,21 @@ export default function EcommerceLandingFeaturedBrands({ products, content }: Pr
         </Grid>
 
         <Grid xs={12} md={8}>
-          <Box
-            gap={3}
-            display="grid"
-            gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
-          >
-            {products.slice(0, 4).map((product) => (
-              <EcommerceProductItemFeaturedByBrand key={product.id} product={product} />
+          <Carousel ref={carouselRef} {...carouselSettings}>
+            {chunkedProducts.map((chunk, index) => (
+              <Box key={index} sx={{ pb: 1 }}>
+                <Box
+                  gap={3}
+                  display="grid"
+                  gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
+                >
+                  {chunk.map((product) => (
+                    <EcommerceProductItemFeaturedByBrand key={product.id} product={product} />
+                  ))}
+                </Box>
+              </Box>
             ))}
-          </Box>
+          </Carousel>
         </Grid>
       </Grid>
     </Container>
@@ -115,3 +153,4 @@ function BrandInfo({ name, description, path, sx, ...other }: BrandInfoProps) {
     </Stack>
   );
 }
+

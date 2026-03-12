@@ -172,9 +172,21 @@ export default function EcommerceCheckoutView() {
         console.error('Order creation failed:', orderError);
       } else {
         console.log('Order created:', orderData);
+        
+        // Update sold_count for each product in the cart
+        const updatePromises = cart.map((item: any) => 
+          supabase.rpc('increment_sold_count', { 
+            product_id: item.id, 
+            row_count: item.quantity || 1 
+          })
+        );
+
+        await Promise.all(updatePromises);
+
         // Clear the cart after successful order
         clearCart();
       }
+
 
       reset();
       replace(paths.eCommerce.orderCompleted);

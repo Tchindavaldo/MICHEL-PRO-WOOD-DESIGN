@@ -91,6 +91,7 @@ export default function EcommerceProductItemHot({ product, hotProduct = false, s
             <ProductPrice
               price={product.price}
               priceSale={product.priceSale}
+              expiresAt={product.hot_deal_expires_at}
               sx={{
                 ...(hotProduct && {
                   color: 'error.main',
@@ -105,21 +106,22 @@ export default function EcommerceProductItemHot({ product, hotProduct = false, s
           </Stack>
         </Stack>
 
-        {hotProduct && (
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 1 }}>
-            <LinearProgress
-              color="inherit"
-              variant="determinate"
-              value={(product.sold / (product.inStock || 100)) * 100}
-              sx={{ width: 1, height: 4 }}
-            />
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 1 }}>
+          <LinearProgress
+            color="inherit"
+            variant="determinate"
+            value={(product.sold / (product.inStock || 100)) * 100}
+            sx={{ width: 1, height: 4 }}
+          />
 
-            <Typography
-              variant="caption"
-              sx={{ flexShrink: 0, color: 'text.disabled' }}
-            >{`${product.sold} Vendu`}</Typography>
-          </Stack>
-        )}
+          <Typography
+            variant="caption"
+            sx={{ flexShrink: 0, color: 'text.disabled', textAlign: 'right', minWidth: 60 }}
+          >{`${product.sold} vendus`}</Typography>
+        </Stack>
+
+
+
       </Paper>
     </Link>
   );

@@ -9,7 +9,7 @@ import { IShopProduct } from 'src/types/shop';
 import Image from 'src/components/image';
 import TextMaxLine from 'src/components/text-max-line';
 //
-import { ProductPrice } from '../../components';
+import { ProductPrice, ProductRating } from '../../components';
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +50,10 @@ export default function EcommerceProductItemFeaturedByBrand({ product, sx, ...ot
           {product.category}
         </TextMaxLine>
 
-        <ProductPrice price={product.price} priceSale={product.priceSale} />
+        <ProductRating rating={product.rating} label={`${product.sold} vendus`} sx={{ mb: 1 }} />
+
+        <ProductPrice price={product.price} priceSale={product.priceSale} expiresAt={product.hot_deal_expires_at} />
+
 
         <Stack flexGrow={1} alignItems="flex-end" justifyContent="flex-end">
           <Button

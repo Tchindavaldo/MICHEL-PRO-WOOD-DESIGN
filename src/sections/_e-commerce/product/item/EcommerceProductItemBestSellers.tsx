@@ -50,7 +50,7 @@ export default function EcommerceProductItemBestSellers({ product, ...other }: P
 
           <ProductRating rating={product.rating} label={`${product.sold} vendus`} />
 
-          <ProductPrice price={product.price} priceSale={product.priceSale} />
+          <ProductPrice price={product.price} priceSale={product.priceSale} expiresAt={product.hot_deal_expires_at} />
         </Stack>
       </Stack>
     </Link>

@@ -4,7 +4,8 @@ import NextLink from 'next/link';
 import { Stack, Box, StackProps, Fab, Link } from '@mui/material';
 // routes
 // types
-import { IProductItemProps } from 'src/types/product';
+import { IShopProduct } from 'src/types/shop';
+
 // components
 import Label from 'src/components/label';
 import Image from 'src/components/image';
@@ -16,8 +17,9 @@ import { ProductRating, ProductPrice } from '../../components';
 // ----------------------------------------------------------------------
 
 interface Props extends StackProps {
-  product: IProductItemProps;
+  product: IShopProduct;
 }
+
 
 export default function EcommerceProductViewGridItem({ product, sx, ...other }: Props) {
     return (
@@ -83,9 +85,9 @@ export default function EcommerceProductViewGridItem({ product, sx, ...other }: 
           </TextMaxLine>
         </Link>
 
-        <ProductPrice price={product.price} priceSale={product.priceSale} />
+        <ProductPrice price={product.price} priceSale={product.priceSale} expiresAt={product.hot_deal_expires_at} />
 
-        <ProductRating rating={product.rating} label={`${product.sold} sold`} />
+        <ProductRating rating={product.rating} label={`${product.sold} vendus`} />
       </Stack>
     </Stack>
   );

@@ -19,9 +19,11 @@ import Image from 'src/components/image';
 import Markdown from 'src/components/markdown';
 import Carousel, { CarouselArrows } from 'src/components/carousel';
 
-import { ProductColorPicker, ProductOptionPicker, ProductCountdownBlock } from '../components';
+import { fCurrency } from 'src/utils/formatNumber';
+import { ProductColorPicker, ProductOptionPicker, ProductCountdownBlock, ProductPrice } from '../components';
 // types
 import { IShopProduct, IShopPageContent } from 'src/types/shop';
+
 
 // ----------------------------------------------------------------------
 
@@ -86,9 +88,11 @@ export default function EcommerceLandingSpecialOffer({ products, content }: Prop
               <SpecialOfferCountdown
                 label={product.special_offer_label || 'Offre Limitée'}
                 name={product.name}
-                price={product.special_offer_price_text || `${product.price} FCFA`}
+                price={product.price}
+                priceSale={product.priceSale}
                 expired={new Date(product.hot_deal_expires_at || Date.now() + 86400000)}
               />
+
 
               <Box sx={{ borderRadius: 1.5, bgcolor: 'background.neutral', height: 1, maxHeight: 400, overflow: 'hidden' }}>
                 <Image
@@ -99,7 +103,7 @@ export default function EcommerceLandingSpecialOffer({ products, content }: Prop
 
               <SpecialOfferBuyNow
                 name={product.name}
-                description={product.special_offer_description || product.description}
+                description={product.description}
                 color={color}
                 finish={finish}
                 onChangeColor={(e) => setColor(e.target.value)}
@@ -107,6 +111,7 @@ export default function EcommerceLandingSpecialOffer({ products, content }: Prop
                 path={`/e-commerce/product/${product.id}`}
               />
             </Box>
+
           </Box>
         ))}
       </Carousel>
@@ -120,10 +125,11 @@ interface SpecialOfferCountdownProps extends StackProps {
   expired: Date;
   label: string;
   name: string;
-  price: string;
+  price: number;
+  priceSale?: number;
 }
 
-function SpecialOfferCountdown({ expired, label, name, price, sx, ...other }: SpecialOfferCountdownProps) {
+function SpecialOfferCountdown({ expired, label, name, price, priceSale, sx, ...other }: SpecialOfferCountdownProps) {
   return (
     <Stack
       alignItems="center"
@@ -133,9 +139,11 @@ function SpecialOfferCountdown({ expired, label, name, price, sx, ...other }: Sp
     >
       <Typography variant="overline" sx={{ color: 'primary.main' }}>{label}</Typography>
       <Typography variant="h5" sx={{ mt: 1, mb: 3 }}>{name}</Typography>
-      <Typography variant="subtitle2" sx={{ px: 2, py: 1, borderRadius: 1, border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.24)}` }}>
-        {price}
-      </Typography>
+      
+      <Box sx={{ px: 2, py: 1, borderRadius: 1, border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.24)}` }}>
+        <ProductPrice price={price} priceSale={priceSale} expiresAt={expired} sx={{ typography: 'subtitle1' }} />
+      </Box>
+
       <Divider sx={{ borderStyle: 'dashed', my: 3, width: 1 }} />
       <Typography variant="body2" sx={{ mb: 2 }}>{`L'offre se termine dans :`}</Typography>
       <ProductCountdownBlock

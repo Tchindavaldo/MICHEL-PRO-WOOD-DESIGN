@@ -1,29 +1,26 @@
-import { add } from 'date-fns';
+import { parseISO, isValid } from 'date-fns';
 // next
 import NextLink from 'next/link';
 // @mui
 import { Theme, alpha, useTheme } from '@mui/material/styles';
-import { Typography, Stack, SxProps, Link } from '@mui/material';
+import { Typography, Stack, SxProps, Link, Box } from '@mui/material';
 // utils
 import { filterStyles } from 'src/utils/cssStyles';
 import { fCurrency } from 'src/utils/formatNumber';
-// routes
-import { paths } from 'src/routes/paths';
 // types
 import { IShopProduct } from 'src/types/shop';
-// theme
-import { ColorSchema } from 'src/theme/palette';
 // components
 import Image from 'src/components/image';
 import TextMaxLine from 'src/components/text-max-line';
 //
-import { ProductCountdownBlock } from '../../components';
+import { ProductCountdownBlock, ProductPrice } from '../../components';
+
 
 // ----------------------------------------------------------------------
 
 type Props = {
   product: IShopProduct;
-  color?: ColorSchema;
+  color?: 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
   hideCountdown?: boolean;
   sx?: SxProps<Theme>;
 };
@@ -36,6 +33,9 @@ export default function EcommerceProductItemCountDown({
 }: Props) {
   const theme = useTheme();
 
+  const expiryDate = product.hot_deal_expires_at ? parseISO(product.hot_deal_expires_at) : null;
+  const showCountdown = !hideCountdown && expiryDate && isValid(expiryDate);
+
   return (
     <Link component={NextLink} href={`/e-commerce/product/${product.id}`} color="inherit" underline="none">
       <Stack
@@ -45,13 +45,14 @@ export default function EcommerceProductItemCountDown({
           borderRadius: 2,
           color: `${color}.darker`,
           bgcolor: `${color}.lighter`,
-          transition: theme.transitions.create('background-color', {
+          transition: theme.transitions.create(['background-color', 'color'], {
             easing: theme.transitions.easing.easeIn,
             duration: theme.transitions.duration.shortest,
           }),
           '&:hover': {
             color: `${color}.lighter`,
             bgcolor: `${color}.main`,
+            '& .price-text': { color: 'inherit' }
           },
           ...sx,
         }}
@@ -71,24 +72,32 @@ export default function EcommerceProductItemCountDown({
             {product.name}
           </TextMaxLine>
 
-          <Typography variant="h5">
-            {product.priceSale && product.priceSale > 0 ? (
-              <>
-                <Typography component="span" variant="body1" sx={{ color: 'text.disabled', textDecoration: 'line-through', mr: 1 }}>
-                  {fCurrency(product.price)}
-                </Typography>
-                {fCurrency(product.priceSale)}
-              </>
-            ) : (
-              `À partir de ${fCurrency(product.price)}`
-            )}
+          <ProductPrice 
+            price={product.price} 
+            priceSale={product.priceSale} 
+            expiresAt={product.hot_deal_expires_at}
+            sx={{ typography: 'h5', justifyContent: 'center' }} 
+          />
+
+          <Typography variant="caption" sx={{ opacity: 0.64 }}>
+            {product.sold} vendus
           </Typography>
+
+
+
         </Stack>
 
-        {!hideCountdown && (
-          <ProductCountdownBlock expired={add(new Date(), { days: 1, hours: 8 })} />
+        {showCountdown && (
+          <ProductCountdownBlock 
+            expired={expiryDate!} 
+            sx={{
+              '& .value': { bgcolor: 'background.paper', color: 'text.primary' },
+              '& .label': { color: 'inherit', opacity: 0.8 }
+            }}
+          />
         )}
       </Stack>
     </Link>
   );
 }
+

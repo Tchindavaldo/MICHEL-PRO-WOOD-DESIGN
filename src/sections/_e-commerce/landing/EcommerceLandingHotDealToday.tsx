@@ -1,40 +1,17 @@
 import { useRef } from 'react';
-import { add, parseISO, isValid } from 'date-fns';
 import { useTheme } from '@mui/material/styles';
 import { Typography, Container, Stack, Box } from '@mui/material';
 import useResponsive from 'src/hooks/useResponsive';
 import Carousel, { CarouselDots, CarouselArrows } from 'src/components/carousel';
-import { ProductCountdownBlock } from '../components';
 import { EcommerceProductItemHot } from '../product/item';
+// types
+import { IShopProduct } from 'src/types/shop';
 
 // ----------------------------------------------------------------------
 
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  priceSale?: number;
-  coverImg: string;
-  sold: number;
-  inStock: number;
-  hot_deal_expires_at?: string | null;
-  [key: string]: any;
-};
-
 type Props = {
-  products: Product[];
+  products: IShopProduct[];
 };
-
-// Parse expiry from any product (look for the earliest, or use default)
-function getSharedExpiry(products: Product[]): Date {
-  for (const p of products) {
-    if (p.hot_deal_expires_at) {
-      const d = parseISO(p.hot_deal_expires_at);
-      if (isValid(d)) return d;
-    }
-  }
-  return add(new Date(), { hours: 1, minutes: 30 });
-}
 
 export default function EcommerceLandingHotDealToday({ products }: Props) {
   const theme = useTheme();
@@ -46,7 +23,7 @@ export default function EcommerceLandingHotDealToday({ products }: Props) {
   const carouselSettings = {
     dots: true,
     arrows: false,
-    infinite: products.length > 6, // Désactive le loop si peu de produits
+    infinite: products.length > 6,
     slidesToShow: slidesToShow || 1,
     slidesToScroll: slidesToShow || 1,
     rtl: Boolean(theme.direction === 'rtl'),
@@ -71,9 +48,6 @@ export default function EcommerceLandingHotDealToday({ products }: Props) {
     ],
   };
 
-
-  const expiry = getSharedExpiry(products);
-
   return (
     <Container sx={{ py: { xs: 5, md: 8 } }}>
       <Stack
@@ -86,8 +60,7 @@ export default function EcommerceLandingHotDealToday({ products }: Props) {
           Offres Spéciales du Jour
         </Typography>
 
-        {isMdUp && (
-
+        {isMdUp && products.length > 6 && (
           <CarouselArrows
             onNext={() => carouselRef.current?.slickNext()}
             onPrev={() => carouselRef.current?.slickPrev()}
@@ -105,6 +78,12 @@ export default function EcommerceLandingHotDealToday({ products }: Props) {
           </Box>
         ))}
       </Carousel>
+
+      {!products.length && (
+        <Typography variant="body1" sx={{ color: 'text.secondary', textAlign: 'center', py: 5 }}>
+          Aucune offre flash disponible pour le moment.
+        </Typography>
+      )}
     </Container>
   );
 }
