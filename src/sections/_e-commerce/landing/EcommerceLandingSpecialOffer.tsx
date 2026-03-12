@@ -16,7 +16,9 @@ import {
 } from '@mui/material';
 // components
 import Image from 'src/components/image';
+import Markdown from 'src/components/markdown';
 import Carousel, { CarouselArrows } from 'src/components/carousel';
+
 import { ProductColorPicker, ProductOptionPicker, ProductCountdownBlock } from '../components';
 // types
 import { IShopProduct, IShopPageContent } from 'src/types/shop';
@@ -163,8 +165,9 @@ function SpecialOfferBuyNow({ name, description, color, finish, path, onChangeCo
     <Stack spacing={3} alignItems="flex-start" {...other}>
       <Stack spacing={1}>
         <Typography variant="h4">{name}</Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>{description}</Typography>
+        <Markdown content={description} sx={{ color: 'text.secondary', '& p': { typography: 'body2' } }} />
       </Stack>
+
 
       <Stack spacing={2}>
         <Typography variant="subtitle2">Essence de Bois</Typography>

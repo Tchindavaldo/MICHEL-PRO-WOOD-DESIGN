@@ -7,7 +7,9 @@ import { Box, Button, Unstable_Grid2 as Grid } from '@mui/material';
 import { filterStyles } from 'src/utils/cssStyles';
 // components
 import Image from 'src/components/image';
+import Markdown from 'src/components/markdown';
 import Iconify from 'src/components/iconify';
+
 import Label from 'src/components/label';
 import TextMaxLine from 'src/components/text-max-line';
 
@@ -60,10 +62,12 @@ export default function EcommerceProductItemHero({ product }: Props) {
           </TextMaxLine>
 
           {caption && (
-            <TextMaxLine variant="body2" sx={{ mb: 5, color: 'text.secondary' }}>
-              {caption}
-            </TextMaxLine>
+            <Markdown 
+              content={caption} 
+              sx={{ mb: 5, color: 'text.secondary', '& p': { typography: 'body2' } }} 
+            />
           )}
+
 
           <Button
             component={NextLink}
