@@ -27,8 +27,9 @@ export default function TestimonialEcommerce({ testimonials }: Props) {
   const carouselSettings = {
     dots: !isMdUp,
     arrows: false,
-    slidesToShow: 4,
+    slidesToShow: Math.min(testimonials.length, 4),
     slidesToScroll: 1,
+    infinite: false,
     rtl: Boolean(theme.direction === 'rtl'),
     ...CarouselDots({
       sx: {
@@ -37,14 +38,20 @@ export default function TestimonialEcommerce({ testimonials }: Props) {
     }),
     responsive: [
       {
-        // Down md
         breakpoint: theme.breakpoints.values.md,
-        settings: { slidesToShow: 2, slidesToScroll: 3 },
+        settings: { 
+          slidesToShow: Math.min(testimonials.length, 2), 
+          slidesToScroll: 1,
+          infinite: false,
+        },
       },
       {
-        // Down sm
         breakpoint: theme.breakpoints.values.sm,
-        settings: { slidesToShow: 1, slidesToScroll: 1 },
+        settings: { 
+          slidesToShow: 1, 
+          slidesToScroll: 1,
+          infinite: false,
+        },
       },
     ],
   };
@@ -66,10 +73,10 @@ export default function TestimonialEcommerce({ testimonials }: Props) {
     >
       <Stack direction="row" alignItems="center" sx={{ mb: 8 }}>
         <Typography variant="h3" sx={{ textAlign: { xs: 'center', md: 'unset' }, flexGrow: 1 }}>
-          Popular Reviews
+          Avis Clients
         </Typography>
 
-        {isMdUp && (
+        {isMdUp && testimonials.length > 4 && (
           <CarouselArrows
             spacing={2}
             justifyContent="center"
@@ -89,3 +96,4 @@ export default function TestimonialEcommerce({ testimonials }: Props) {
     </Container>
   );
 }
+

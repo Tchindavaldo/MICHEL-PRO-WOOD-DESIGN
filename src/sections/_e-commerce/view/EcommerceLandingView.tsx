@@ -53,49 +53,52 @@ export default function EcommerceLandingView({ data }: Props) {
       special_offer_description: p.special_offer_description,
     }));
 
-  const allBackendProducts = hasPopular ? adaptProductsForComponent(data!.popularProducts) : _products;
+  const allBackendProducts = adaptProductsForComponent(data?.popularProducts || []);
 
   return (
     <>
       <EcommerceHeader />
 
-      <EcommerceLandingHero
-        banners={hasBanners ? data!.banners : _productsCarousel.map(p => ({ ...p, btnText: 'Voir la collection', btnLink: '#' }))}
-      />
+      {hasBanners && (
+        <EcommerceLandingHero banners={data!.banners} />
+      )}
 
-      <EcommerceLandingCategories
-        categories={hasCategories ? data!.categories : undefined}
-      />
+      {hasCategories && (
+        <EcommerceLandingCategories categories={data!.categories} />
+      )}
 
-      <EcommerceLandingHotDealToday
-        products={hasHotDeal ? adaptProductsForComponent(data!.hotDealProducts) : _products}
-      />
+      {hasHotDeal && (
+        <EcommerceLandingHotDealToday products={adaptProductsForComponent(data!.hotDealProducts)} />
+      )}
 
-      <EcommerceLandingFeaturedProducts
-        products={hasFeatured ? adaptProductsForComponent(data!.featuredProducts) : _products}
-      />
+      {hasFeatured && (
+        <EcommerceLandingFeaturedProducts products={adaptProductsForComponent(data!.featuredProducts)} />
+      )}
 
-      <EcommerceLandingSpecialOffer
-        products={hasSpecialOffer ? adaptProductsForComponent(data!.specialOfferProducts) : undefined}
-        content={data?.specialOfferContent || undefined}
-      />
+      {hasSpecialOffer && (
+        <EcommerceLandingSpecialOffer
+          products={adaptProductsForComponent(data!.specialOfferProducts)}
+          content={data?.specialOfferContent || undefined}
+        />
+      )}
 
-      <EcommerceLandingFeaturedBrands
-        products={hasCollection ? adaptProductsForComponent(data!.collectionProducts) : _products}
-        content={data?.collectionContent || undefined}
-      />
+      {hasCollection && (
+        <EcommerceLandingFeaturedBrands
+          products={adaptProductsForComponent(data!.collectionProducts)}
+          content={data?.collectionContent || undefined}
+        />
+      )}
 
-      <EcommerceLandingPopularProducts 
-        products={allBackendProducts} 
-      />
+      {hasPopular && (
+        <>
+          <EcommerceLandingPopularProducts products={allBackendProducts} />
+          <EcommerceLandingTopProducts products={allBackendProducts} />
+        </>
+      )}
 
-      <EcommerceLandingTopProducts 
-        products={allBackendProducts} 
-      />
-
-      <TestimonialEcommerce
-        testimonials={hasTestimonials ? data!.testimonials : _testimonials}
-      />
+      {hasTestimonials && (
+        <TestimonialEcommerce testimonials={data!.testimonials} />
+      )}
     </>
   );
 }
