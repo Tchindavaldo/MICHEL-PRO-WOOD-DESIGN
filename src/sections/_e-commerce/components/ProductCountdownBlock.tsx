@@ -16,7 +16,11 @@ export default function ProductCountdownBlock({
   sx,
   ...other
 }: Props) {
-  const { days, hours, minutes, seconds } = useCountdown(expired);
+  const { days, hours, minutes, seconds, isExpired } = useCountdown(expired);
+
+  if (isExpired) {
+    return null;
+  }
 
   return (
     <Stack

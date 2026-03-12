@@ -65,7 +65,7 @@ export default function EcommerceProductsView() {
           coverImg: p.image_url || '/assets/images/michel-pro-wood/vente/armoir.jpg',
           review: p.review || 45,
           category: p.category || 'Mobilier',
-          sold: p.sold || 10,
+          sold: Number(p.sold) || 0,
           inStock: p.in_stock ? p.stock_quantity : 0,
           rating: Number(p.rating),
           label: p.label || '',

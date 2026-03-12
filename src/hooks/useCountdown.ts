@@ -7,6 +7,7 @@ type ReturnType = {
   hours: string;
   minutes: string;
   seconds: string;
+  isExpired: boolean;
 };
 
 export default function useCountdown(date: Date): ReturnType {
@@ -15,6 +16,7 @@ export default function useCountdown(date: Date): ReturnType {
     hours: '00',
     minutes: '00',
     seconds: '00',
+    isExpired: false,
   });
 
   useEffect(() => {
@@ -30,6 +32,17 @@ export default function useCountdown(date: Date): ReturnType {
 
     const distanceToNow = startTime.valueOf() - endTime.valueOf();
 
+    if (distanceToNow <= 0) {
+      setCountdown({
+        days: '00',
+        hours: '00',
+        minutes: '00',
+        seconds: '00',
+        isExpired: true,
+      });
+      return;
+    }
+
     const getDays = Math.floor(distanceToNow / (1000 * 60 * 60 * 24));
 
     const getHours = `0${Math.floor(
@@ -41,10 +54,11 @@ export default function useCountdown(date: Date): ReturnType {
     const getSeconds = `0${Math.floor((distanceToNow % (1000 * 60)) / 1000)}`.slice(-2);
 
     setCountdown({
-      days: getDays.toString() || '000',
-      hours: getHours || '000',
-      minutes: getMinutes || '000',
-      seconds: getSeconds || '000',
+      days: getDays.toString(),
+      hours: getHours,
+      minutes: getMinutes,
+      seconds: getSeconds,
+      isExpired: false,
     });
   };
 
@@ -53,6 +67,7 @@ export default function useCountdown(date: Date): ReturnType {
     hours: countdown.hours,
     minutes: countdown.minutes,
     seconds: countdown.seconds,
+    isExpired: countdown.isExpired,
   };
 }
 

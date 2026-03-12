@@ -130,6 +130,8 @@ interface SpecialOfferCountdownProps extends StackProps {
 }
 
 function SpecialOfferCountdown({ expired, label, name, price, priceSale, sx, ...other }: SpecialOfferCountdownProps) {
+  const isExpired = expired.getTime() <= Date.now();
+
   return (
     <Stack
       alignItems="center"
@@ -144,16 +146,20 @@ function SpecialOfferCountdown({ expired, label, name, price, priceSale, sx, ...
         <ProductPrice price={price} priceSale={priceSale} expiresAt={expired} sx={{ typography: 'subtitle1' }} />
       </Box>
 
-      <Divider sx={{ borderStyle: 'dashed', my: 3, width: 1 }} />
-      <Typography variant="body2" sx={{ mb: 2 }}>{`L'offre se termine dans :`}</Typography>
-      <ProductCountdownBlock
-        expired={expired}
-        sx={{
-          '& .value': { color: 'text.primary', bgcolor: 'transparent', border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.32)}` },
-          '& .label': { color: 'text.secondary' },
-          '& .separator': { color: 'inherit' },
-        }}
-      />
+      {!isExpired && (
+        <>
+          <Divider sx={{ borderStyle: 'dashed', my: 3, width: 1 }} />
+          <Typography variant="body2" sx={{ mb: 2 }}>{`L'offre se termine dans :`}</Typography>
+          <ProductCountdownBlock
+            expired={expired}
+            sx={{
+              '& .value': { color: 'text.primary', bgcolor: 'transparent', border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.32)}` },
+              '& .label': { color: 'text.secondary' },
+              '& .separator': { color: 'inherit' },
+            }}
+          />
+        </>
+      )}
     </Stack>
   );
 }

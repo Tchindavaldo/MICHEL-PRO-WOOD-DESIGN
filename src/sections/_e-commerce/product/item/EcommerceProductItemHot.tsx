@@ -25,7 +25,7 @@ type Props = {
 export default function EcommerceProductItemHot({ product, hotProduct = false, sx }: Props) {
   // Check for individual expiry date
   const expiryDate = product.hot_deal_expires_at ? parseISO(product.hot_deal_expires_at) : null;
-  const showCountdown = hotProduct && expiryDate && isValid(expiryDate);
+  const showCountdown = hotProduct && expiryDate && isValid(expiryDate) && expiryDate.getTime() > Date.now();
 
   return (
     <Link component={NextLink} href={`/e-commerce/product/${product.id}`} color="inherit" underline="none">

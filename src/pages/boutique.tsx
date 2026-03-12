@@ -101,7 +101,7 @@ export const getStaticProps: GetStaticProps = async () => {
       priceSale: Number(p.price_sale) || 0,
       coverImg: p.image_url || '', // Frontend expects coverImg
       category: p.category || '',
-      sold: Number(p.sold_count) || 0,
+      sold: Number(p.sold) || 0,
       inStock: 100,
       rating: Number(p.rating) || 0,
       label: p.is_hot_deal ? 'HOT' : '',

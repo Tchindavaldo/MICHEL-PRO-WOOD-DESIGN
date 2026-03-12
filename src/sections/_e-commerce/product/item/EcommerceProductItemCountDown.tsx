@@ -34,7 +34,7 @@ export default function EcommerceProductItemCountDown({
   const theme = useTheme();
 
   const expiryDate = product.hot_deal_expires_at ? parseISO(product.hot_deal_expires_at) : null;
-  const showCountdown = !hideCountdown && expiryDate && isValid(expiryDate);
+  const showCountdown = !hideCountdown && expiryDate && isValid(expiryDate) && expiryDate.getTime() > Date.now();
 
   return (
     <Link component={NextLink} href={`/e-commerce/product/${product.id}`} color="inherit" underline="none">

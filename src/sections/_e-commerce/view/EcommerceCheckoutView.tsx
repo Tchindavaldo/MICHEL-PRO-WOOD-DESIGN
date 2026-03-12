@@ -173,16 +173,9 @@ export default function EcommerceCheckoutView() {
       } else {
         console.log('Order created:', orderData);
         
-        // Update sold_count for each product in the cart
-        const updatePromises = cart.map((item: any) => 
-          supabase.rpc('increment_sold_count', { 
-            product_id: item.id, 
-            row_count: item.quantity || 1 
-          })
-        );
-
-        await Promise.all(updatePromises);
-
+        // Sales counts are now automatically handled by the database trigger 'tr_after_order_insert'
+        // No manual increment required here anymore.
+        
         // Clear the cart after successful order
         clearCart();
       }
