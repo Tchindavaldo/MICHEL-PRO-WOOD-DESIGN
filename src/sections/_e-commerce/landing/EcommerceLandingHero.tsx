@@ -1,22 +1,28 @@
 import { useRef } from 'react';
-
-// @mui
 import { alpha, useTheme } from '@mui/material/styles';
 import { Box, Container } from '@mui/material';
-// utils
 import { bgGradient } from 'src/utils/cssStyles';
-// _mock
-import { _productsCarousel } from 'src/_mock';
-// components
 import Carousel, { CarouselDots } from 'src/components/carousel';
-//
 import { EcommerceProductItemHero } from '../product/item';
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceLandingHero() {
-  const theme = useTheme();
+type Banner = {
+  id: string;
+  title: string;
+  caption: string;
+  label: string;
+  coverImg: string;
+  btnText?: string;
+  btnLink?: string;
+};
 
+type Props = {
+  banners: Banner[];
+};
+
+export default function EcommerceLandingHero({ banners }: Props) {
+  const theme = useTheme();
   const carouselRef = useRef<Carousel | null>(null);
 
   const carouselSettings = {
@@ -42,11 +48,7 @@ export default function EcommerceLandingHero() {
   };
 
   return (
-    <Container
-      sx={{
-        pt: { xs: 5, md: 8 },
-      }}
-    >
+    <Container sx={{ pt: { xs: 5, md: 8 } }}>
       <Box
         sx={{
           ...bgGradient({
@@ -59,8 +61,8 @@ export default function EcommerceLandingHero() {
         }}
       >
         <Carousel ref={carouselRef} {...carouselSettings}>
-          {_productsCarousel.map((product) => (
-            <EcommerceProductItemHero key={product.id} product={product} />
+          {banners.map((banner) => (
+            <EcommerceProductItemHero key={banner.id} product={banner} />
           ))}
         </Carousel>
       </Box>

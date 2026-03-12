@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 // @mui
 import { Box, Typography, Container, Tabs, Tab, Button } from '@mui/material';
 import NextLink from 'next/link';
-import { paths } from 'src/routes/paths';
 import Iconify from 'src/components/iconify';
-// _mock
-import { _products } from 'src/_mock';
+// types
+import { IShopProduct } from 'src/types/shop';
 //
 import { EcommerceProductItemBestSellers } from '../product/item';
 
@@ -15,11 +14,8 @@ const TABS = ['Produits Vedettes', 'Mieux Notés', 'En Promotion'];
 
 // ----------------------------------------------------------------------
 
-// types
-import { IProductItemProps } from 'src/types/product';
-
 type Props = {
-  products: IProductItemProps[];
+  products: IShopProduct[];
 };
 
 export default function EcommerceLandingPopularProducts({ products }: Props) {
@@ -28,6 +24,17 @@ export default function EcommerceLandingPopularProducts({ products }: Props) {
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
   };
+
+  const filteredProducts = useMemo(() => {
+    if (tab === 'Mieux Notés') {
+      return [...products].sort((a, b) => b.rating - a.rating).slice(0, 8);
+    }
+    if (tab === 'En Promotion') {
+      return products.filter((p) => p.priceSale && p.priceSale > 0).slice(0, 8);
+    }
+    // Par défaut : Vedettes (ordre du backend ou meilleures ventes)
+    return products.slice(0, 8);
+  }, [products, tab]);
 
   return (
     <Container
@@ -66,15 +73,21 @@ export default function EcommerceLandingPopularProducts({ products }: Props) {
           md: 'repeat(4, 1fr)',
         }}
       >
-        {products.slice(0, 8).map((product) => (
+        {filteredProducts.map((product) => (
           <EcommerceProductItemBestSellers key={product.id} product={product} />
         ))}
+        
+        {filteredProducts.length === 0 && (
+          <Typography variant="body1" sx={{ color: 'text.secondary', gridColumn: '1/-1', textAlign: 'center', py: 5 }}>
+            Pas de produits disponibles dans cette catégorie pour le moment.
+          </Typography>
+        )}
       </Box>
 
       <Box sx={{ mt: 8, textAlign: 'center' }}>
         <Button
           component={NextLink}
-          href={paths.eCommerce.products}
+          href="/e-commerce/products"
           size="large"
           variant="contained"
           color="primary"

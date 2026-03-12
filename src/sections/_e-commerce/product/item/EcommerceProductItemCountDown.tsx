@@ -10,7 +10,7 @@ import { fCurrency } from 'src/utils/formatNumber';
 // routes
 import { paths } from 'src/routes/paths';
 // types
-import { IProductItemProps } from 'src/types/product';
+import { IShopProduct } from 'src/types/shop';
 // theme
 import { ColorSchema } from 'src/theme/palette';
 // components
@@ -22,16 +22,22 @@ import { ProductCountdownBlock } from '../../components';
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IProductItemProps;
+  product: IShopProduct;
   color?: ColorSchema;
+  hideCountdown?: boolean;
   sx?: SxProps<Theme>;
 };
 
-export default function EcommerceProductItemCountDown({ product, color = 'primary', sx }: Props) {
+export default function EcommerceProductItemCountDown({ 
+  product, 
+  color = 'primary', 
+  hideCountdown = false,
+  sx 
+}: Props) {
   const theme = useTheme();
 
   return (
-    <Link component={NextLink} href={paths.eCommerce.product} color="inherit" underline="none">
+    <Link component={NextLink} href={`/e-commerce/product/${product.id}`} color="inherit" underline="none">
       <Stack
         spacing={3}
         sx={{
@@ -65,10 +71,23 @@ export default function EcommerceProductItemCountDown({ product, color = 'primar
             {product.name}
           </TextMaxLine>
 
-          <Typography variant="h5">{`À partir de ${fCurrency(product.price)}`}</Typography>
+          <Typography variant="h5">
+            {product.priceSale && product.priceSale > 0 ? (
+              <>
+                <Typography component="span" variant="body1" sx={{ color: 'text.disabled', textDecoration: 'line-through', mr: 1 }}>
+                  {fCurrency(product.price)}
+                </Typography>
+                {fCurrency(product.priceSale)}
+              </>
+            ) : (
+              `À partir de ${fCurrency(product.price)}`
+            )}
+          </Typography>
         </Stack>
 
-        <ProductCountdownBlock expired={add(new Date(), { days: 1, hours: 8 })} />
+        {!hideCountdown && (
+          <ProductCountdownBlock expired={add(new Date(), { days: 1, hours: 8 })} />
+        )}
       </Stack>
     </Link>
   );

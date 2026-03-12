@@ -3,10 +3,8 @@ import NextLink from 'next/link';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Stack, StackProps, Button } from '@mui/material';
-// routes
-import { paths } from 'src/routes/paths';
 // types
-import { IProductItemProps } from 'src/types/product';
+import { IShopProduct } from 'src/types/shop';
 // components
 import Image from 'src/components/image';
 import TextMaxLine from 'src/components/text-max-line';
@@ -16,7 +14,7 @@ import { ProductPrice } from '../../components';
 // ----------------------------------------------------------------------
 
 interface Props extends StackProps {
-  product: IProductItemProps;
+  product: IShopProduct;
 }
 
 export default function EcommerceProductItemFeaturedByBrand({ product, sx, ...other }: Props) {
@@ -57,12 +55,12 @@ export default function EcommerceProductItemFeaturedByBrand({ product, sx, ...ot
         <Stack flexGrow={1} alignItems="flex-end" justifyContent="flex-end">
           <Button
             component={NextLink}
-            href={paths.eCommerce.product}
+            href={`/e-commerce/product/${product.id}`}
             size="small"
             color="inherit"
             variant="contained"
           >
-            Buy Now
+            Acheter
           </Button>
         </Stack>
       </Stack>

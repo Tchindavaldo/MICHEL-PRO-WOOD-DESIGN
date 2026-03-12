@@ -1,23 +1,29 @@
 // @mui
 import { Box, Typography, Container, Button } from '@mui/material';
 import NextLink from 'next/link';
-import { paths } from 'src/routes/paths';
 import Iconify from 'src/components/iconify';
-// _mock
-import { _products } from 'src/_mock';
+// types
+import { IShopProduct } from 'src/types/shop';
 //
 import { EcommerceProductItemHot, EcommerceProductItemTop } from '../product/item';
 
 // ----------------------------------------------------------------------
 
-// types
-import { IProductItemProps } from 'src/types/product';
-
 type Props = {
-  products: IProductItemProps[];
+  products: IShopProduct[];
 };
 
 export default function EcommerceLandingTopProducts({ products }: Props) {
+  // On trie par ventes pour cette section
+  const topSellers = [...products].sort((a, b) => b.sold - a.sold);
+  
+  const gridProducts = topSellers.slice(0, 4);
+  const largeProduct = topSellers[4] || products[0];
+  const sideProduct1 = topSellers[5] || products[1];
+  const sideProduct2 = topSellers[6] || products[2];
+
+  if (!products.length) return null;
+
   return (
     <Container
       sx={{
@@ -43,9 +49,9 @@ export default function EcommerceLandingTopProducts({ products }: Props) {
         }}
         sx={{ mb: { xs: 3, md: 8 } }}
       >
-        {products.slice(4, 8).map((product) => (
+        {gridProducts.map((product) => (product ? (
           <EcommerceProductItemHot key={product.id} product={product} />
-        ))}
+        ) : null))}
       </Box>
 
       <Box
@@ -56,7 +62,7 @@ export default function EcommerceLandingTopProducts({ products }: Props) {
           md: 'repeat(2, 1fr)',
         }}
       >
-        <EcommerceProductItemTop variant="large" product={products[6]} />
+        {largeProduct && <EcommerceProductItemTop variant="large" product={largeProduct} />}
 
         <Box
           gap={3}
@@ -66,15 +72,15 @@ export default function EcommerceLandingTopProducts({ products }: Props) {
             md: 'repeat(2, 1fr)',
           }}
         >
-          <EcommerceProductItemTop product={products[4]} />
-          <EcommerceProductItemTop product={products[10]} />
+          {sideProduct1 && <EcommerceProductItemTop product={sideProduct1} />}
+          {sideProduct2 && <EcommerceProductItemTop product={sideProduct2} />}
         </Box>
       </Box>
 
       <Box sx={{ mt: 8, textAlign: 'center' }}>
         <Button
           component={NextLink}
-          href={paths.eCommerce.products}
+          href="/e-commerce/products"
           size="large"
           variant="contained"
           color="primary"

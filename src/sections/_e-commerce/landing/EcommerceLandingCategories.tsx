@@ -1,16 +1,18 @@
-// @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Typography, Container, Stack, Button } from '@mui/material';
-import NextLink from 'next/link';
-import { paths } from 'src/routes/paths';
-// components
-import Image from 'src/components/image';
+import { Box, Typography, Container, Stack } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import TextMaxLine from 'src/components/text-max-line';
 
 // ----------------------------------------------------------------------
 
-const CATEGORIES = [
+type Category = {
+  id?: string;
+  label: string;
+  icon: string;
+  path: string;
+};
+
+const DEFAULT_CATEGORIES: Category[] = [
   { label: 'Mobilier', icon: 'carbon:home', path: '#' },
   { label: 'Cuisine', icon: 'carbon:restaurant', path: '#' },
   { label: 'Salle de Bain', icon: 'carbon:clean', path: '#' },
@@ -19,22 +21,16 @@ const CATEGORIES = [
   { label: 'Décoration', icon: 'carbon:color-palette', path: '#' },
 ];
 
-// ----------------------------------------------------------------------
+type Props = {
+  categories?: Category[];
+};
 
-export default function EcommerceLandingCategories() {
+export default function EcommerceLandingCategories({ categories }: Props) {
+  const items = categories && categories.length > 0 ? categories : DEFAULT_CATEGORIES;
+
   return (
-    <Container
-      sx={{
-        py: { xs: 5, md: 8 },
-      }}
-    >
-      <Typography
-        variant="h3"
-        sx={{
-          mb: 8,
-          textAlign: { xs: 'center', md: 'unset' },
-        }}
-      >
+    <Container sx={{ py: { xs: 5, md: 8 } }}>
+      <Typography variant="h3" sx={{ mb: 8, textAlign: { xs: 'center', md: 'unset' } }}>
         Nos Catégories
       </Typography>
 
@@ -47,16 +43,20 @@ export default function EcommerceLandingCategories() {
           md: 'repeat(6, 1fr)',
         }}
       >
-        {CATEGORIES.map((category) => (
+        {items.map((category) => (
           <Stack
             key={category.label}
             alignItems="center"
             justifyContent="center"
+            component="a"
+            href={category.path}
             sx={{
               px: 1,
               py: 3,
               borderRadius: 2,
               cursor: 'pointer',
+              textDecoration: 'none',
+              color: 'text.primary',
               border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.24)}`,
               '&:hover': {
                 boxShadow: (theme) => theme.customShadows.z24,
@@ -73,15 +73,12 @@ export default function EcommerceLandingCategories() {
             >
               <Iconify icon={category.icon} width={24} />
             </Box>
-
             <TextMaxLine variant="subtitle2" line={1}>
               {category.label}
             </TextMaxLine>
           </Stack>
         ))}
       </Box>
-
-
     </Container>
   );
 }

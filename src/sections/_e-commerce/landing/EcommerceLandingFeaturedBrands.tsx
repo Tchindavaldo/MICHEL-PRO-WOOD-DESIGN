@@ -1,6 +1,4 @@
-// next
 import NextLink from 'next/link';
-// @mui
 import { alpha } from '@mui/material/styles';
 import {
   Box,
@@ -11,39 +9,52 @@ import {
   StackProps,
   Unstable_Grid2 as Grid,
 } from '@mui/material';
-// _mock
-import { _products } from 'src/_mock';
-// components
 import Iconify from 'src/components/iconify';
-//
+import { paths } from 'src/routes/paths';
 import { EcommerceProductItemFeaturedByBrand } from '../product/item';
+
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceLandingFeaturedBrands() {
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  priceSale?: number;
+  coverImg: string;
+  category: string;
+  [key: string]: any;
+};
+
+type ContentData = {
+  title?: string;
+  subtitle?: string;
+  content?: string;
+};
+
+type Props = {
+  products: Product[];
+  content?: ContentData;
+};
+
+// ----------------------------------------------------------------------
+
+export default function EcommerceLandingFeaturedBrands({ products, content }: Props) {
+  const collectionName = content?.title || 'Collection Prestige';
+  const collectionDescription = content?.content || "Découvrez notre collection la plus exclusive, alliant bois rares et finitions d'exception.";
+
   return (
-    <Container
-      sx={{
-        py: { xs: 5, md: 8 },
-      }}
-    >
-      <Typography
-        variant="h3"
-        sx={{
-          mb: 8,
-          textAlign: { xs: 'center', md: 'unset' },
-        }}
-      >
+    <Container sx={{ py: { xs: 5, md: 8 } }}>
+      <Typography variant="h3" sx={{ mb: 8, textAlign: { xs: 'center', md: 'unset' } }}>
         Nos Collections
       </Typography>
 
       <Grid container spacing={3}>
         <Grid xs={12} md={4}>
           <BrandInfo
-            logo={<Iconify icon="carbon:crown" width={40} />}
-            name="Collection Prestige"
-            description="Découvrez notre collection la plus exclusive, alliant bois rares et finitions d'exception."
-            path="#"
+            name={collectionName}
+            description={collectionDescription}
+            path={paths.eCommerce.products}
             sx={{ height: 1 }}
           />
         </Grid>
@@ -52,12 +63,9 @@ export default function EcommerceLandingFeaturedBrands() {
           <Box
             gap={3}
             display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
-            }}
+            gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
           >
-            {_products.slice(4, 8).map((product) => (
+            {products.slice(0, 4).map((product) => (
               <EcommerceProductItemFeaturedByBrand key={product.id} product={product} />
             ))}
           </Box>
@@ -67,16 +75,15 @@ export default function EcommerceLandingFeaturedBrands() {
   );
 }
 
-// ----------------------------------------------------------------------
+// ─── Brand Info Block ───
 
 interface BrandInfoProps extends StackProps {
   name?: string;
   path: string;
   description?: string;
-  logo?: React.ReactNode;
 }
 
-function BrandInfo({ logo, name, description, path, sx, ...other }: BrandInfoProps) {
+function BrandInfo({ name, description, path, sx, ...other }: BrandInfoProps) {
   return (
     <Stack
       alignItems="center"
@@ -90,15 +97,11 @@ function BrandInfo({ logo, name, description, path, sx, ...other }: BrandInfoPro
       }}
       {...other}
     >
-      {logo}
+      <Iconify icon="carbon:crown" width={40} />
 
-      <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-        {name}
-      </Typography>
+      <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>{name}</Typography>
 
-      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        {description}
-      </Typography>
+      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{description}</Typography>
 
       <Button
         component={NextLink}

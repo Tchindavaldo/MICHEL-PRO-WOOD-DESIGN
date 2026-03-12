@@ -5,10 +5,8 @@ import { Theme } from '@mui/material/styles';
 import { Stack, Box, Paper, Button, SxProps } from '@mui/material';
 // hooks
 import useResponsive from 'src/hooks/useResponsive';
-// routes
-import { paths } from 'src/routes/paths';
 // types
-import { IProductItemProps } from 'src/types/product';
+import { IShopProduct } from 'src/types/shop';
 // components
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image';
@@ -19,7 +17,7 @@ import { ProductPrice } from '../../components';
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IProductItemProps;
+  product: IShopProduct;
   sx?: SxProps<Theme>;
   variant?: 'small' | 'large';
 };
@@ -38,13 +36,13 @@ export default function EcommerceProductItemTop({ product, variant = 'small', sx
   );
 
   const priceText = (
-    <ProductPrice price={product.price} sx={{ typography: 'h5', color: 'text.disabled' }} />
+    <ProductPrice price={product.price} priceSale={product.priceSale} sx={{ typography: 'h5', color: 'text.disabled' }} />
   );
 
   const moreBtn = (
     <Button
       component={NextLink}
-      href={paths.eCommerce.product}
+      href={`/e-commerce/product/${product.id}`}
       color="inherit"
       endIcon={<Iconify icon="carbon:chevron-right" />}
       sx={{ flexShrink: 0 }}

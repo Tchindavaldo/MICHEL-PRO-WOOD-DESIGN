@@ -5,10 +5,6 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { Box, Button, Unstable_Grid2 as Grid } from '@mui/material';
 // utils
 import { filterStyles } from 'src/utils/cssStyles';
-// routes
-import { paths } from 'src/routes/paths';
-// types
-import { IProductItemHeroProps } from 'src/types/product';
 // components
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
@@ -18,13 +14,21 @@ import TextMaxLine from 'src/components/text-max-line';
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IProductItemHeroProps;
+  product: {
+    id: string;
+    title: string;
+    caption: string;
+    label: string;
+    coverImg: string;
+    btnText?: string;
+    btnLink?: string;
+  };
 };
 
 export default function EcommerceProductItemHero({ product }: Props) {
   const theme = useTheme();
 
-  const { label, title, caption, coverImg } = product;
+  const { label, title, caption, coverImg, btnText, btnLink } = product;
 
   return (
     <Grid
@@ -45,27 +49,31 @@ export default function EcommerceProductItemHero({ product }: Props) {
             textAlign: { xs: 'center', md: 'unset' },
           }}
         >
-          <Label color="warning" sx={{ mb: 2 }}>
-            {label}
-          </Label>
+          {label && (
+            <Label color="warning" sx={{ mb: 2 }}>
+              {label}
+            </Label>
+          )}
 
           <TextMaxLine variant="h3" sx={{ mb: 2 }}>
             {title}
           </TextMaxLine>
 
-          <TextMaxLine variant="body2" sx={{ mb: 5, color: 'text.secondary' }}>
-            {caption}
-          </TextMaxLine>
+          {caption && (
+            <TextMaxLine variant="body2" sx={{ mb: 5, color: 'text.secondary' }}>
+              {caption}
+            </TextMaxLine>
+          )}
 
           <Button
             component={NextLink}
-            href={paths.eCommerce.product}
+            href={btnLink || '#'}
             size="large"
             color="inherit"
             variant="contained"
             endIcon={<Iconify icon="carbon:chevron-right" />}
           >
-            Acheter Maintenant
+            {btnText || 'Acheter Maintenant'}
           </Button>
         </Box>
       </Grid>
