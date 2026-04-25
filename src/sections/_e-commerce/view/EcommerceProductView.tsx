@@ -14,7 +14,7 @@ import {
 // ----------------------------------------------------------------------
 
 
-interface Props { product: any; reviews: any[]; }
+interface Props { product?: any; reviews?: any[]; }
 
 export default function EcommerceProductView({ product, reviews }: Props) {
 
