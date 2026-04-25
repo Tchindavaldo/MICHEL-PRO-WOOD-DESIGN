@@ -1,14 +1,14 @@
 // @mui
 import { Stack, Typography } from '@mui/material';
-// _mock
-import { IProductItemProps } from 'src/types/product';
+// types
+import { IShopProduct } from 'src/types/shop';
 //
 import { EcommerceProductItemBestSellers } from '../item';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  products: IProductItemProps[];
+  products: IShopProduct[];
 };
 
 export default function EcommerceProductListBestSellers({ products }: Props) {

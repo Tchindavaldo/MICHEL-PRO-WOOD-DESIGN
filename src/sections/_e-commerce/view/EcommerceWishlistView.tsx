@@ -4,8 +4,6 @@ import NextLink from 'next/link';
 import { Box, Container, Typography, Button, Stack } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
-// _mock
-import { _products } from 'src/_mock';
 // components
 import Iconify from 'src/components/iconify';
 //
@@ -30,7 +28,7 @@ export default function EcommerceWishlistView() {
           Wishlist
         </Typography>
 
-        <EcommerceCartList wishlist products={_products.slice(0, 4)} />
+        <EcommerceCartList wishlist products={[]} />
 
         <Stack
           direction={{ xs: 'column-reverse', sm: 'row' }}

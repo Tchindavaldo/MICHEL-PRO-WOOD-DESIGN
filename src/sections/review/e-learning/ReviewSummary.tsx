@@ -32,7 +32,7 @@ export default function ReviewSummary({ reviewsNumber, ratingsNumber, onOpenForm
         </Stack>
 
         <RadioGroup>
-          <ReviewProgress />
+          <ReviewProgress ratings={[]} />
         </RadioGroup>
 
         <Button

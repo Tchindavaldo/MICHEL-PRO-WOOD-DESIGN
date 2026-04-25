@@ -48,7 +48,7 @@ export default function EcommerceProductView({ product, reviews }: Props) {
               name={product.name}
               price={product.price}
               rating={product.rating}
-              review={reviews.length}
+              review={reviews?.length ?? 0}
               priceSale={product.sale_price}
               caption={product.caption}
               woodType={product.wood_type}
@@ -77,7 +77,7 @@ export default function EcommerceProductView({ product, reviews }: Props) {
         </Grid>
       </Container>
 
-      <ReviewEcommerce productId={product.id} reviews={reviews} />
+      <ReviewEcommerce productId={product.id} reviews={reviews ?? []} />
     </>
   );
 }

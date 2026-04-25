@@ -30,9 +30,9 @@ type FormValuesProps = {
 };
 
 interface Props extends DialogProps {
-  productId: string;
+  productId?: string;
   onClose: VoidFunction;
-  onReviewAdded: (newReview: any) => void;
+  onReviewAdded?: (newReview: any) => void;
 }
 
 // ----------------------------------------------------------------------
@@ -67,18 +67,22 @@ export default function ReviewNewForm({ productId, onClose, onReviewAdded, ...ot
 
 const onSubmit = async (data: FormValuesProps) => {
     try {
-      await addProductReview({
-        product_id: productId,
-        author: data.name,
-        rating: Number(data.rating),
-        comment: data.review,
-      });
-      onReviewAdded({
-        author: data.name,
-        rating: Number(data.rating),
-        comment: data.review,
-        created_at: new Date().toISOString(),
-      });
+      if (productId) {
+        await addProductReview({
+          product_id: productId,
+          author: data.name,
+          rating: Number(data.rating),
+          comment: data.review,
+        });
+      }
+      if (onReviewAdded) {
+        onReviewAdded({
+          author: data.name,
+          rating: Number(data.rating),
+          comment: data.review,
+          created_at: new Date().toISOString(),
+        });
+      }
       reset();
       onClose();
     } catch (error) {

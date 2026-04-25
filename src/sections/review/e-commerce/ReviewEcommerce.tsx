@@ -36,6 +36,8 @@ export default function ReviewEcommerce({ productId, reviews }: Props) {
         message: item.comment || item.message,
         rating: item.rating,
         helpful: item.helpful || 0,
+        users: item.users || [],
+        replyComment: item.replyComment || [],
       }))} />
       </Container>
 
