@@ -25,6 +25,7 @@ import FormProvider, {
   RHFRadioGroup,
   RHFSelect,
 } from 'src/components/hook-form';
+import UploadField from 'src/components/inscriptions/UploadField';
 // lib
 import { supabase } from 'src/lib/supabase';
 
@@ -48,16 +49,16 @@ const DUREE_OPTIONS = [
 ];
 
 const PAIEMENT_OPTIONS = [
-  { label: 'Mobile Money (MTN, Orange)', value: 'Mobile Money' },
-  { label: 'Paiement en espèces (avec reçu)', value: 'Espèces' },
-  { label: 'Virement bancaire (optionnel)', value: 'Virement bancaire' },
+  { label: 'Espèces (avec reçu)', value: 'Espèces' },
+  { label: 'Mobile Money', value: 'Mobile Money' },
+  { label: 'Virement bancaire', value: 'Virement bancaire' },
+  { label: 'E-card', value: 'E-card' },
 ];
 
-const DOCUMENTS_OPTIONS = [
-  { label: 'Acte de naissance', value: 'acte_naissance' },
-  { label: 'Dernier diplôme obtenu', value: 'diplome' },
-  { label: 'Pièce d\'identité', value: 'piece_identite' },
-  { label: '2 photos 4x4', value: 'photos' },
+const RESEAU_OPTIONS = [
+  { label: 'MTN', value: 'MTN' },
+  { label: 'Orange', value: 'Orange' },
+  { label: 'Autre', value: 'Autre' },
 ];
 
 const COUTS_FORMATION = [
@@ -80,15 +81,26 @@ type FormValuesProps = {
   date_lieu_naissance: string;
   sexe: string;
   nationalite: string;
+  cni_numero: string;
+  cni_date_delivrance: string;
+  cni_lieu_delivrance: string;
+  cni_url: string;
   adresse: string;
   telephone: string;
   email: string;
   filiere: string;
   niveau_etude: string;
   duree_formation: string;
+  plan_localisation_url: string;
+  demande_admission_url: string;
+  releve_notes_url: string;
   signature_documents: string;
   date_signature_documents: string;
+  date_emission: string;
   mode_paiement: string;
+  momo_numero: string;
+  momo_titulaire: string;
+  momo_reseau: string;
   montant_annuelle: string;
   montant_global: string;
   mode_paiement_frais: string;
@@ -99,14 +111,33 @@ const FormationSchema = Yup.object().shape({
   date_lieu_naissance: Yup.string().required('La date et lieu de naissance sont requis'),
   sexe: Yup.string().required('Le sexe est requis'),
   nationalite: Yup.string().required('La nationalité est requise'),
-  adresse: Yup.string().required('L\'adresse est requise'),
+  cni_numero: Yup.string().required('Le numéro de la pièce est requis'),
+  cni_date_delivrance: Yup.string().required('La date de délivrance est requise'),
+  cni_lieu_delivrance: Yup.string().required('Le lieu de délivrance est requis'),
+  cni_url: Yup.string().required("Veuillez téléverser la pièce d'identité"),
+  adresse: Yup.string().required("L'adresse est requise"),
   telephone: Yup.string().required('Le téléphone est requis'),
-  email: Yup.string().required('L\'email est requis').email('Format d\'email invalide'),
+  email: Yup.string().required("L'email est requis").email("Format d'email invalide"),
   filiere: Yup.string().required('La filière est requise'),
-  duree_formation: Yup.string().required('La durée de formation est requise'),
-  niveau_etude: Yup.string().required('Le niveau d\'étude est requis'),
+  duree_formation: Yup.string().required('La durée souhaitée est requise'),
+  niveau_etude: Yup.string().required("Le niveau d'étude est requis"),
   mode_paiement: Yup.string().required('Le mode de paiement est requis'),
   mode_paiement_frais: Yup.string().required('Le mode de paiement des frais est requis'),
+  momo_numero: Yup.string().when('mode_paiement', {
+    is: 'Mobile Money',
+    then: (schema) => schema.required('Numéro Mobile Money requis'),
+    otherwise: (schema) => schema.nullable(),
+  }),
+  momo_titulaire: Yup.string().when('mode_paiement', {
+    is: 'Mobile Money',
+    then: (schema) => schema.required('Nom du titulaire requis'),
+    otherwise: (schema) => schema.nullable(),
+  }),
+  momo_reseau: Yup.string().when('mode_paiement', {
+    is: 'Mobile Money',
+    then: (schema) => schema.required('Réseau requis'),
+    otherwise: (schema) => schema.nullable(),
+  }),
 });
 
 const defaultValues: FormValuesProps = {
@@ -114,15 +145,26 @@ const defaultValues: FormValuesProps = {
   date_lieu_naissance: '',
   sexe: '',
   nationalite: '',
+  cni_numero: '',
+  cni_date_delivrance: '',
+  cni_lieu_delivrance: '',
+  cni_url: '',
   adresse: '',
   telephone: '',
   email: '',
   filiere: '',
   niveau_etude: '',
   duree_formation: '',
+  plan_localisation_url: '',
+  demande_admission_url: '',
+  releve_notes_url: '',
   signature_documents: '',
   date_signature_documents: '',
+  date_emission: '',
   mode_paiement: '',
+  momo_numero: '',
+  momo_titulaire: '',
+  momo_reseau: '',
   montant_annuelle: '',
   montant_global: '',
   mode_paiement_frais: '',
@@ -140,9 +182,13 @@ export default function FormationProfessionnelleForm() {
 
   const {
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const watchModePayment = watch('mode_paiement');
+  const isMomo = watchModePayment === 'Mobile Money';
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
@@ -151,6 +197,11 @@ export default function FormationProfessionnelleForm() {
         montant_annuelle: data.montant_annuelle ? Number(data.montant_annuelle) : null,
         montant_global: data.montant_global ? Number(data.montant_global) : null,
         date_signature_documents: data.date_signature_documents || null,
+        date_emission: data.date_emission || null,
+        cni_date_delivrance: data.cni_date_delivrance || null,
+        momo_numero: isMomo ? data.momo_numero : null,
+        momo_titulaire: isMomo ? data.momo_titulaire : null,
+        momo_reseau: isMomo ? data.momo_reseau : null,
         documents_fournis: [],
       };
 
@@ -177,7 +228,7 @@ export default function FormationProfessionnelleForm() {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Box sx={{ maxWidth: 960, mx: 'auto', px: { xs: 2, md: 0 } }}>
+      <Box sx={{ maxWidth: 960, mx: 'auto', px: { xs: 2, md: 0 } }} component="form" noValidate>
         {/* En-tête */}
         <Box sx={{ mb: 4, textAlign: 'center' }}>
           <Typography variant="h3" sx={{ mb: 1 }}>
@@ -187,11 +238,11 @@ export default function FormationProfessionnelleForm() {
             Formation Professionnelle
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Michel Pro Wood Design — Menuiserie & Ébénisterie
+            Michel Pro Wood Design — Menuiserie Ébénisterie · Construction bois · Usinage CNC
           </Typography>
         </Box>
 
-        {/* Section 1 */}
+        {/* Section 1 — Informations personnelles */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
             1. Informations personnelles
@@ -211,13 +262,7 @@ export default function FormationProfessionnelleForm() {
               <RHFTextField name="nationalite" label="Nationalité *" />
             </Grid>
             <Grid item xs={12}>
-              <RHFRadioGroup
-                name="sexe"
-                label="Sexe *"
-                options={SEXE_OPTIONS}
-                row
-                spacing={4}
-              />
+              <RHFRadioGroup name="sexe" label="Sexe *" options={SEXE_OPTIONS} row spacing={4} />
             </Grid>
             <Grid item xs={12}>
               <RHFTextField name="adresse" label="Adresse *" />
@@ -231,14 +276,45 @@ export default function FormationProfessionnelleForm() {
           </Grid>
         </Paper>
 
-        {/* Section 2 */}
+        {/* Section 2 — Pièce d'identité */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            2. Formation choisie
+            2. Pièce d'identité (CNI / passeport)
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <RHFSelect name="filiere" label="Filière">
+              <RHFTextField name="cni_numero" label="Numéro de la pièce *" />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField
+                name="cni_date_delivrance"
+                label="Date de délivrance *"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="cni_lieu_delivrance" label="Lieu de délivrance *" />
+            </Grid>
+            <Grid item xs={12}>
+              <UploadField
+                name="cni_url"
+                label="Téléverser la pièce d'identité"
+                folder="inscriptions/formation"
+                required
+              />
+            </Grid>
+          </Grid>
+        </Paper>
+
+        {/* Section 3 — Formation */}
+        <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+            3. Formation choisie
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <RHFSelect name="filiere" label="Filière *">
                 {FILIERE_OPTIONS.map((opt) => (
                   <MenuItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -247,12 +323,12 @@ export default function FormationProfessionnelleForm() {
               </RHFSelect>
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="niveau_etude" label="Niveau d'étude" />
+              <RHFTextField name="niveau_etude" label="Niveau d'étude *" />
             </Grid>
             <Grid item xs={12}>
               <RHFRadioGroup
                 name="duree_formation"
-                label="Durée de la formation"
+                label="Durée souhaitée pour votre formation *"
                 options={DUREE_OPTIONS}
                 row
                 spacing={4}
@@ -261,21 +337,32 @@ export default function FormationProfessionnelleForm() {
           </Grid>
         </Paper>
 
-        {/* Section 3 */}
+        {/* Section 4 — Documents à fournir */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            3. Documents à fournir (photocopies)
+            4. Documents à fournir
           </Typography>
-          <Alert severity="error" icon="⚠️" sx={{ mb: 2 }}>
-            <strong>Documents obligatoires à remettre lors de l'inscription :</strong>
+          <Alert severity="error" sx={{ mb: 2 }}>
+            Tous les documents ci-dessous sont <strong>obligatoires</strong>.
           </Alert>
-          <Box component="ul" sx={{ m: 0, pl: 3 }}>
-            {DOCUMENTS_OPTIONS.map((doc) => (
-              <Box component="li" key={doc.value} sx={{ mb: 0.5 }}>
-                <Typography variant="body2">{doc.label}</Typography>
-              </Box>
-            ))}
-          </Box>
+          <Stack spacing={3}>
+            <UploadField
+              name="plan_localisation_url"
+              label="Plan de localisation (image ou PDF)"
+              folder="inscriptions/formation"
+            />
+            <UploadField
+              name="demande_admission_url"
+              label="Demande d'admission"
+              folder="inscriptions/formation"
+            />
+            <UploadField
+              name="releve_notes_url"
+              label="Dernier relevé de notes / bulletin scolaire / dernier diplôme"
+              folder="inscriptions/formation"
+            />
+          </Stack>
+
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={12} md={6}>
               <RHFTextField name="signature_documents" label="Signature du candidat" />
@@ -291,23 +378,65 @@ export default function FormationProfessionnelleForm() {
           </Grid>
         </Paper>
 
-        {/* Section 4 */}
+        {/* Section 5 — Date d'émission */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            4. Moyen de paiement
+            5. Date d'émission ou d'envoi
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <RHFTextField
+                name="date_emission"
+                label="Date d'émission ou d'envoi"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+          </Grid>
+        </Paper>
+
+        {/* Section 6 — Moyen de paiement */}
+        <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+            6. Moyen de paiement
           </Typography>
           <RHFRadioGroup
             name="mode_paiement"
-            label="Choisissez votre mode de paiement"
+            label="Choisissez votre mode de paiement *"
             options={PAIEMENT_OPTIONS}
             spacing={1}
           />
+
+          {isMomo && (
+            <Box sx={{ mt: 3, p: 2, bgcolor: 'background.neutral', borderRadius: 1 }}>
+              <Typography variant="subtitle2" sx={{ mb: 2 }}>
+                Informations Mobile Money
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <RHFTextField name="momo_numero" label="Numéro de téléphone *" />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <RHFTextField name="momo_titulaire" label="Nom du titulaire *" />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <RHFSelect name="momo_reseau" label="Réseau *">
+                    {RESEAU_OPTIONS.map((opt) => (
+                      <MenuItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                </Grid>
+              </Grid>
+            </Box>
+          )}
         </Paper>
 
-        {/* Section 5 — Tableau de coûts (affichage uniquement) */}
+        {/* Section 7 — Coût de la formation */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            5. Estimation du coût de la formation
+            7. Coût de la formation
           </Typography>
           <TableContainer sx={{ overflowX: 'auto' }}>
             <Table size="small">
@@ -332,10 +461,7 @@ export default function FormationProfessionnelleForm() {
               </TableHead>
               <TableBody>
                 {COUTS_FORMATION.map((row, index) => (
-                  <TableRow
-                    key={index}
-                    sx={{ '&:nth-of-type(odd)': { bgcolor: 'action.hover' } }}
-                  >
+                  <TableRow key={index} sx={{ '&:nth-of-type(odd)': { bgcolor: 'action.hover' } }}>
                     <TableCell sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
                       {row.formation}
                     </TableCell>
@@ -358,21 +484,17 @@ export default function FormationProfessionnelleForm() {
           </TableContainer>
         </Paper>
 
-        {/* Section 6 */}
+        {/* Section 8 — Frais d'inscription et de formation */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            6. Frais d'inscription et de formation
+            8. Frais d'inscription et de formation
           </Typography>
           <Alert severity="warning" sx={{ mb: 2 }}>
             <strong>Montant à régler à l'inscription : 25 000 FCFA</strong> (non remboursable)
           </Alert>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <RHFTextField
-                name="montant_annuelle"
-                label="Montant annuel (FCFA)"
-                type="number"
-              />
+              <RHFTextField name="montant_annuelle" label="Montant annuel (FCFA)" type="number" />
             </Grid>
             <Grid item xs={12} md={6}>
               <RHFTextField
@@ -386,7 +508,7 @@ export default function FormationProfessionnelleForm() {
           <Box sx={{ mt: 2 }}>
             <RHFRadioGroup
               name="mode_paiement_frais"
-              label="Mode de paiement des frais"
+              label="Mode de paiement des frais *"
               options={PAIEMENT_OPTIONS}
               spacing={1}
             />

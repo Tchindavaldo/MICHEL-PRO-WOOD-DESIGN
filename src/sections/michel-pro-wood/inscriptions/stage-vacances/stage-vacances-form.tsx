@@ -12,6 +12,7 @@ import {
   Stack,
   Typography,
   MenuItem,
+  Divider,
 } from '@mui/material';
 // components
 import FormProvider, {
@@ -20,12 +21,21 @@ import FormProvider, {
   RHFMultiCheckbox,
   RHFSelect,
 } from 'src/components/hook-form';
+import UploadField from 'src/components/inscriptions/UploadField';
 // lib
 import { supabase } from 'src/lib/supabase';
 
 // ----------------------------------------------------------------------
 
+const TYPE_STAGE_OPTIONS = [
+  { label: 'Stage de vacances', value: 'Stage de vacances' },
+  { label: 'Stage académique', value: 'Stage académique' },
+  { label: 'Stage professionnel', value: 'Stage professionnel' },
+  { label: 'Stage pré-emploi', value: 'Stage pré-emploi' },
+];
+
 const LIEU_OPTIONS = [
+  { label: 'CAJED TAYIM', value: 'CAJED TAYIM' },
   { label: 'Entrée école normale Bafoussam', value: 'Entrée école normale Bafoussam' },
   { label: 'Foyer Lagouen', value: 'Foyer Lagouen' },
 ];
@@ -38,15 +48,15 @@ const SEXE_OPTIONS = [
 const PAIEMENT_OPTIONS = [
   { label: 'Espèces', value: 'Espèces' },
   { label: 'Mobile Money', value: 'Mobile Money' },
+  { label: 'Virement bancaire', value: 'Virement bancaire' },
+  { label: 'E-card', value: 'E-card' },
   { label: 'Autre', value: 'Autre' },
 ];
 
-const DOCUMENTS_OPTIONS = [
-  { label: '1 photocopie de l\'acte de naissance', value: 'acte_naissance' },
-  { label: '1 photo d\'identité', value: 'photo_identite' },
-  { label: 'Autorisation parentale signée (pour les mineurs)', value: 'autorisation_parentale' },
-  { label: 'Fiche d\'inscription remplie', value: 'fiche_inscription' },
-  { label: 'Paiement des frais d\'inscription', value: 'paiement' },
+const RESEAU_OPTIONS = [
+  { label: 'MTN', value: 'MTN' },
+  { label: 'Orange', value: 'Orange' },
+  { label: 'Autre', value: 'Autre' },
 ];
 
 const ENGAGEMENTS_OPTIONS = [
@@ -58,60 +68,113 @@ const ENGAGEMENTS_OPTIONS = [
 // ----------------------------------------------------------------------
 
 type FormValuesProps = {
+  type_stage: string;
   annee: string;
   lieu: string;
+  // Candidat
   nom: string;
   prenom: string;
   date_naissance: string;
   age: string;
   sexe: string;
+  telephone_candidat: string;
+  email_candidat: string;
   etablissement_scolaire: string;
   classe_actuelle: string;
+  niveau_etude: string;
   adresse: string;
-  telephone_parent: string;
-  documents_joints: string[];
+  // Pièce d'identité candidat
+  cni_numero: string;
+  cni_date_delivrance: string;
+  cni_lieu_delivrance: string;
+  cni_url: string;
+  // Documents
+  photos_4x4_urls: string[];
+  bulletin_url: string;
+  plan_localisation_candidat_url: string;
+  // Frais & paiement
   montant_mois: string;
   montant_3mois: string;
   mode_paiement: string;
   mode_paiement_autre: string;
+  momo_numero: string;
+  momo_titulaire: string;
+  momo_reseau: string;
+  // Engagements
   engagements: string[];
   signature_participant: string;
   date_signature_participant: string;
+  // Parent
   nom_parent: string;
-  nom_enfant: string;
+  prenom_parent: string;
+  lien_parent: string;
+  telephone_parent: string;
+  email_parent: string;
+  parent_cni_numero: string;
+  parent_cni_date_delivrance: string;
+  parent_cni_lieu_delivrance: string;
+  parent_cni_url: string;
+  parent_photos_4x4_urls: string[];
+  plan_localisation_parent_url: string;
   signature_parent: string;
   date_autorisation: string;
-  contact_parent: string;
 };
 
 const StageVacancesSchema = Yup.object().shape({
-  annee: Yup.string().required('L\'année est requise'),
+  type_stage: Yup.string().required('Le type de stage est requis'),
+  annee: Yup.string().required("L'année est requise"),
   lieu: Yup.string().required('Le lieu est requis'),
   nom: Yup.string().required('Le nom est requis'),
   prenom: Yup.string().required('Le prénom est requis'),
   date_naissance: Yup.string().required('La date de naissance est requise'),
   age: Yup.number()
-    .typeError('L\'âge doit être un nombre')
-    .required('L\'âge est requis')
-    .positive('L\'âge doit être positif')
-    .integer('L\'âge doit être un entier'),
+    .typeError("L'âge doit être un nombre")
+    .required("L'âge est requis")
+    .positive("L'âge doit être positif")
+    .integer("L'âge doit être un entier"),
   sexe: Yup.string().required('Le sexe est requis'),
-  etablissement_scolaire: Yup.string().required('L\'établissement est requis'),
+  telephone_candidat: Yup.string().required('Le téléphone du candidat est requis'),
+  etablissement_scolaire: Yup.string().required("L'établissement est requis"),
   classe_actuelle: Yup.string().required('La classe est requise'),
-  adresse: Yup.string().required('L\'adresse est requise'),
-  telephone_parent: Yup.string().required('Le téléphone est requis'),
+  niveau_etude: Yup.string().required("Le niveau d'étude est requis"),
+  adresse: Yup.string().required("L'adresse est requise"),
+  cni_numero: Yup.string().required('Le numéro de la pièce est requis'),
+  cni_date_delivrance: Yup.string().required('La date de délivrance est requise'),
+  cni_lieu_delivrance: Yup.string().required('Le lieu de délivrance est requis'),
+  cni_url: Yup.string().required('Veuillez téléverser la pièce d\'identité'),
+  photos_4x4_urls: Yup.array()
+    .of(Yup.string())
+    .min(2, 'Veuillez téléverser au moins 2 photos 4x4'),
   mode_paiement: Yup.string().required('Le mode de paiement est requis'),
   mode_paiement_autre: Yup.string().when('mode_paiement', {
     is: 'Autre',
     then: (schema) => schema.required('Veuillez préciser le mode de paiement'),
     otherwise: (schema) => schema.nullable(),
   }),
+  momo_numero: Yup.string().when('mode_paiement', {
+    is: 'Mobile Money',
+    then: (schema) => schema.required('Numéro Mobile Money requis'),
+    otherwise: (schema) => schema.nullable(),
+  }),
+  momo_titulaire: Yup.string().when('mode_paiement', {
+    is: 'Mobile Money',
+    then: (schema) => schema.required('Nom du titulaire requis'),
+    otherwise: (schema) => schema.nullable(),
+  }),
+  momo_reseau: Yup.string().when('mode_paiement', {
+    is: 'Mobile Money',
+    then: (schema) => schema.required('Réseau requis'),
+    otherwise: (schema) => schema.nullable(),
+  }),
   engagements: Yup.array().min(1, 'Veuillez accepter au moins un engagement'),
-  nom_parent: Yup.string().required('Le nom du parent/tuteur est requis'),
-  contact_parent: Yup.string().required('Le contact du parent/tuteur est requis'),
+  nom_parent: Yup.string().required('Le nom du parent est requis'),
+  prenom_parent: Yup.string().required('Le prénom du parent est requis'),
+  lien_parent: Yup.string().required('Le lien avec le candidat est requis'),
+  telephone_parent: Yup.string().required('Le téléphone du parent est requis'),
 });
 
 const defaultValues: FormValuesProps = {
+  type_stage: '',
   annee: '',
   lieu: '',
   nom: '',
@@ -119,23 +182,42 @@ const defaultValues: FormValuesProps = {
   date_naissance: '',
   age: '',
   sexe: '',
+  telephone_candidat: '',
+  email_candidat: '',
   etablissement_scolaire: '',
   classe_actuelle: '',
+  niveau_etude: '',
   adresse: '',
-  telephone_parent: '',
-  documents_joints: [],
+  cni_numero: '',
+  cni_date_delivrance: '',
+  cni_lieu_delivrance: '',
+  cni_url: '',
+  photos_4x4_urls: [],
+  bulletin_url: '',
+  plan_localisation_candidat_url: '',
   montant_mois: '',
   montant_3mois: '',
   mode_paiement: '',
   mode_paiement_autre: '',
+  momo_numero: '',
+  momo_titulaire: '',
+  momo_reseau: '',
   engagements: [],
   signature_participant: '',
   date_signature_participant: '',
   nom_parent: '',
-  nom_enfant: '',
+  prenom_parent: '',
+  lien_parent: '',
+  telephone_parent: '',
+  email_parent: '',
+  parent_cni_numero: '',
+  parent_cni_date_delivrance: '',
+  parent_cni_lieu_delivrance: '',
+  parent_cni_url: '',
+  parent_photos_4x4_urls: [],
+  plan_localisation_parent_url: '',
   signature_parent: '',
   date_autorisation: '',
-  contact_parent: '',
 };
 
 // ----------------------------------------------------------------------
@@ -156,6 +238,7 @@ export default function StageVacancesForm() {
   } = methods;
 
   const watchModePayment = watch('mode_paiement');
+  const isMomo = watchModePayment === 'Mobile Money';
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
@@ -167,7 +250,12 @@ export default function StageVacancesForm() {
         date_naissance: data.date_naissance || null,
         date_signature_participant: data.date_signature_participant || null,
         date_autorisation: data.date_autorisation || null,
-        mode_paiement_autre: data.mode_paiement !== 'Autre' ? null : data.mode_paiement_autre,
+        cni_date_delivrance: data.cni_date_delivrance || null,
+        parent_cni_date_delivrance: data.parent_cni_date_delivrance || null,
+        mode_paiement_autre: data.mode_paiement === 'Autre' ? data.mode_paiement_autre : null,
+        momo_numero: isMomo ? data.momo_numero : null,
+        momo_titulaire: isMomo ? data.momo_titulaire : null,
+        momo_reseau: isMomo ? data.momo_reseau : null,
         documents_joints: [],
       };
 
@@ -194,31 +282,40 @@ export default function StageVacancesForm() {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Box sx={{ maxWidth: 900, mx: 'auto', px: { xs: 2, md: 0 } }}>
+      <Box sx={{ maxWidth: 900, mx: 'auto', px: { xs: 2, md: 0 } }} component="form" noValidate>
         {/* En-tête */}
         <Box sx={{ mb: 4, textAlign: 'center' }}>
           <Typography variant="h3" sx={{ mb: 1 }}>
             FICHE D'INSCRIPTION
           </Typography>
           <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
-            STAGE DE VACANCES
+            STAGE
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Arts et Meuble de l'ouest & Michel Pro Wood Design
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            Lieu : Entrée école normale Bafoussam & Foyer Lagouen
-          </Typography>
         </Box>
 
-        {/* Année & Lieu */}
+        {/* Type & Localisation */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+            Type de stage & Localisation
+          </Typography>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <RHFTextField name="annee" label="Année" />
+            <Grid item xs={12}>
+              <RHFSelect name="type_stage" label="Type de stage *">
+                {TYPE_STAGE_OPTIONS.map((opt) => (
+                  <MenuItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFSelect name="lieu" label="Lieu">
+              <RHFTextField name="annee" label="Année *" />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFSelect name="lieu" label="Lieu *">
                 {LIEU_OPTIONS.map((opt) => (
                   <MenuItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -229,12 +326,18 @@ export default function StageVacancesForm() {
           </Grid>
         </Paper>
 
-        {/* Section 1 */}
+        {/* Section 1 — Candidat */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            1. Informations du participant
+            1. Informations du candidat
           </Typography>
           <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="telephone_candidat" label="Téléphone du candidat *" />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="email_candidat" label="Email du candidat" />
+            </Grid>
             <Grid item xs={12} md={6}>
               <RHFTextField name="nom" label="Nom *" />
             </Grid>
@@ -253,13 +356,7 @@ export default function StageVacancesForm() {
               <RHFTextField name="age" label="Âge (ans) *" type="number" />
             </Grid>
             <Grid item xs={12}>
-              <RHFRadioGroup
-                name="sexe"
-                label="Sexe *"
-                options={SEXE_OPTIONS}
-                row
-                spacing={4}
-              />
+              <RHFRadioGroup name="sexe" label="Sexe *" options={SEXE_OPTIONS} row spacing={4} />
             </Grid>
             <Grid item xs={12} md={6}>
               <RHFTextField name="etablissement_scolaire" label="Établissement scolaire *" />
@@ -267,86 +364,148 @@ export default function StageVacancesForm() {
             <Grid item xs={12} md={6}>
               <RHFTextField name="classe_actuelle" label="Classe actuelle *" />
             </Grid>
-            <Grid item xs={12}>
-              <RHFTextField name="adresse" label="Adresse *" />
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="niveau_etude" label="Niveau d'étude *" />
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="telephone_parent" label="Téléphone du parent / tuteur *" />
+              <RHFTextField name="adresse" label="Adresse *" />
             </Grid>
           </Grid>
         </Paper>
 
-        {/* Section 2 */}
+        {/* Section 2 — Pièce d'identité du candidat */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            2. Documents à joindre
+            2. Pièce d'identité du candidat
           </Typography>
-          <Alert severity="error" icon="⚠️" sx={{ mb: 2 }}>
-            <strong>Documents obligatoires à remettre lors de l'inscription :</strong>
-          </Alert>
-          <Box component="ul" sx={{ m: 0, pl: 3 }}>
-            {DOCUMENTS_OPTIONS.map((doc) => (
-              <Box component="li" key={doc.value} sx={{ mb: 0.5 }}>
-                <Typography variant="body2">{doc.label}</Typography>
-              </Box>
-            ))}
-          </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="cni_numero" label="Numéro de la pièce (CNI / passeport) *" />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField
+                name="cni_date_delivrance"
+                label="Date de délivrance *"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="cni_lieu_delivrance" label="Lieu de délivrance *" />
+            </Grid>
+            <Grid item xs={12}>
+              <UploadField
+                name="cni_url"
+                label="Téléverser la pièce d'identité"
+                folder="inscriptions/stage"
+                required
+              />
+            </Grid>
+          </Grid>
         </Paper>
 
-        {/* Section 3 */}
+        {/* Section 3 — Documents à joindre */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            3. Frais d'inscription
+            3. Documents à joindre
+          </Typography>
+          <Alert severity="error" sx={{ mb: 2 }}>
+            Tous les documents ci-dessous sont <strong>obligatoires</strong>.
+          </Alert>
+          <Stack spacing={3}>
+            <UploadField
+              name="photos_4x4_urls"
+              label="2 photos 4x4 (au minimum)"
+              accept="image/*"
+              multiple
+              folder="inscriptions/stage"
+              required
+            />
+            <UploadField
+              name="bulletin_url"
+              label="Bulletin scolaire / relevé de notes / dernier diplôme"
+              folder="inscriptions/stage"
+            />
+            <UploadField
+              name="plan_localisation_candidat_url"
+              label="Plan de localisation du candidat (image ou PDF)"
+              folder="inscriptions/stage"
+            />
+          </Stack>
+        </Paper>
+
+        {/* Section 4 — Frais & Paiement */}
+        <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+            4. Frais d'inscription & Paiement
           </Typography>
           <Alert severity="warning" sx={{ mb: 2 }}>
             <strong>Montant à régler à l'inscription : 15 000 FCFA</strong> (non remboursable)
           </Alert>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <RHFTextField
-                name="montant_mois"
-                label="Montant du mois (FCFA)"
-                type="number"
-              />
+              <RHFTextField name="montant_mois" label="Montant du mois (FCFA)" type="number" />
             </Grid>
             <Grid item xs={12} md={6}>
               <RHFTextField
                 name="montant_3mois"
                 label="Montant pour 3 mois (FCFA)"
                 type="number"
-                helperText="Réduction de 10% si paiement unique pour 3 mois"
+                helperText="Réduction de 10% si paiement unique"
               />
             </Grid>
           </Grid>
           <Box sx={{ mt: 2 }}>
             <RHFRadioGroup
               name="mode_paiement"
-              label="Mode de paiement"
+              label="Mode de paiement *"
               options={PAIEMENT_OPTIONS}
               row
               spacing={4}
             />
           </Box>
+
           {watchModePayment === 'Autre' && (
             <Box sx={{ mt: 2 }}>
               <RHFTextField name="mode_paiement_autre" label="Préciser le mode de paiement *" />
             </Box>
           )}
+
+          {isMomo && (
+            <Box sx={{ mt: 3, p: 2, bgcolor: 'background.neutral', borderRadius: 1 }}>
+              <Typography variant="subtitle2" sx={{ mb: 2 }}>
+                Informations Mobile Money
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <RHFTextField name="momo_numero" label="Numéro de téléphone *" />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <RHFTextField name="momo_titulaire" label="Nom du titulaire *" />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <RHFSelect name="momo_reseau" label="Réseau *">
+                    {RESEAU_OPTIONS.map((opt) => (
+                      <MenuItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                </Grid>
+              </Grid>
+            </Box>
+          )}
         </Paper>
 
-        {/* Section 4 */}
+        {/* Section 5 — Engagements */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            4. Engagements
+            5. Engagements
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Je m'engage à :
           </Typography>
-          <RHFMultiCheckbox
-            name="engagements"
-            options={ENGAGEMENTS_OPTIONS}
-            spacing={1}
-          />
+          <RHFMultiCheckbox name="engagements" options={ENGAGEMENTS_OPTIONS} spacing={1} />
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={12} md={6}>
               <RHFTextField name="signature_participant" label="Signature du participant" />
@@ -362,23 +521,78 @@ export default function StageVacancesForm() {
           </Grid>
         </Paper>
 
-        {/* Section 5 */}
+        {/* Section 6 — Autorisation parentale */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            5. Autorisation parentale
+            6. Autorisation parentale
           </Typography>
           <Alert severity="info" sx={{ mb: 2 }}>
-            À remplir pour les participants mineurs. Le parent/tuteur autorise son enfant à
-            participer au Stage de Vacances organisé par la Société Arts et Meuble de l'ouest &
-            Michel Pro Wood Design.
+            À remplir pour les participants mineurs.
           </Alert>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="nom_parent" label="Je soussigné(e) — Parent / Tuteur légal" />
+              <RHFTextField name="nom_parent" label="Nom du parent / tuteur *" />
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="nom_enfant" label="Parent / Tuteur légal de" />
+              <RHFTextField name="prenom_parent" label="Prénom du parent / tuteur *" />
             </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="lien_parent" label="Lien avec le candidat *" />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="telephone_parent" label="Téléphone du parent *" />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="email_parent" label="Email du parent" />
+            </Grid>
+          </Grid>
+
+          <Divider sx={{ my: 3 }} />
+          <Typography variant="subtitle2" sx={{ mb: 2 }}>
+            Pièce d'identité du parent / tuteur
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="parent_cni_numero" label="Numéro de la pièce" />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField
+                name="parent_cni_date_delivrance"
+                label="Date de délivrance"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField name="parent_cni_lieu_delivrance" label="Lieu de délivrance" />
+            </Grid>
+            <Grid item xs={12}>
+              <UploadField
+                name="parent_cni_url"
+                label="Téléverser la pièce d'identité du parent"
+                folder="inscriptions/stage"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <UploadField
+                name="parent_photos_4x4_urls"
+                label="2 photos 4x4 du parent"
+                accept="image/*"
+                multiple
+                folder="inscriptions/stage"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <UploadField
+                name="plan_localisation_parent_url"
+                label="Plan de localisation du parent (image ou PDF)"
+                folder="inscriptions/stage"
+              />
+            </Grid>
+          </Grid>
+
+          <Divider sx={{ my: 3 }} />
+          <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <RHFTextField name="signature_parent" label="Signature du parent / tuteur" />
             </Grid>
@@ -389,9 +603,6 @@ export default function StageVacancesForm() {
                 type="date"
                 InputLabelProps={{ shrink: true }}
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <RHFTextField name="contact_parent" label="Contact" />
             </Grid>
           </Grid>
         </Paper>
