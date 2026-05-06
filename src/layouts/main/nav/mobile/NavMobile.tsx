@@ -62,6 +62,9 @@ export default function NavMobile({ data }: NavProps) {
           </List>
 
           <Stack spacing={1.5} sx={{ p: 3 }}>
+            <Button fullWidth variant="outlined" color="primary" href={paths.michelProWood.monEspace}>
+              Mon Espace
+            </Button>
             <Button fullWidth variant="contained" color="primary" href={paths.michelProWood.contact}>
               Demander un devis
             </Button>

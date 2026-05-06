@@ -9,6 +9,7 @@ export const paths = {
     realizations: '/realisations',
     shop: '/boutique',
     contact: '/contact',
+    monEspace: '/inscriptions/mon-espace',
   },
   // Marketing
   marketing: {

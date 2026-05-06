@@ -1,6 +1,6 @@
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Box, AppBar, Toolbar, Container, Button } from '@mui/material';
+import { Box, AppBar, Toolbar, Container, Button, Stack } from '@mui/material';
 import { paths } from 'src/routes/paths';
 // hooks
 import useOffSetTop from 'src/hooks/useOffSetTop';
@@ -61,18 +61,24 @@ export default function Header({ headerOnDark }: Props) {
           {isMdUp && <NavDesktop data={navConfig} />}
           
           {isMdUp && (
-            <Button 
-              variant="contained" 
-              color="primary" 
-              href={paths.michelProWood.contact}
-              sx={{ 
-                ml: { xs: 1, md: 2 },
-                mr: { xs: 1, md: 0 },
-                whiteSpace: 'nowrap'
-              }}
-            >
-              Demander un devis
-            </Button>
+            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ ml: { xs: 1, md: 2 } }}>
+              <Button
+                variant="outlined"
+                color="primary"
+                href={paths.michelProWood.monEspace}
+                sx={{ whiteSpace: 'nowrap' }}
+              >
+                Mon Espace
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                href={paths.michelProWood.contact}
+                sx={{ whiteSpace: 'nowrap' }}
+              >
+                Demander un devis
+              </Button>
+            </Stack>
           )}
 
           {!isMdUp && <NavMobile data={navConfig} />}
