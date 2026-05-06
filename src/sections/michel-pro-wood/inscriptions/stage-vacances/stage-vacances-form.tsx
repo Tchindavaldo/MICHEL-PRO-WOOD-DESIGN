@@ -13,6 +13,12 @@ import {
   Typography,
   MenuItem,
   Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from '@mui/material';
 // components
 import FormProvider, {
@@ -32,6 +38,14 @@ const TYPE_STAGE_OPTIONS = [
   { label: 'Stage académique', value: 'Stage académique' },
   { label: 'Stage professionnel', value: 'Stage professionnel' },
   { label: 'Stage pré-emploi', value: 'Stage pré-emploi' },
+];
+
+const FILIERE_STAGE_OPTIONS = [
+  'Menuiserie / Ébénisterie',
+  'Construction Bois',
+  'Usinage CNC',
+  'Marketing / Infographie / Vidéo / Web',
+  'Secrétariat / Community Management',
 ];
 
 const LIEU_OPTIONS = [
@@ -69,6 +83,7 @@ const ENGAGEMENTS_OPTIONS = [
 
 type FormValuesProps = {
   type_stage: string;
+  filiere_stage: string;
   annee: string;
   lieu: string;
   // Candidat
@@ -175,6 +190,7 @@ const StageVacancesSchema = Yup.object().shape({
 
 const defaultValues: FormValuesProps = {
   type_stage: '',
+  filiere_stage: '',
   annee: '',
   lieu: '',
   nom: '',
@@ -240,6 +256,34 @@ export default function StageVacancesForm() {
   const watchModePayment = watch('mode_paiement');
   const isMomo = watchModePayment === 'Mobile Money';
 
+  const watchTypeStage = watch('type_stage');
+  const watchFiliere = watch('filiere_stage');
+  const watchNiveauEtude = watch('niveau_etude');
+
+  const TARIFS = [
+    { type: 'Stage de vacances', filiere: 'Menuiserie / Ébénisterie', niveau: 'BEPC et inférieur', cout: 25000 },
+    { type: 'Stage de vacances', filiere: 'Menuiserie / Ébénisterie', niveau: 'Bac et plus', cout: 35000 },
+    { type: 'Stage de vacances', filiere: 'Construction Bois', niveau: 'BEPC et inférieur', cout: 30000 },
+    { type: 'Stage de vacances', filiere: 'Construction Bois', niveau: 'Bac et plus', cout: 40000 },
+    { type: 'Stage de vacances', filiere: 'Usinage CNC', niveau: 'BEPC et inférieur', cout: 35000 },
+    { type: 'Stage de vacances', filiere: 'Usinage CNC', niveau: 'Bac et plus', cout: 50000 },
+    { type: 'Stage de vacances', filiere: 'Marketing / Infographie / Vidéo / Web', niveau: 'BEPC et inférieur', cout: 30000 },
+    { type: 'Stage de vacances', filiere: 'Marketing / Infographie / Vidéo / Web', niveau: 'Bac et plus', cout: 45000 },
+    { type: 'Stage de vacances', filiere: 'Secrétariat / Community Management', niveau: 'Tous niveaux', cout: 25000 },
+    { type: 'Stage académique', filiere: 'Toutes filières', niveau: 'Élèves / Étudiants', cout: 20000 },
+    { type: 'Stage professionnel', filiere: 'Toutes filières', niveau: 'Diplômés', cout: 30000 },
+    { type: 'Stage pré-emploi', filiere: 'Toutes filières', niveau: 'Jeunes diplômés', cout: 35000 },
+  ];
+
+  const tarifTrouve = watchTypeStage && watchNiveauEtude
+    ? TARIFS.find((t) => {
+        const typeMatch = t.type === watchTypeStage;
+        const niveauMatch = t.niveau === watchNiveauEtude || t.niveau === 'Tous niveaux';
+        const filiereMatch = t.filiere === 'Toutes filières' || t.filiere === watchFiliere;
+        return typeMatch && niveauMatch && filiereMatch;
+      }) ?? null
+    : null;
+
   const onSubmit = async (data: FormValuesProps) => {
     try {
       const payload = {
@@ -282,7 +326,7 @@ export default function StageVacancesForm() {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Box sx={{ maxWidth: 900, mx: 'auto', px: { xs: 2, md: 0 } }} component="form" noValidate>
+      <Box sx={{ maxWidth: 900, mx: 'auto', px: { xs: 2, md: 0 } }}>
         {/* En-tête */}
         <Box sx={{ mb: 4, textAlign: 'center' }}>
           <Typography variant="h3" sx={{ mb: 1 }}>
@@ -292,7 +336,7 @@ export default function StageVacancesForm() {
             STAGE
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Arts et Meuble de l'ouest & Michel Pro Wood Design
+            Michel Pro Wood Design — Menuiserie Ébénisterie · Construction bois · Usinage CNC
           </Typography>
         </Box>
 
@@ -302,12 +346,19 @@ export default function StageVacancesForm() {
             Type de stage & Localisation
           </Typography>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={12} md={6}>
               <RHFSelect name="type_stage" label="Type de stage *">
                 {TYPE_STAGE_OPTIONS.map((opt) => (
                   <MenuItem key={opt.value} value={opt.value}>
                     {opt.label}
                   </MenuItem>
+                ))}
+              </RHFSelect>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFSelect name="filiere_stage" label="Filière">
+                {FILIERE_STAGE_OPTIONS.map((f) => (
+                  <MenuItem key={f} value={f}>{f}</MenuItem>
                 ))}
               </RHFSelect>
             </Grid>
@@ -323,6 +374,17 @@ export default function StageVacancesForm() {
                 ))}
               </RHFSelect>
             </Grid>
+            {tarifTrouve && (
+              <Grid item xs={12}>
+                <Alert severity="info" sx={{ mt: 1 }}>
+                  <strong>Coût mensuel estimé :</strong>{' '}
+                  <span style={{ fontSize: 18, fontWeight: 700 }}>
+                    {tarifTrouve.cout.toLocaleString('fr-FR')} FCFA / mois
+                  </span>
+                  {' '}— Durée : 1 à 3 mois
+                </Alert>
+              </Grid>
+            )}
           </Grid>
         </Paper>
 
@@ -434,10 +496,56 @@ export default function StageVacancesForm() {
           </Stack>
         </Paper>
 
-        {/* Section 4 — Frais & Paiement */}
+        {/* Section 4 — Tarifs */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            4. Frais d'inscription & Paiement
+            4. Tarifs des stages
+          </Typography>
+          <TableContainer sx={{ overflowX: 'auto' }}>
+            <Table size="small" sx={{ '& .MuiTableCell-root': { p: { xs: 0.5, md: 1 } } }}>
+              <TableHead sx={{ bgcolor: 'primary.main' }}>
+                <TableRow>
+                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Type de stage</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Filière</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Niveau du candidat</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Durée</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Coût mensuel (FCFA)</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Diplôme obtenu</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {[
+                  { type: 'Stage de vacances', filiere: 'Menuiserie / Ébénisterie', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 25000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage de vacances', filiere: 'Menuiserie / Ébénisterie', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 35000, diplome: '' },
+                  { type: 'Stage de vacances', filiere: 'Construction Bois', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 30000, diplome: '' },
+                  { type: 'Stage de vacances', filiere: 'Construction Bois', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 40000, diplome: '' },
+                  { type: 'Stage de vacances', filiere: 'Usinage CNC', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 35000, diplome: '' },
+                  { type: 'Stage de vacances', filiere: 'Usinage CNC', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 50000, diplome: '' },
+                  { type: 'Stage de vacances', filiere: 'Marketing / Infographie / Vidéo / Web', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 30000, diplome: '' },
+                  { type: 'Stage de vacances', filiere: 'Marketing / Infographie / Vidéo / Web', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 45000, diplome: '' },
+                  { type: 'Stage de vacances', filiere: 'Secrétariat / Community Management', niveau: 'Tous niveaux', duree: '1 à 3 mois', cout: 25000, diplome: '' },
+                  { type: 'Stage académique', filiere: 'Toutes filières', niveau: 'Élèves / Étudiants', duree: 'Selon programme', cout: 20000, diplome: '' },
+                  { type: 'Stage professionnel', filiere: 'Toutes filières', niveau: 'Diplômés', duree: 'Selon besoin', cout: 30000, diplome: '' },
+                  { type: 'Stage pré-emploi', filiere: 'Toutes filières', niveau: 'Jeunes diplômés', duree: 'Selon évaluation', cout: 35000, diplome: '' },
+                ].map((row, idx) => (
+                  <TableRow key={idx} sx={{ '&:nth-of-type(odd)': { bgcolor: 'action.hover' } }}>
+                    <TableCell sx={{ fontSize: { xs: 11, md: 13 } }}>{row.type}</TableCell>
+                    <TableCell sx={{ fontSize: { xs: 11, md: 13 } }}>{row.filiere}</TableCell>
+                    <TableCell sx={{ fontSize: { xs: 11, md: 13 } }}>{row.niveau}</TableCell>
+                    <TableCell sx={{ fontSize: { xs: 11, md: 13 } }}>{row.duree}</TableCell>
+                    <TableCell sx={{ fontSize: { xs: 11, md: 13 }, fontWeight: 600 }}>{row.cout.toLocaleString('fr-FR')}</TableCell>
+                    <TableCell sx={{ fontSize: { xs: 11, md: 13 } }}>{row.diplome}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+
+        {/* Section 5 — Frais & Paiement */}
+        <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+            5. Frais d'inscription & Paiement
           </Typography>
           <Alert severity="warning" sx={{ mb: 2 }}>
             <strong>Montant à régler à l'inscription : 15 000 FCFA</strong> (non remboursable)
@@ -497,7 +605,7 @@ export default function StageVacancesForm() {
           )}
         </Paper>
 
-        {/* Section 5 — Engagements */}
+        {/* Section 6 — Engagements */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
             5. Engagements
@@ -521,7 +629,7 @@ export default function StageVacancesForm() {
           </Grid>
         </Paper>
 
-        {/* Section 6 — Autorisation parentale */}
+        {/* Section 7 — Autorisation parentale */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
             6. Autorisation parentale

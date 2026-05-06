@@ -94,6 +94,9 @@ type FormValuesProps = {
   plan_localisation_url: string;
   demande_admission_url: string;
   releve_notes_url: string;
+  photos_4x4_urls: string[];
+  acte_naissance_url: string;
+  dernier_diplome_url: string;
   signature_documents: string;
   date_signature_documents: string;
   date_emission: string;
@@ -138,6 +141,9 @@ const FormationSchema = Yup.object().shape({
     then: (schema) => schema.required('Réseau requis'),
     otherwise: (schema) => schema.nullable(),
   }),
+  photos_4x4_urls: Yup.array().min(2, 'Veuillez téléverser au moins 2 photos 4x4'),
+  acte_naissance_url: Yup.string().required("Veuillez téléverser l'acte de naissance"),
+  dernier_diplome_url: Yup.string().required('Veuillez téléverser le dernier diplôme obtenu'),
 });
 
 const defaultValues: FormValuesProps = {
@@ -158,6 +164,9 @@ const defaultValues: FormValuesProps = {
   plan_localisation_url: '',
   demande_admission_url: '',
   releve_notes_url: '',
+  photos_4x4_urls: [],
+  acte_naissance_url: '',
+  dernier_diplome_url: '',
   signature_documents: '',
   date_signature_documents: '',
   date_emission: '',
@@ -189,6 +198,32 @@ export default function FormationProfessionnelleForm() {
 
   const watchModePayment = watch('mode_paiement');
   const isMomo = watchModePayment === 'Mobile Money';
+
+  const watchFiliere = watch('filiere');
+  const watchDuree = watch('duree_formation');
+  const watchNiveau = watch('niveau_etude');
+
+  const TARIFS_FORMATION = [
+    { formation: 'Menuiserie Ébénisterie', niveaux: ['Bac', 'BT', 'BTS', 'Licence', 'Master'], duree: '1 an', cout: 300000, diplome: 'DQP' },
+    { formation: 'Menuiserie Ébénisterie', niveaux: ['Probatoire'], duree: '2 ans', cout: 400000, diplome: 'CQP ou DQP' },
+    { formation: 'Menuiserie Ébénisterie', niveaux: ['CEP', 'BEPC', 'CAP'], duree: '3 ans', cout: 500000, diplome: 'CQP' },
+    { formation: 'Construction Bois', niveaux: ['Bac', 'BT', 'BTS', 'Licence', 'Master'], duree: '1 an', cout: 500000, diplome: 'DQP' },
+    { formation: 'Construction Bois', niveaux: ['Probatoire'], duree: '2 ans', cout: 500000, diplome: 'CQP ou DQP' },
+    { formation: 'Construction Bois', niveaux: ['CEP', 'BEPC', 'CAP'], duree: '3 ans', cout: 500000, diplome: 'CQP' },
+    { formation: 'Usinage CNC', niveaux: ['Licence', 'Master'], duree: '1 an', cout: 600000, diplome: 'DQP' },
+    { formation: 'Usinage CNC', niveaux: ['BTS'], duree: '2 ans', cout: 650000, diplome: 'DQP' },
+    { formation: 'Usinage CNC', niveaux: ['Bac', 'BT'], duree: '3 ans', cout: 700000, diplome: 'DQP' },
+    { formation: 'Formation complète (les 3 filières)', niveaux: [], duree: '3 ans', cout: 1200000, diplome: 'DQP' },
+  ];
+
+  const tarifFormation = watchFiliere && watchDuree
+    ? TARIFS_FORMATION.find((t) => {
+        const filiereMatch = t.formation.toLowerCase().includes(watchFiliere.toLowerCase()) || watchFiliere.toLowerCase().includes(t.formation.toLowerCase());
+        const dureeMatch = t.duree === watchDuree;
+        const niveauMatch = t.niveaux.length === 0 || (watchNiveau && t.niveaux.some((n) => watchNiveau.toUpperCase().includes(n.toUpperCase())));
+        return filiereMatch && dureeMatch && niveauMatch;
+      }) ?? null
+    : null;
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
@@ -228,7 +263,7 @@ export default function FormationProfessionnelleForm() {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Box sx={{ maxWidth: 960, mx: 'auto', px: { xs: 2, md: 0 } }} component="form" noValidate>
+      <Box sx={{ maxWidth: 960, mx: 'auto', px: { xs: 2, md: 0 } }}>
         {/* En-tête */}
         <Box sx={{ mb: 4, textAlign: 'center' }}>
           <Typography variant="h3" sx={{ mb: 1 }}>
@@ -334,6 +369,17 @@ export default function FormationProfessionnelleForm() {
                 spacing={4}
               />
             </Grid>
+            {tarifFormation && (
+              <Grid item xs={12}>
+                <Alert severity="info" sx={{ mt: 1 }}>
+                  <strong>Coût estimé :</strong>{' '}
+                  <span style={{ fontSize: 18, fontWeight: 700 }}>
+                    {tarifFormation.cout.toLocaleString('fr-FR')} FCFA
+                  </span>
+                  {' '}sur {tarifFormation.duree} — Diplôme : {tarifFormation.diplome}
+                </Alert>
+              </Grid>
+            )}
           </Grid>
         </Paper>
 
@@ -350,16 +396,38 @@ export default function FormationProfessionnelleForm() {
               name="plan_localisation_url"
               label="Plan de localisation (image ou PDF)"
               folder="inscriptions/formation"
+              required
             />
             <UploadField
               name="demande_admission_url"
               label="Demande d'admission"
               folder="inscriptions/formation"
+              required
+            />
+            <UploadField
+              name="photos_4x4_urls"
+              label="Photos 4x4 (minimum 2 photos)"
+              folder="inscriptions/formation"
+              multiple
+              required
+            />
+            <UploadField
+              name="acte_naissance_url"
+              label="Acte de naissance"
+              folder="inscriptions/formation"
+              required
+            />
+            <UploadField
+              name="dernier_diplome_url"
+              label="Dernier diplôme obtenu"
+              folder="inscriptions/formation"
+              required
             />
             <UploadField
               name="releve_notes_url"
-              label="Dernier relevé de notes / bulletin scolaire / dernier diplôme"
+              label="Dernier relevé de notes / bulletin scolaire"
               folder="inscriptions/formation"
+              required
             />
           </Stack>
 
