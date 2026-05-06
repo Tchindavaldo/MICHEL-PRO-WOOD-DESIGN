@@ -48,6 +48,15 @@ const FILIERE_STAGE_OPTIONS = [
   'Secrétariat / Community Management',
 ];
 
+const NIVEAU_STAGE_OPTIONS = [
+  'BEPC et inférieur',
+  'Bac et plus',
+  'Tous niveaux',
+  'Élèves / Étudiants',
+  'Diplômés',
+  'Jeunes diplômés',
+];
+
 const LIEU_OPTIONS = [
   { label: 'CAJED TAYIM', value: 'CAJED TAYIM' },
   { label: 'Entrée école normale Bafoussam', value: 'Entrée école normale Bafoussam' },
@@ -285,14 +294,34 @@ export default function StageVacancesForm() {
     { type: 'Stage pré-emploi', filiere: 'Toutes filières', niveau: 'Jeunes diplômés', cout: 35000 },
   ];
 
-  const tarifTrouve = watchTypeStage && watchNiveauEtude
-    ? TARIFS.find((t) => {
-        const typeMatch = t.type === watchTypeStage;
-        const niveauMatch = t.niveau === watchNiveauEtude || t.niveau === 'Tous niveaux';
-        const filiereMatch = t.filiere === 'Toutes filières' || t.filiere === watchFiliere;
-        return typeMatch && niveauMatch && filiereMatch;
-      }) ?? null
-    : null;
+  // Filières disponibles selon type_stage (toujours toutes les filières si aucune restriction)
+  const filieresDisponibles = watchTypeStage
+    ? FILIERE_STAGE_OPTIONS.filter((f) =>
+        TARIFS.some((t) => t.type === watchTypeStage && (t.filiere === f || t.filiere === 'Toutes filières'))
+      )
+    : FILIERE_STAGE_OPTIONS;
+
+  // Niveaux disponibles selon type + filière
+  const niveauxDisponibles = (watchTypeStage)
+    ? Array.from(
+        new Set(
+          TARIFS.filter(
+            (t) =>
+              t.type === watchTypeStage &&
+              (!watchFiliere || t.filiere === watchFiliere || t.filiere === 'Toutes filières')
+          ).map((t) => t.niveau)
+        )
+      )
+    : NIVEAU_STAGE_OPTIONS;
+
+  // Tous les tarifs possibles dès que type + filière sont remplis (le niveau est saisi plus bas)
+  const tarifsAffichables = (watchTypeStage && watchFiliere)
+    ? TARIFS.filter(
+        (t) =>
+          t.type === watchTypeStage &&
+          (t.filiere === watchFiliere || t.filiere === 'Toutes filières')
+      )
+    : [];
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
@@ -367,7 +396,7 @@ export default function StageVacancesForm() {
             </Grid>
             <Grid item xs={12} md={6}>
               <RHFSelect name="filiere_stage" label="Filière">
-                {FILIERE_STAGE_OPTIONS.map((f) => (
+                {filieresDisponibles.map((f) => (
                   <MenuItem key={f} value={f}>{f}</MenuItem>
                 ))}
               </RHFSelect>
@@ -384,14 +413,19 @@ export default function StageVacancesForm() {
                 ))}
               </RHFSelect>
             </Grid>
-            {tarifTrouve && (
+            {tarifsAffichables.length > 0 && (
               <Grid item xs={12}>
                 <Alert severity="info" sx={{ mt: 1 }}>
-                  <strong>Coût mensuel estimé :</strong>{' '}
-                  <span style={{ fontSize: 18, fontWeight: 700 }}>
-                    {tarifTrouve.cout.toLocaleString('fr-FR')} FCFA / mois
-                  </span>
-                  {' '}— Durée : 1 à 3 mois
+                  <strong>Coût mensuel selon le niveau :</strong>
+                  <Box component="ul" sx={{ m: 0, mt: 0.5, pl: 2.5 }}>
+                    {tarifsAffichables.map((t, i) => (
+                      <li key={i}>
+                        <strong>{t.niveau}</strong> :{' '}
+                        <span style={{ fontWeight: 700 }}>{t.cout.toLocaleString('fr-FR')} FCFA / mois</span>
+                      </li>
+                    ))}
+                  </Box>
+                  <Typography variant="caption" color="text.secondary">Durée : 1 à 3 mois</Typography>
                 </Alert>
               </Grid>
             )}
@@ -437,7 +471,11 @@ export default function StageVacancesForm() {
               <RHFTextField name="classe_actuelle" label="Classe actuelle *" />
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="niveau_etude" label="Niveau d'étude *" />
+              <RHFSelect name="niveau_etude" label="Niveau d'étude *">
+                {niveauxDisponibles.map((n) => (
+                  <MenuItem key={n} value={n}>{n}</MenuItem>
+                ))}
+              </RHFSelect>
             </Grid>
             <Grid item xs={12} md={6}>
               <RHFTextField name="adresse" label="Adresse *" />
@@ -526,17 +564,17 @@ export default function StageVacancesForm() {
               <TableBody>
                 {[
                   { type: 'Stage de vacances', filiere: 'Menuiserie / Ébénisterie', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 25000, diplome: 'ATTESTATION DE FIN DE STAGE' },
-                  { type: 'Stage de vacances', filiere: 'Menuiserie / Ébénisterie', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 35000, diplome: '' },
-                  { type: 'Stage de vacances', filiere: 'Construction Bois', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 30000, diplome: '' },
-                  { type: 'Stage de vacances', filiere: 'Construction Bois', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 40000, diplome: '' },
-                  { type: 'Stage de vacances', filiere: 'Usinage CNC', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 35000, diplome: '' },
-                  { type: 'Stage de vacances', filiere: 'Usinage CNC', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 50000, diplome: '' },
-                  { type: 'Stage de vacances', filiere: 'Marketing / Infographie / Vidéo / Web', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 30000, diplome: '' },
-                  { type: 'Stage de vacances', filiere: 'Marketing / Infographie / Vidéo / Web', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 45000, diplome: '' },
-                  { type: 'Stage de vacances', filiere: 'Secrétariat / Community Management', niveau: 'Tous niveaux', duree: '1 à 3 mois', cout: 25000, diplome: '' },
-                  { type: 'Stage académique', filiere: 'Toutes filières', niveau: 'Élèves / Étudiants', duree: 'Selon programme', cout: 20000, diplome: '' },
-                  { type: 'Stage professionnel', filiere: 'Toutes filières', niveau: 'Diplômés', duree: 'Selon besoin', cout: 30000, diplome: '' },
-                  { type: 'Stage pré-emploi', filiere: 'Toutes filières', niveau: 'Jeunes diplômés', duree: 'Selon évaluation', cout: 35000, diplome: '' },
+                  { type: 'Stage de vacances', filiere: 'Menuiserie / Ébénisterie', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 35000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage de vacances', filiere: 'Construction Bois', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 30000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage de vacances', filiere: 'Construction Bois', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 40000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage de vacances', filiere: 'Usinage CNC', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 35000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage de vacances', filiere: 'Usinage CNC', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 50000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage de vacances', filiere: 'Marketing / Infographie / Vidéo / Web', niveau: 'BEPC et inférieur', duree: '1 à 3 mois', cout: 30000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage de vacances', filiere: 'Marketing / Infographie / Vidéo / Web', niveau: 'Bac et plus', duree: '1 à 3 mois', cout: 45000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage de vacances', filiere: 'Secrétariat / Community Management', niveau: 'Tous niveaux', duree: '1 à 3 mois', cout: 25000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage académique', filiere: 'Toutes filières', niveau: 'Élèves / Étudiants', duree: 'Selon programme', cout: 20000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage professionnel', filiere: 'Toutes filières', niveau: 'Diplômés', duree: 'Selon besoin', cout: 30000, diplome: 'ATTESTATION DE FIN DE STAGE' },
+                  { type: 'Stage pré-emploi', filiere: 'Toutes filières', niveau: 'Jeunes diplômés', duree: 'Selon évaluation', cout: 35000, diplome: 'ATTESTATION DE FIN DE STAGE' },
                 ].map((row, idx) => (
                   <TableRow key={idx} sx={{ '&:nth-of-type(odd)': { bgcolor: 'action.hover' } }}>
                     <TableCell sx={{ fontSize: { xs: 11, md: 13 } }}>{row.type}</TableCell>

@@ -33,19 +33,41 @@ import { supabase } from 'src/lib/supabase';
 
 const FILIERE_OPTIONS = [
   { label: 'Menuiserie Ébénisterie', value: 'Menuiserie Ébénisterie' },
-  { label: 'Construction Bois', value: 'Construction Bois' },
+  { label: 'Construction Bois (décoration, escalier et charpente)', value: 'Construction Bois (décoration, escalier et charpente)' },
   { label: 'Usinage CNC', value: 'Usinage CNC' },
+  { label: 'Formation complète (les 3 filières)', value: 'Formation complète (les 3 filières)' },
 ];
+
+const NIVEAU_ETUDE_OPTIONS = [
+  'CEP',
+  'BEPC',
+  'CAP',
+  'Probatoire',
+  'BAC',
+  'BT',
+  'BTS',
+  'Licence',
+  'Master',
+  'Master+',
+];
+
+// Map d'un diplôme individuel vers les libellés "niveau" du tableau COUTS_FORMATION qui l'incluent
+const NIVEAU_TO_TABLEAU: Record<string, string[]> = {
+  CEP: ['< CEP, BEPC/CAP'],
+  BEPC: ['< CEP, BEPC/CAP', 'BEPC / CAP'],
+  CAP: ['< CEP, BEPC/CAP', 'BEPC / CAP'],
+  Probatoire: ['Probatoire'],
+  BAC: ['Bac, BT, BTS, Licence, Master', 'BAC, BT', 'BAC < MASTER'],
+  BT: ['Bac, BT, BTS, Licence, Master', 'BAC, BT'],
+  BTS: ['Bac, BT, BTS, Licence, Master', 'BTS'],
+  Licence: ['Bac, BT, BTS, Licence, Master', 'Licence / Master+', 'BAC < MASTER'],
+  Master: ['Bac, BT, BTS, Licence, Master', 'BAC < MASTER'],
+  'Master+': ['Licence / Master+'],
+};
 
 const SEXE_OPTIONS = [
   { label: 'Masculin', value: 'Masculin' },
   { label: 'Féminin', value: 'Féminin' },
-];
-
-const DUREE_OPTIONS = [
-  { label: '1 an', value: '1 an' },
-  { label: '2 ans', value: '2 ans' },
-  { label: '3 ans', value: '3 ans' },
 ];
 
 const PAIEMENT_OPTIONS = [
@@ -62,23 +84,24 @@ const RESEAU_OPTIONS = [
 ];
 
 const COUTS_FORMATION = [
-  { formation: 'Menuiserie Ébénisterie', diplome: 'Bac, BT, BTS, Licence, Master', duree: '1 an', cout: '300 000', diplomeObtenu: 'DQP' },
-  { formation: 'Menuiserie Ébénisterie', diplome: 'Probatoire', duree: '2 ans', cout: '400 000', diplomeObtenu: 'CQP ou DQP' },
-  { formation: 'Menuiserie Ébénisterie', diplome: '< CEP, BEPC/CAP', duree: '3 ans', cout: '500 000', diplomeObtenu: 'CQP' },
-  { formation: 'Construction Bois (décoration, escalier et charpente)', diplome: 'Bac, BT, BTS, Licence, Master', duree: '1 an', cout: '500 000', diplomeObtenu: 'DQP' },
-  { formation: 'Construction Bois (décoration, escalier et charpente)', diplome: 'Probatoire', duree: '2 ans', cout: '500 000', diplomeObtenu: 'CQP ou DQP' },
-  { formation: 'Construction Bois (décoration, escalier et charpente)', diplome: 'BEPC / CAP', duree: '3 ans', cout: '500 000', diplomeObtenu: 'CQP' },
-  { formation: 'Usinage CNC', diplome: 'Licence / Master+', duree: '1 an', cout: '600 000', diplomeObtenu: 'DQP' },
-  { formation: 'Usinage CNC', diplome: 'BTS', duree: '2 ans', cout: '650 000', diplomeObtenu: 'DQP' },
-  { formation: 'Usinage CNC', diplome: 'BAC, BT', duree: '3 ans', cout: '700 000', diplomeObtenu: 'DQP' },
-  { formation: 'Formation complète (les 3 filières)', diplome: 'BAC < MASTER', duree: '3 ans', cout: '1 200 000', diplomeObtenu: 'DQP' },
+  { formation: 'Menuiserie Ébénisterie', niveau: 'Bac, BT, BTS, Licence, Master', duree: '1 an', cout: 300000, diplomeObtenu: 'DQP' },
+  { formation: 'Menuiserie Ébénisterie', niveau: 'Probatoire', duree: '2 ans', cout: 400000, diplomeObtenu: 'CQP ou DQP' },
+  { formation: 'Menuiserie Ébénisterie', niveau: '< CEP, BEPC/CAP', duree: '3 ans', cout: 500000, diplomeObtenu: 'CQP' },
+  { formation: 'Construction Bois (décoration, escalier et charpente)', niveau: 'Bac, BT, BTS, Licence, Master', duree: '1 an', cout: 500000, diplomeObtenu: 'DQP' },
+  { formation: 'Construction Bois (décoration, escalier et charpente)', niveau: 'Probatoire', duree: '2 ans', cout: 500000, diplomeObtenu: 'CQP ou DQP' },
+  { formation: 'Construction Bois (décoration, escalier et charpente)', niveau: 'BEPC / CAP', duree: '3 ans', cout: 500000, diplomeObtenu: 'CQP' },
+  { formation: 'Usinage CNC', niveau: 'Licence / Master+', duree: '1 an', cout: 600000, diplomeObtenu: 'DQP' },
+  { formation: 'Usinage CNC', niveau: 'BTS', duree: '2 ans', cout: 650000, diplomeObtenu: 'DQP' },
+  { formation: 'Usinage CNC', niveau: 'BAC, BT', duree: '3 ans', cout: 700000, diplomeObtenu: 'DQP' },
+  { formation: 'Formation complète (les 3 filières)', niveau: 'BAC < MASTER', duree: '3 ans', cout: 1200000, diplomeObtenu: 'DQP' },
 ];
 
 // ----------------------------------------------------------------------
 
 type FormValuesProps = {
   nom_prenom: string;
-  date_lieu_naissance: string;
+  date_naissance: string;
+  lieu_naissance: string;
   sexe: string;
   nationalite: string;
   cni_numero: string;
@@ -111,7 +134,8 @@ type FormValuesProps = {
 
 const FormationSchema = Yup.object().shape({
   nom_prenom: Yup.string().required('Le nom et prénom sont requis'),
-  date_lieu_naissance: Yup.string().required('La date et lieu de naissance sont requis'),
+  date_naissance: Yup.string().required('La date de naissance est requise'),
+  lieu_naissance: Yup.string().required('Le lieu de naissance est requis'),
   sexe: Yup.string().required('Le sexe est requis'),
   nationalite: Yup.string().required('La nationalité est requise'),
   cni_numero: Yup.string().required('Le numéro de la pièce est requis'),
@@ -148,7 +172,8 @@ const FormationSchema = Yup.object().shape({
 
 const defaultValues: FormValuesProps = {
   nom_prenom: '',
-  date_lieu_naissance: '',
+  date_naissance: '',
+  lieu_naissance: '',
   sexe: '',
   nationalite: '',
   cni_numero: '',
@@ -213,32 +238,36 @@ export default function FormationProfessionnelleForm() {
   const watchDuree = watch('duree_formation');
   const watchNiveau = watch('niveau_etude');
 
-  const TARIFS_FORMATION = [
-    { formation: 'Menuiserie Ébénisterie', niveaux: ['Bac', 'BT', 'BTS', 'Licence', 'Master'], duree: '1 an', cout: 300000, diplome: 'DQP' },
-    { formation: 'Menuiserie Ébénisterie', niveaux: ['Probatoire'], duree: '2 ans', cout: 400000, diplome: 'CQP ou DQP' },
-    { formation: 'Menuiserie Ébénisterie', niveaux: ['CEP', 'BEPC', 'CAP'], duree: '3 ans', cout: 500000, diplome: 'CQP' },
-    { formation: 'Construction Bois', niveaux: ['Bac', 'BT', 'BTS', 'Licence', 'Master'], duree: '1 an', cout: 500000, diplome: 'DQP' },
-    { formation: 'Construction Bois', niveaux: ['Probatoire'], duree: '2 ans', cout: 500000, diplome: 'CQP ou DQP' },
-    { formation: 'Construction Bois', niveaux: ['CEP', 'BEPC', 'CAP'], duree: '3 ans', cout: 500000, diplome: 'CQP' },
-    { formation: 'Usinage CNC', niveaux: ['Licence', 'Master'], duree: '1 an', cout: 600000, diplome: 'DQP' },
-    { formation: 'Usinage CNC', niveaux: ['BTS'], duree: '2 ans', cout: 650000, diplome: 'DQP' },
-    { formation: 'Usinage CNC', niveaux: ['Bac', 'BT'], duree: '3 ans', cout: 700000, diplome: 'DQP' },
-    { formation: 'Formation complète (les 3 filières)', niveaux: [], duree: '3 ans', cout: 1200000, diplome: 'DQP' },
-  ];
+  // Helpers : un diplôme individuel matche un libellé groupé du tableau si présent dans son mapping
+  const niveauMatchTableau = (diplome: string, ligneNiveau: string) =>
+    (NIVEAU_TO_TABLEAU[diplome] || []).includes(ligneNiveau);
 
-  const tarifFormation = watchFiliere && watchDuree
-    ? TARIFS_FORMATION.find((t) => {
-        const filiereMatch = t.formation.toLowerCase().includes(watchFiliere.toLowerCase()) || watchFiliere.toLowerCase().includes(t.formation.toLowerCase());
-        const dureeMatch = t.duree === watchDuree;
-        const niveauMatch = t.niveaux.length === 0 || (watchNiveau && t.niveaux.some((n) => watchNiveau.toUpperCase().includes(n.toUpperCase())));
-        return filiereMatch && dureeMatch && niveauMatch;
-      }) ?? null
+  // Niveaux disponibles : filtrés par la filière choisie (si une filière est déjà sélectionnée)
+  const niveauxDisponibles = NIVEAU_ETUDE_OPTIONS.filter((diplome) =>
+    !watchFiliere
+      ? true
+      : COUTS_FORMATION.some((t) => t.formation === watchFiliere && niveauMatchTableau(diplome, t.niveau))
+  );
+
+  // Lignes du tableau matchant filière + niveau choisis
+  const lignesMatchees = (watchFiliere && watchNiveau)
+    ? COUTS_FORMATION.filter(
+        (t) => t.formation === watchFiliere && niveauMatchTableau(watchNiveau, t.niveau)
+      )
+    : [];
+
+  // Durées disponibles : seulement quand filière ET niveau sont choisis
+  const dureesDisponibles = Array.from(new Set(lignesMatchees.map((l) => l.duree)));
+
+  const tarifFormation = watchDuree
+    ? lignesMatchees.find((t) => t.duree === watchDuree) ?? null
     : null;
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
       const payload = {
         ...data,
+        date_lieu_naissance: `${data.date_naissance}, ${data.lieu_naissance}`,
         montant_annuelle: data.montant_annuelle ? Number(data.montant_annuelle) : null,
         montant_global: data.montant_global ? Number(data.montant_global) : null,
         date_signature_documents: data.date_signature_documents || null,
@@ -298,9 +327,17 @@ export default function FormationProfessionnelleForm() {
             </Grid>
             <Grid item xs={12} md={6}>
               <RHFTextField
-                name="date_lieu_naissance"
-                label="Date et lieu de naissance *"
-                placeholder="ex: 01/01/1995, Yaoundé"
+                name="date_naissance"
+                label="Date de naissance *"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <RHFTextField
+                name="lieu_naissance"
+                label="Lieu de naissance *"
+                placeholder="ex: Yaoundé"
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -368,16 +405,27 @@ export default function FormationProfessionnelleForm() {
               </RHFSelect>
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="niveau_etude" label="Niveau d'étude *" />
+              <RHFSelect name="niveau_etude" label="Niveau d'étude *">
+                {niveauxDisponibles.map((n) => (
+                  <MenuItem key={n} value={n}>{n}</MenuItem>
+                ))}
+              </RHFSelect>
             </Grid>
-            <Grid item xs={12}>
-              <RHFRadioGroup
+            <Grid item xs={12} md={6}>
+              <RHFSelect
                 name="duree_formation"
                 label="Durée souhaitée pour votre formation *"
-                options={DUREE_OPTIONS}
-                row
-                spacing={4}
-              />
+                disabled={dureesDisponibles.length === 0}
+                helperText={
+                  dureesDisponibles.length === 0
+                    ? 'Sélectionnez d\'abord la filière et le niveau d\'étude'
+                    : ''
+                }
+              >
+                {dureesDisponibles.map((d) => (
+                  <MenuItem key={d} value={d}>{d}</MenuItem>
+                ))}
+              </RHFSelect>
             </Grid>
             {tarifFormation && (
               <Grid item xs={12}>
@@ -386,7 +434,7 @@ export default function FormationProfessionnelleForm() {
                   <span style={{ fontSize: 18, fontWeight: 700 }}>
                     {tarifFormation.cout.toLocaleString('fr-FR')} FCFA
                   </span>
-                  {' '}sur {tarifFormation.duree} — Diplôme : {tarifFormation.diplome}
+                  {' '}sur {tarifFormation.duree} — Diplôme : {tarifFormation.diplomeObtenu}
                 </Alert>
               </Grid>
             )}
@@ -543,8 +591,8 @@ export default function FormationProfessionnelleForm() {
                     <TableCell sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
                       {row.formation}
                     </TableCell>
-                    <TableCell sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' }, whiteSpace: 'nowrap' }}>
-                      {row.diplome}
+                    <TableCell sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
+                      {row.niveau}
                     </TableCell>
                     <TableCell sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' }, whiteSpace: 'nowrap' }}>
                       {row.duree}
