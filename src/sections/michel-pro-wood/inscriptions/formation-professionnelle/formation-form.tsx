@@ -193,8 +193,18 @@ export default function FormationProfessionnelleForm() {
     reset,
     watch,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
+
+  const onInvalid = (errs: any) => {
+    const champs = Object.keys(errs);
+    enqueueSnackbar(
+      `Champs manquants ou invalides : ${champs.join(', ')}`,
+      { variant: 'error', anchorOrigin: { vertical: 'top', horizontal: 'center' }, autoHideDuration: 7000 }
+    );
+    const first = document.querySelector(`[name="${champs[0]}"]`);
+    if (first) (first as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
 
   const watchModePayment = watch('mode_paiement');
   const isMomo = watchModePayment === 'Mobile Money';
@@ -262,7 +272,7 @@ export default function FormationProfessionnelleForm() {
   };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit, onInvalid)}>
       <Box sx={{ maxWidth: 960, mx: 'auto', px: { xs: 2, md: 0 } }}>
         {/* En-tête */}
         <Box sx={{ mb: 4, textAlign: 'center' }}>
@@ -584,6 +594,18 @@ export default function FormationProfessionnelleForm() {
         </Paper>
 
         {/* Submit */}
+        {Object.keys(errors).length > 0 && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            <strong>Veuillez corriger les champs suivants :</strong>
+            <ul style={{ margin: '8px 0 0 16px', padding: 0 }}>
+              {Object.entries(errors).map(([key, val]: any) => (
+                <li key={key}>
+                  <strong>{key}</strong> — {val?.message || 'champ invalide'}
+                </li>
+              ))}
+            </ul>
+          </Alert>
+        )}
         <Stack alignItems="center" sx={{ mb: 6 }}>
           <LoadingButton
             type="submit"
