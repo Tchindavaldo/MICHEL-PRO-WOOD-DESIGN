@@ -31,11 +31,26 @@ import { supabase } from 'src/lib/supabase';
 
 // ----------------------------------------------------------------------
 
+const TYPE_FORMATION_OPTIONS = [
+  { label: 'Formation professionnelle', value: 'Formation professionnelle' },
+  { label: 'Immersion professionnelle', value: 'Immersion professionnelle' },
+  { label: 'Apprentissage', value: 'Apprentissage' },
+  { label: 'Initiation au métier du bois', value: 'Initiation au métier du bois' },
+  { label: 'Autre', value: 'Autre' },
+];
+
+const LIEU_FORMATION_OPTIONS = [
+  { label: 'CAJED TAYIM', value: 'CAJED TAYIM' },
+  { label: 'Entrée école normale Bafoussam', value: 'Entrée école normale Bafoussam' },
+  { label: 'Foyer Lagouen', value: 'Foyer Lagouen' },
+];
+
 const FILIERE_OPTIONS = [
   { label: 'Menuiserie Ébénisterie', value: 'Menuiserie Ébénisterie' },
   { label: 'Construction Bois (décoration, escalier et charpente)', value: 'Construction Bois (décoration, escalier et charpente)' },
   { label: 'Usinage CNC', value: 'Usinage CNC' },
   { label: 'Formation complète (les 3 filières)', value: 'Formation complète (les 3 filières)' },
+  { label: 'Autre', value: 'Autre' },
 ];
 
 const NIVEAU_ETUDE_OPTIONS = [
@@ -111,7 +126,11 @@ type FormValuesProps = {
   adresse: string;
   telephone: string;
   email: string;
+  type_formation: string;
+  type_formation_autre: string;
+  lieu_formation: string;
   filiere: string;
+  filiere_autre: string;
   niveau_etude: string;
   duree_formation: string;
   plan_localisation_url: string;
@@ -145,7 +164,19 @@ const FormationSchema = Yup.object().shape({
   adresse: Yup.string().required("L'adresse est requise"),
   telephone: Yup.string().required('Le téléphone est requis'),
   email: Yup.string().required("L'email est requis").email("Format d'email invalide"),
+  type_formation: Yup.string().required('Le type de formation est requis'),
+  type_formation_autre: Yup.string().when('type_formation', {
+    is: 'Autre',
+    then: (schema) => schema.required('Veuillez préciser le type de formation'),
+    otherwise: (schema) => schema.nullable(),
+  }),
+  lieu_formation: Yup.string().required('Le lieu de formation est requis'),
   filiere: Yup.string().required('La filière est requise'),
+  filiere_autre: Yup.string().when('filiere', {
+    is: 'Autre',
+    then: (schema) => schema.required('Veuillez préciser la filière'),
+    otherwise: (schema) => schema.nullable(),
+  }),
   duree_formation: Yup.string().required('La durée souhaitée est requise'),
   niveau_etude: Yup.string().required("Le niveau d'étude est requis"),
   mode_paiement: Yup.string().required('Le mode de paiement est requis'),
@@ -183,7 +214,11 @@ const defaultValues: FormValuesProps = {
   adresse: '',
   telephone: '',
   email: '',
+  type_formation: '',
+  type_formation_autre: '',
+  lieu_formation: '',
   filiere: '',
+  filiere_autre: '',
   niveau_etude: '',
   duree_formation: '',
   plan_localisation_url: '',
@@ -234,6 +269,7 @@ export default function FormationProfessionnelleForm() {
   const watchModePayment = watch('mode_paiement');
   const isMomo = watchModePayment === 'Mobile Money';
 
+  const watchTypeFormation = watch('type_formation');
   const watchFiliere = watch('filiere');
   const watchDuree = watch('duree_formation');
   const watchNiveau = watch('niveau_etude');
@@ -242,24 +278,25 @@ export default function FormationProfessionnelleForm() {
   const niveauMatchTableau = (diplome: string, ligneNiveau: string) =>
     (NIVEAU_TO_TABLEAU[diplome] || []).includes(ligneNiveau);
 
-  // Niveaux disponibles : filtrés par la filière choisie (si une filière est déjà sélectionnée)
-  const niveauxDisponibles = NIVEAU_ETUDE_OPTIONS.filter((diplome) =>
-    !watchFiliere
-      ? true
-      : COUTS_FORMATION.some((t) => t.formation === watchFiliere && niveauMatchTableau(diplome, t.niveau))
-  );
+  // Si filière = 'Autre', tous les niveaux sont dispos ; sinon filtrage par tableau
+  const niveauxDisponibles = (!watchFiliere || watchFiliere === 'Autre')
+    ? NIVEAU_ETUDE_OPTIONS
+    : NIVEAU_ETUDE_OPTIONS.filter((diplome) =>
+        COUTS_FORMATION.some((t) => t.formation === watchFiliere && niveauMatchTableau(diplome, t.niveau))
+      );
 
-  // Lignes du tableau matchant filière + niveau choisis
-  const lignesMatchees = (watchFiliere && watchNiveau)
+  // Lignes du tableau matchant filière + niveau — vides si filière = 'Autre'
+  const lignesMatchees = (watchFiliere && watchFiliere !== 'Autre' && watchNiveau)
     ? COUTS_FORMATION.filter(
         (t) => t.formation === watchFiliere && niveauMatchTableau(watchNiveau, t.niveau)
       )
     : [];
 
-  // Durées disponibles : seulement quand filière ET niveau sont choisis
+  // Durées disponibles : seulement quand filière ET niveau sont choisis (et filière != Autre)
   const dureesDisponibles = Array.from(new Set(lignesMatchees.map((l) => l.duree)));
 
-  const tarifFormation = watchDuree
+  // Tarif masqué si filière = 'Autre'
+  const tarifFormation = (watchDuree && watchFiliere !== 'Autre')
     ? lignesMatchees.find((t) => t.duree === watchDuree) ?? null
     : null;
 
@@ -396,6 +433,25 @@ export default function FormationProfessionnelleForm() {
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
+              <RHFSelect name="type_formation" label="Type de formation *">
+                {TYPE_FORMATION_OPTIONS.map((opt) => (
+                  <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                ))}
+              </RHFSelect>
+            </Grid>
+            {watchTypeFormation === 'Autre' && (
+              <Grid item xs={12} md={6}>
+                <RHFTextField name="type_formation_autre" label="Préciser le type de formation *" />
+              </Grid>
+            )}
+            <Grid item xs={12} md={6}>
+              <RHFSelect name="lieu_formation" label="Lieu de formation *">
+                {LIEU_FORMATION_OPTIONS.map((opt) => (
+                  <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                ))}
+              </RHFSelect>
+            </Grid>
+            <Grid item xs={12} md={6}>
               <RHFSelect name="filiere" label="Filière *">
                 {FILIERE_OPTIONS.map((opt) => (
                   <MenuItem key={opt.value} value={opt.value}>
@@ -404,6 +460,11 @@ export default function FormationProfessionnelleForm() {
                 ))}
               </RHFSelect>
             </Grid>
+            {watchFiliere === 'Autre' && (
+              <Grid item xs={12} md={6}>
+                <RHFTextField name="filiere_autre" label="Préciser la filière *" />
+              </Grid>
+            )}
             <Grid item xs={12} md={6}>
               <RHFSelect name="niveau_etude" label="Niveau d'étude *">
                 {niveauxDisponibles.map((n) => (
@@ -412,20 +473,28 @@ export default function FormationProfessionnelleForm() {
               </RHFSelect>
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFSelect
-                name="duree_formation"
-                label="Durée souhaitée pour votre formation *"
-                disabled={dureesDisponibles.length === 0}
-                helperText={
-                  dureesDisponibles.length === 0
-                    ? 'Sélectionnez d\'abord la filière et le niveau d\'étude'
-                    : ''
-                }
-              >
-                {dureesDisponibles.map((d) => (
-                  <MenuItem key={d} value={d}>{d}</MenuItem>
-                ))}
-              </RHFSelect>
+              {watchFiliere === 'Autre' ? (
+                <RHFTextField
+                  name="duree_formation"
+                  label="Durée souhaitée pour votre formation *"
+                  placeholder="ex: 6 mois, 1 an..."
+                />
+              ) : (
+                <RHFSelect
+                  name="duree_formation"
+                  label="Durée souhaitée pour votre formation *"
+                  disabled={dureesDisponibles.length === 0}
+                  helperText={
+                    dureesDisponibles.length === 0
+                      ? "Sélectionnez d'abord la filière et le niveau d'étude"
+                      : ''
+                  }
+                >
+                  {dureesDisponibles.map((d) => (
+                    <MenuItem key={d} value={d}>{d}</MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
             </Grid>
             {tarifFormation && (
               <Grid item xs={12}>
@@ -565,24 +634,14 @@ export default function FormationProfessionnelleForm() {
             7. Coût de la formation
           </Typography>
           <TableContainer sx={{ overflowX: 'auto' }}>
-            <Table size="small">
+            <Table>
               <TableHead>
-                <TableRow sx={{ bgcolor: 'primary.main' }}>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, whiteSpace: 'nowrap' }}>
-                    Formation
-                  </TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, whiteSpace: 'nowrap' }}>
-                    Diplôme requis
-                  </TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, whiteSpace: 'nowrap' }}>
-                    Durée
-                  </TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, whiteSpace: 'nowrap' }}>
-                    Coût (FCFA)
-                  </TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, whiteSpace: 'nowrap' }}>
-                    Diplôme obtenu
-                  </TableCell>
+                <TableRow>
+                  {['Formation', 'Diplôme requis', 'Durée', 'Coût estimé (FCFA)', 'DIPLÔME OBTENU'].map((h) => (
+                    <TableCell key={h} sx={{ bgcolor: '#770508', color: '#fff', fontWeight: 800, fontSize: { xs: 12, md: 14 }, whiteSpace: 'nowrap', letterSpacing: 0.3 }}>
+                      {h}
+                    </TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>

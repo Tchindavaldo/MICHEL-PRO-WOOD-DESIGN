@@ -38,6 +38,7 @@ const TYPE_STAGE_OPTIONS = [
   { label: 'Stage académique', value: 'Stage académique' },
   { label: 'Stage professionnel', value: 'Stage professionnel' },
   { label: 'Stage pré-emploi', value: 'Stage pré-emploi' },
+  { label: 'Autre', value: 'Autre' },
 ];
 
 const FILIERE_STAGE_OPTIONS = [
@@ -46,6 +47,7 @@ const FILIERE_STAGE_OPTIONS = [
   'Usinage CNC',
   'Marketing / Infographie / Vidéo / Web',
   'Secrétariat / Community Management',
+  'Autre',
 ];
 
 const NIVEAU_STAGE_OPTIONS = [
@@ -92,7 +94,9 @@ const ENGAGEMENTS_OPTIONS = [
 
 type FormValuesProps = {
   type_stage: string;
+  type_stage_autre: string;
   filiere_stage: string;
+  filiere_stage_autre: string;
   annee: string;
   lieu: string;
   // Candidat
@@ -191,15 +195,23 @@ const StageVacancesSchema = Yup.object().shape({
     otherwise: (schema) => schema.nullable(),
   }),
   engagements: Yup.array().min(1, 'Veuillez accepter au moins un engagement'),
-  nom_parent: Yup.string().required('Le nom du parent est requis'),
-  prenom_parent: Yup.string().required('Le prénom du parent est requis'),
-  lien_parent: Yup.string().required('Le lien avec le candidat est requis'),
-  telephone_parent: Yup.string().required('Le téléphone du parent est requis'),
+  type_stage_autre: Yup.string().when('type_stage', {
+    is: 'Autre',
+    then: (schema) => schema.required('Veuillez préciser le type de stage'),
+    otherwise: (schema) => schema.nullable(),
+  }),
+  filiere_stage_autre: Yup.string().when('filiere_stage', {
+    is: 'Autre',
+    then: (schema) => schema.required('Veuillez préciser la filière'),
+    otherwise: (schema) => schema.nullable(),
+  }),
 });
 
 const defaultValues: FormValuesProps = {
   type_stage: '',
+  type_stage_autre: '',
   filiere_stage: '',
+  filiere_stage_autre: '',
   annee: '',
   lieu: '',
   nom: '',
@@ -294,16 +306,17 @@ export default function StageVacancesForm() {
     { type: 'Stage pré-emploi', filiere: 'Toutes filières', niveau: 'Jeunes diplômés', cout: 35000 },
   ];
 
-  // Filières disponibles selon type_stage (toujours toutes les filières si aucune restriction)
-  const filieresDisponibles = watchTypeStage
-    ? FILIERE_STAGE_OPTIONS.filter((f) =>
-        TARIFS.some((t) => t.type === watchTypeStage && (t.filiere === f || t.filiere === 'Toutes filières'))
-      )
-    : FILIERE_STAGE_OPTIONS;
+  // Filières disponibles selon type_stage — si type = 'Autre' ou pas de type, toutes les filières
+  const filieresDisponibles = (!watchTypeStage || watchTypeStage === 'Autre')
+    ? FILIERE_STAGE_OPTIONS
+    : FILIERE_STAGE_OPTIONS.filter((f) =>
+        f === 'Autre' || TARIFS.some((t) => t.type === watchTypeStage && (t.filiere === f || t.filiere === 'Toutes filières'))
+      );
 
-  // Niveaux disponibles selon type + filière
-  const niveauxDisponibles = (watchTypeStage)
-    ? Array.from(
+  // Niveaux disponibles — si type ou filière = 'Autre', afficher tous les niveaux
+  const niveauxDisponibles = (!watchTypeStage || watchTypeStage === 'Autre' || watchFiliere === 'Autre')
+    ? NIVEAU_STAGE_OPTIONS
+    : Array.from(
         new Set(
           TARIFS.filter(
             (t) =>
@@ -311,11 +324,10 @@ export default function StageVacancesForm() {
               (!watchFiliere || t.filiere === watchFiliere || t.filiere === 'Toutes filières')
           ).map((t) => t.niveau)
         )
-      )
-    : NIVEAU_STAGE_OPTIONS;
+      );
 
-  // Tous les tarifs possibles dès que type + filière sont remplis (le niveau est saisi plus bas)
-  const tarifsAffichables = (watchTypeStage && watchFiliere)
+  // Tarifs affichables — masqués si type ou filière = 'Autre' (pas de tarif standard applicable)
+  const tarifsAffichables = (watchTypeStage && watchFiliere && watchTypeStage !== 'Autre' && watchFiliere !== 'Autre')
     ? TARIFS.filter(
         (t) =>
           t.type === watchTypeStage &&
@@ -394,6 +406,11 @@ export default function StageVacancesForm() {
                 ))}
               </RHFSelect>
             </Grid>
+            {watchTypeStage === 'Autre' && (
+              <Grid item xs={12} md={6}>
+                <RHFTextField name="type_stage_autre" label="Préciser le type de stage *" />
+              </Grid>
+            )}
             <Grid item xs={12} md={6}>
               <RHFSelect name="filiere_stage" label="Filière">
                 {filieresDisponibles.map((f) => (
@@ -401,6 +418,11 @@ export default function StageVacancesForm() {
                 ))}
               </RHFSelect>
             </Grid>
+            {watchFiliere === 'Autre' && (
+              <Grid item xs={12} md={6}>
+                <RHFTextField name="filiere_stage_autre" label="Préciser la filière *" />
+              </Grid>
+            )}
             <Grid item xs={12} md={6}>
               <RHFTextField name="annee" label="Année *" />
             </Grid>
@@ -550,15 +572,14 @@ export default function StageVacancesForm() {
             4. Tarifs des stages
           </Typography>
           <TableContainer sx={{ overflowX: 'auto' }}>
-            <Table size="small" sx={{ '& .MuiTableCell-root': { p: { xs: 0.5, md: 1 } } }}>
-              <TableHead sx={{ bgcolor: 'primary.main' }}>
+            <Table sx={{ '& .MuiTableCell-root': { p: { xs: 1, md: 1.5 } } }}>
+              <TableHead>
                 <TableRow>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Type de stage</TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Filière</TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Niveau du candidat</TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Durée</TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Coût mensuel (FCFA)</TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 700, fontSize: { xs: 11, md: 13 } }}>Diplôme obtenu</TableCell>
+                  {['Type de stage', 'Filière', 'Niveau du candidat', 'Durée', 'Coût mensuel (FCFA)', 'DIPLÔME OBTENU'].map((h) => (
+                    <TableCell key={h} sx={{ bgcolor: '#770508', color: '#fff', fontWeight: 800, fontSize: { xs: 12, md: 14 }, whiteSpace: 'nowrap', letterSpacing: 0.3 }}>
+                      {h}
+                    </TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -677,29 +698,29 @@ export default function StageVacancesForm() {
           </Grid>
         </Paper>
 
-        {/* Section 7 — Autorisation parentale */}
+        {/* Section 7 — Autorisation parentale / Garant */}
         <Paper elevation={2} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-            6. Autorisation parentale
+            6. Autorisation parentale / Garant / Tuteur légal / Conjoint
           </Typography>
           <Alert severity="info" sx={{ mb: 2 }}>
-            À remplir pour les participants mineurs.
+            Cette section est <strong>facultative pour les majeurs</strong>. Elle est obligatoire pour les candidats mineurs. Renseignez le parent, tuteur légal, conjoint ou garant selon votre situation.
           </Alert>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="nom_parent" label="Nom du parent / tuteur *" />
+              <RHFTextField name="nom_parent" label="Nom" />
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="prenom_parent" label="Prénom du parent / tuteur *" />
+              <RHFTextField name="prenom_parent" label="Prénom" />
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="lien_parent" label="Lien avec le candidat *" />
+              <RHFTextField name="lien_parent" label="Lien avec le candidat (parent, conjoint, tuteur...)" />
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="telephone_parent" label="Téléphone du parent *" />
+              <RHFTextField name="telephone_parent" label="Téléphone" />
             </Grid>
             <Grid item xs={12} md={6}>
-              <RHFTextField name="email_parent" label="Email du parent" />
+              <RHFTextField name="email_parent" label="Email" />
             </Grid>
           </Grid>
 
