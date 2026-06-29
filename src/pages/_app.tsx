@@ -33,6 +33,12 @@ import { ThemeSettings, SettingsProvider } from 'src/components/settings';
 import { SnackbarProvider } from 'notistack';
 import MotionLazyContainer from 'src/components/animate/MotionLazyContainer';
 import { CartProvider } from 'src/context/CartContext';
+import DomainExpiredPage from 'src/components/DomainExpiredPage';
+
+// ----------------------------------------------------------------------
+
+// Mettre à false pour réactiver le site une fois un nom de domaine acheté.
+const BLOCK_SITE = true;
 
 // ----------------------------------------------------------------------
 
@@ -51,6 +57,19 @@ export default function MyApp(props: MyAppProps) {
   const { Component, pageProps, emotionCache = clientSideEmotionCache } = props;
 
   const getLayout = Component.getLayout ?? ((page) => page);
+
+  if (BLOCK_SITE) {
+    return (
+      <CacheProvider value={emotionCache}>
+        <Head>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+          <title>Site indisponible — URL Vercel expirée</title>
+          <meta name="robots" content="noindex" />
+        </Head>
+        <DomainExpiredPage />
+      </CacheProvider>
+    );
+  }
 
   return (
     <CacheProvider value={emotionCache}>
