@@ -11,6 +11,11 @@ import {
 } from 'src/lib/supabaseData';
 // sections
 import { AboutView } from 'src/sections/michel-pro-wood/about/view';
+// seo
+import { Seo, breadcrumbJsonLd } from 'src/components/seo';
+import { INDEXED_PAGES } from 'src/config-seo';
+
+const SEO = INDEXED_PAGES.find((p) => p.path === '/a-propos')!;
 
 
 // ----------------------------------------------------------------------
@@ -88,14 +93,25 @@ export default function AboutPage({
   aboutTimeline: any[];
 }) {
   return (
-    <AboutView 
-      testimonials={testimonials} 
-      partners={partners} 
-      values={values} 
-      pageContent={pageContent}
-      aboutStats={aboutStats}
-      aboutTimeline={aboutTimeline}
-    />
+    <>
+      <Seo
+        title={SEO.title}
+        description={SEO.description}
+        canonical="/a-propos"
+        jsonLd={breadcrumbJsonLd([
+          { name: 'Accueil', path: '/' },
+          { name: 'À propos', path: '/a-propos' },
+        ])}
+      />
+      <AboutView
+        testimonials={testimonials}
+        partners={partners}
+        values={values}
+        pageContent={pageContent}
+        aboutStats={aboutStats}
+        aboutTimeline={aboutTimeline}
+      />
+    </>
   );
 }
 

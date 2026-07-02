@@ -8,6 +8,11 @@ import {
 } from 'src/lib/supabaseData';
 // sections
 import { ContactView } from 'src/sections/michel-pro-wood/contact/view';
+// seo
+import { Seo, breadcrumbJsonLd } from 'src/components/seo';
+import { INDEXED_PAGES } from 'src/config-seo';
+
+const SEO = INDEXED_PAGES.find((p) => p.path === '/contact')!;
 
 
 // ----------------------------------------------------------------------
@@ -36,7 +41,7 @@ export async function getStaticProps() {
   // Organize contact information from multiple rows
   const contactData = {
     title: contactInfo.find((item: any) => item.section_key === 'general')?.title || 'Prêt à Démarrer Votre Projet ?',
-    address: contactInfo.find((item: any) => item.section_key === 'address')?.content?.address || 'Yaoundé, Cameroun',
+    address: contactInfo.find((item: any) => item.section_key === 'address')?.content?.address || 'Bafoussam, Cameroun',
     phones: contactInfo.find((item: any) => item.section_key === 'phones')?.content?.phones || ['+237 6 96 50 34 39', '+237 6 50 34 39 96'],
     email: contactInfo.find((item: any) => item.section_key === 'email')?.content?.email || 'contact@michelprowood.com',
     openingHours: contactInfo.find((item: any) => item.section_key === 'hours')?.content?.schedule || ['Lun-Ven : 8h00 — 18h00', 'Sam : 8h00 — 14h00'],
@@ -53,7 +58,20 @@ export async function getStaticProps() {
 }
 
 export default function ContactPage({ contactData, testimonials, pageContent }: any) {
-  return <ContactView contactData={contactData} testimonials={testimonials} pageContent={pageContent} />;
+  return (
+    <>
+      <Seo
+        title={SEO.title}
+        description={SEO.description}
+        canonical="/contact"
+        jsonLd={breadcrumbJsonLd([
+          { name: 'Accueil', path: '/' },
+          { name: 'Contact', path: '/contact' },
+        ])}
+      />
+      <ContactView contactData={contactData} testimonials={testimonials} pageContent={pageContent} />
+    </>
+  );
 }
 
 ContactPage.getLayout = (page: React.ReactElement) => <MainLayout>{page}</MainLayout>;

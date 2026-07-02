@@ -1,9 +1,12 @@
-// next
-import Head from 'next/head';
 // layouts
 import MainLayout from 'src/layouts/main';
+// seo
+import { Seo, breadcrumbJsonLd } from 'src/components/seo';
+import { INDEXED_PAGES } from 'src/config-seo';
 // sections
 import HomeView from 'src/sections/michel-pro-wood/home/view/home-view';
+
+const SEO = INDEXED_PAGES.find((p) => p.path === '/')!;
 
 // ----------------------------------------------------------------------
 
@@ -341,11 +344,14 @@ export default function HomePage({
 }) {
   return (
     <>
-      <Head>
-        <title>MICHEL PRO WOOD DESIGN</title>
-      </Head>
+      <Seo
+        title={SEO.title}
+        description={SEO.description}
+        canonical="/"
+        jsonLd={breadcrumbJsonLd([{ name: 'Accueil', path: '/' }])}
+      />
 
-      <HomeView 
+      <HomeView
         services={services} 
         testimonials={testimonials} 
         partners={partners} 

@@ -1,5 +1,4 @@
 // next
-import Head from 'next/head';
 import { GetStaticProps } from 'next';
 // layouts
 import MainLayout from 'src/layouts/main';
@@ -9,6 +8,11 @@ import { createClient } from '@supabase/supabase-js';
 import { EcommerceLandingView } from 'src/sections/_e-commerce/view';
 // types
 import { IShopPageData } from 'src/types/shop';
+// seo
+import { Seo, breadcrumbJsonLd } from 'src/components/seo';
+import { INDEXED_PAGES } from 'src/config-seo';
+
+const SEO = INDEXED_PAGES.find((p) => p.path === '/boutique')!;
 
 // ----------------------------------------------------------------------
 
@@ -19,9 +23,15 @@ ShopPage.getLayout = (page: React.ReactElement) => <MainLayout>{page}</MainLayou
 export default function ShopPage({ data }: { data: IShopPageData }) {
   return (
     <>
-      <Head>
-        <title>Boutique | Michel Pro Wood</title>
-      </Head>
+      <Seo
+        title={SEO.title}
+        description={SEO.description}
+        canonical="/boutique"
+        jsonLd={breadcrumbJsonLd([
+          { name: 'Accueil', path: '/' },
+          { name: 'Boutique', path: '/boutique' },
+        ])}
+      />
 
       <EcommerceLandingView data={data} />
     </>

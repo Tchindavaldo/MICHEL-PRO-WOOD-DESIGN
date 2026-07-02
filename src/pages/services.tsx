@@ -14,6 +14,11 @@ import {
 } from 'src/lib/supabaseData';
 // sections
 import { ServicesView } from 'src/sections/michel-pro-wood/services/view';
+// seo
+import { Seo, breadcrumbJsonLd } from 'src/components/seo';
+import { INDEXED_PAGES } from 'src/config-seo';
+
+const SEO = INDEXED_PAGES.find((p) => p.path === '/services')!;
 
 // ----------------------------------------------------------------------
 
@@ -32,16 +37,27 @@ export default function ServicesPage({
   pageContent 
 }: any) {
   return (
-    <ServicesView 
-      services={services}
-      serviceIncludes={serviceIncludes}
-      serviceBenefits={serviceBenefits}
-      plans={plans}
-      processSteps={processSteps}
-      testimonials={testimonials}
-      posts={posts}
-      pageContent={pageContent}
-    />
+    <>
+      <Seo
+        title={SEO.title}
+        description={SEO.description}
+        canonical="/services"
+        jsonLd={breadcrumbJsonLd([
+          { name: 'Accueil', path: '/' },
+          { name: 'Services', path: '/services' },
+        ])}
+      />
+      <ServicesView
+        services={services}
+        serviceIncludes={serviceIncludes}
+        serviceBenefits={serviceBenefits}
+        plans={plans}
+        processSteps={processSteps}
+        testimonials={testimonials}
+        posts={posts}
+        pageContent={pageContent}
+      />
+    </>
   );
 }
 

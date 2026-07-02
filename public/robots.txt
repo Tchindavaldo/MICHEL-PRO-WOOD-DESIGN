@@ -1,3 +1,27 @@
-# https://www.robotstxt.org/robotstxt.html
+# robots.txt — MICHEL PRO WOOD DESIGN
+# Menuiserie & ébénisterie à Bafoussam, Cameroun.
+
 User-agent: *
-Disallow:
+Allow: /
+
+# Pages de démonstration du template (non pertinentes) — ne pas indexer
+Disallow: /marketing/
+Disallow: /travel/
+Disallow: /career/
+Disallow: /e-learning/
+Disallow: /e-commerce/
+Disallow: /components/
+Disallow: /auth/
+Disallow: /pricing-01
+Disallow: /pricing-02
+Disallow: /payment
+Disallow: /support
+Disallow: /coming-soon
+Disallow: /maintenance
+
+# Espace client / zones privées
+Disallow: /inscriptions/mon-espace
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://michelprowooddesign.com/sitemap.xml
