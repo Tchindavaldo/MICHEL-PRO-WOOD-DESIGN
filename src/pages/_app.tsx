@@ -38,7 +38,7 @@ import DomainExpiredPage from 'src/components/DomainExpiredPage';
 // ----------------------------------------------------------------------
 
 // Mettre à false pour réactiver le site une fois un nom de domaine acheté.
-const BLOCK_SITE = true;
+const BLOCK_SITE = false;
 
 // ----------------------------------------------------------------------
 
