@@ -21,6 +21,8 @@ import {
   TableContainer,
 } from '@mui/material';
 import { supabase } from 'src/lib/supabase';
+import { DEMO_MODE, DEMO_PHONE_DISPLAY } from 'src/demo/config';
+import { loadDemoDB } from 'src/demo/store';
 
 // ----------------------------------------------------------------------
 
@@ -106,7 +108,7 @@ function joursRestants(dateEcheance: string) {
 // ----------------------------------------------------------------------
 
 export default function MonEspaceInscription() {
-  const [telephone, setTelephone] = useState('');
+  const [telephone, setTelephone] = useState(DEMO_MODE ? DEMO_PHONE_DISPLAY : '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [inscriptions, setInscriptions] = useState<Inscription[] | null>(null);
@@ -129,6 +131,15 @@ export default function MonEspaceInscription() {
     try {
       const digits = tel.replace(/\D/g, '');
       const tail = digits.slice(-9);
+
+      if (DEMO_MODE) {
+        // Demo: read fictitious fixtures from the browser, no backend call.
+        const db = loadDemoDB();
+        await new Promise((r) => setTimeout(r, 300));
+        setInscriptions(db.inscriptions.filter((i) => i.phone.endsWith(tail)).map(({ phone, ...rest }) => rest));
+        setOrders(db.orders.filter((o) => o.customer_phone.endsWith(tail)) as any);
+        return;
+      }
       const pattern = `%${tail}`;
 
       const [stageRes, formationRes, ordersRes] = await Promise.all([

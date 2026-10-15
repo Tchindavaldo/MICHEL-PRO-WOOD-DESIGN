@@ -11,6 +11,8 @@
     "sitemap": "node scripts/generate-sitemap.mjs",
     "prebuild": "node scripts/generate-sitemap.mjs",
     "build": "next build",
+    "build:demo": "NEXT_PUBLIC_DEMO=1 next build",
+    "start:demo": "NEXT_PUBLIC_DEMO=1 next start -p 5150",
     "build-netlify": "next build && cp -r .next _next && mv _next .next/",
     "export": "yarn build && next export -o _static",
     "lint": "eslint --ext .ts,.tsx .",

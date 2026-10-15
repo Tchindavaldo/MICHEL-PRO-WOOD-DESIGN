@@ -3,7 +3,7 @@ import { GetStaticProps } from 'next';
 // layouts
 import MainLayout from 'src/layouts/main';
 // supabase
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from 'src/lib/supabase';
 // sections
 import { EcommerceLandingView } from 'src/sections/_e-commerce/view';
 // types
@@ -41,10 +41,6 @@ export default function ShopPage({ data }: { data: IShopPageData }) {
 // ----------------------------------------------------------------------
 
 export const getStaticProps: GetStaticProps = async () => {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
 
   try {
     // 1. Fetch segmented products (Hot Deals, Featured, Special)
