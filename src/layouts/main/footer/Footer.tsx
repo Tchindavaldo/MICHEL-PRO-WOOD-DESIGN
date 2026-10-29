@@ -133,7 +133,10 @@ export default function Footer() {
           sx={{ py: 3, textAlign: 'center' }}
         >
           <Typography variant="caption" sx={{ color: 'grey.500' }}>
-            © 2025 MICHEL PRO WOOD DESIGN. Tous droits réservés.
+            © 2025 MICHEL PRO WOOD DESIGN. Tous droits réservés. Site réalisé par{' '}
+            <Link href="https://rauval.com" target="_blank" rel="noopener" sx={{ color: 'grey.500', '&:hover': { color: 'primary.main' } }}>
+              Rauval
+            </Link>
           </Typography>
 
           <Stack direction="row" spacing={3} justifyContent="center">
